@@ -1,0 +1,29 @@
+# Name displayed in the GitHub Actions tab
+name: Norminette Check (v3.3.53)
+
+# Events that trigger this workflow
+# Run on pushes and pull requests to any branch
+on: [push, pull_request]
+
+jobs:
+  # The ID of the job (can be anything)
+  norminette_check: 
+     # Name displayed for this specific job
+    name: Run Norminette Linter
+    # Use the standard GitHub-hosted Ubuntu runner
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out your repository code onto the runner
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Run the published Norminette action
+      - name: 42 Norminette
+        uses: alexandregv/norminette-action@v3
+        #with:
+          # Input for the action: specify flags/paths for norminette
+          # Default is '.', checking all files from the repository root.
+          #flags: '.'
+          # Example: If your code is only in 'src' and 'includes'
+          # flags: './src ./includes'

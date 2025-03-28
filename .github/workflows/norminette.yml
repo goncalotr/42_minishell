@@ -20,7 +20,7 @@ jobs:
 
       # Step 2: Run the published Norminette action
       - name: 42 Norminette
-        uses: alexandregv/norminette-action@v3
+        uses: alexandregv/norminette-action@v3.3.53
         #with:
           # Input for the action: specify flags/paths for norminette
           # Default is '.', checking all files from the repository root.

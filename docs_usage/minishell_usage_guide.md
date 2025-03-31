@@ -14,3 +14,11 @@ Exit minishell with:
 ```sh
 exit
 ```
+
+Other commands
+
+```sh
+make re
+make clean
+make fclean
+```

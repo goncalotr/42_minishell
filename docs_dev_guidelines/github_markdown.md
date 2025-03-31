@@ -259,3 +259,27 @@ You can escape Markdown characters using a backslash (\).
 ```
 
 \*This text will not be italic.\*
+
+## 14. Comments
+
+We can add comments to markdown documents with the following notation:
+
+```sh
+<!---
+your comment goes here
+and here
+-->
+```
+
+Between this and the following line we have that comment snippet present again, but you aren't able to see it in the document.
+
+<!---
+your comment goes here
+and here
+-->
+
+Before this line we have a HTML tag. The advantage is that it works with pandoc when generating TeX or HTML output.
+
+Reference:
+https://stackoverflow.com/questions/4823468/comments-in-markdown
+

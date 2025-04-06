@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/03/17 16:54:04 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/06 15:17:02 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,10 @@ fclean:			clean
 				@echo "$(GREEN)Executable files cleaned successfully!$(RESET)"
 
 re:				fclean all
+
+valgrind:		all
+				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
+					--track-origins=yes --trace-children=yes --suppressions=readline.supp ./minishell
 
 .PHONY:			all clean fclean re bonus
 

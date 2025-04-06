@@ -128,3 +128,117 @@ This creates a local copy of a remote branch and switches to it.
 - `git branch -d <branch_name>`: Delete a merged local branch.
 - `git push origin --delete <branch_name>`: Delete a remote branch.
 - `git fetch origin`: Download objects and refs from the remote repository without merging.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Examples
+
+### 1. Creating a New Feature Branch
+
+This is the standard way to start working on a new feature or task in isolation.
+
+**Steps:**
+
+1. **Ensure 'main' is up-to-date:** Before creating a new branch, make sure your local `main` branch has the latest changes from the remote repository.
+
+	```sh
+	# Switch to your main branch (e.g., 'main' or 'master')
+	git switch main
+
+	# Pull the latest changes from GitHub
+	git pull origin main
+	```
+
+2. **Create and switch to the new branch:** Choose a descriptive name for your branch (e.g., `feature/new-parser`, `fix/memory-leak`).
+
+	```sh
+	# Creates the new branch based on the current state of 'main' and switches to it
+	git switch -c feature/your-new-feature-branch
+
+	# --- Now you can start working on your feature ---
+	```
+
+### 2. Updating an Existing Branch with Changes from 'main'
+
+If you have an existing branch (like `implement/core-loop`) that you started earlier, and `main` has been updated since then (e.g., other features or documentation were merged), you need to bring those updates into your branch.
+
+**Choose ONE of the following methods:**
+
+**Method A: Using `git merge` (Recommended for simplicity)**
+
+This adds the changes from `main` into your branch and creates a "merge commit".
+
+1. **Switch to the branch you want to update:**
+	```sh
+	git switch implement/core-loop
+	```
+
+2.  **Fetch the latest remote changes:** Ensures your Git knows about the newest `origin/main`.
+
+	```sh
+	git fetch origin
+	```
+
+3.  **Merge the latest `main` into your current branch:**
+
+	```sh
+	git merge origin/main
+	```
+	- *Git will create a merge commit. Resolve conflicts if prompted.*
+
+**Method B: Using `git rebase` (Cleaner history, use with caution)**
+
+This replays your branch's unique commits *on top of* the latest `main`. **Warning:** This rewrites history. Don't use it on branches others have pulled or branched from.
+
+1. **Switch to the branch you want to update:**
+
+	```sh
+	git switch implement/core-loop
+	```
+
+2. **Fetch the latest remote changes:**
+
+	```sh
+	git fetch origin
+	```
+
+3. **Rebase your branch onto the latest `main`:**
+
+	```sh
+	git rebase origin/main
+	```
+	- *Your commits will be reapplied. Resolve conflicts if prompted.*
+
+**Method C: Resetting Branch to Match 'main' (Discarding Local Changes)**
+
+Use this **only** if you want to completely discard any unique commits or changes on your local branch (`implement/core-loop` in this example) and make it identical to the latest `main`. **WARNING: This is destructive to local work on that branch.**
+
+1. **Switch to the branch you want to reset:**
+
+	```sh
+	git switch implement/core-loop
+	```
+
+2. **Fetch the latest remote changes:**
+
+	```sh
+	git fetch origin
+	```
+
+3. **Hard reset the branch to match `origin/main`:**
+	```bash
+	# WARNING: Deletes unique local commits/changes on this branch!
+	git reset --hard origin/main
+	```

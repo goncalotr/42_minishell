@@ -6,8 +6,10 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/03/28 19:34:22 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:29:05 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //todo
+
+#include <stdio.h>

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 17:21:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:14:27 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	g_last_exit_status = 0;
 void	ms_core_loop(void)
 {
 	char	*input_line;
+	char	**args;
 
 	while (1)
 	{
@@ -48,12 +49,22 @@ void	ms_core_loop(void)
 			continue ;
 		}
 		add_history(input_line);
-		if (strcmp(input_line, "exit") == 0)
+		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
+		args = ms_parse_input_placeholder(input_line);
+		if (!args)
 		{
+			free(input_line);
+			g_last_exit_status = 1;
+			continue;
+		}
+		if (args[0] && strcmp(input_line, "exit") == 0)
+		{
+			ms_free_split_args(args);
 			free(input_line);
 			break ;
 		}
-		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
+		g_last_exit_status = ms_execute_command_placeholder(args);
+		ms_free_split_args(args);
 		free(input_line);
 		input_line = NULL;
 	}
@@ -64,9 +75,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	// TODO: Initialize environment variables list from envp
-	// TODO: Initialize signal handlers (SIGINT, SIGQUIT)
 	ms_signal_handlers_init();
+	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
 	ms_core_loop();
 	//TODO Cleanup

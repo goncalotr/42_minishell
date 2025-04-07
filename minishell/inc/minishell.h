@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 16:52:41 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:15:35 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <unistd.h>
 
 # include <string.h>
+# include <errno.h>
 
 // signals
 # include <signal.h>
@@ -49,12 +50,25 @@
  * SECTION: Structs
  **************************************************************************/
 
-
 /**************************************************************************
  * SECTION: Functions
  **************************************************************************/
 
 // signals
 void	ms_signal_handlers_init(void);
+
+// parsing
+
+// placeholder
+void	ms_free_split_args(char **args);
+char	**ms_parse_input_placeholder(const char *input_line);
+int	ms_execute_command_placeholder(char **args);
+
+// built-ins
+int	ms_execute_cd(char **args);
+
+
+// main
+
 
 #endif

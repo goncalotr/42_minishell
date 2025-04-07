@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/07 16:52:30 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/07 18:12:24 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,15 @@ CFLAGS			+= -I$(LIBFT_SRC_DIR)
 
 #MANDATORY_SRC	= $(MANDATORY_DIR)main.c
 MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
+				  $(SRC_DIR)/builtin/ms_execute_cd.c\
+				  $(SRC_DIR)/builtin/ms_execute_echo.c\
+				  $(SRC_DIR)/builtin/ms_execute_env.c\
+				  $(SRC_DIR)/builtin/ms_execute_exit.c\
+				  $(SRC_DIR)/builtin/ms_execute_export.c\
+				  $(SRC_DIR)/builtin/ms_execute_pwd.c\
+				  $(SRC_DIR)/builtin/ms_execute_unset.c\
+				  $(SRC_DIR)/builtin/ms_execute_echo.c\
+				  $(SRC_DIR)/parser/ms_parser_placeholder.c\
 				  $(SRC_DIR)main.c
 
 # Object files in the same directory as source

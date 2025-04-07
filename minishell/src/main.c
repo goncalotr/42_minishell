@@ -6,11 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/06 17:28:40 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:13:39 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../inc/minishell.h"
+#include "./../inc/minishell.h"
 
 // Definition of the global variable
 int	g_last_exit_status = 0;

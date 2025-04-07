@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/07 13:56:59 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/07 14:13:15 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,8 @@ LIBFT_A			= $(LIBFT_SRC_DIR)libft.a
 LIBFT_REPO_URL	= https://github.com/goncalotr/42_libft_v2.git
 
 # --- Source Directories ---
-MANDATORY_DIR	= $(SRC_DIR)mandatory/
+#MANDATORY_DIR	= $(SRC_DIR)mandatory/
+# Using just SRC_DIR
 
 # Libraries
 LIBFT			= $(LIBFT_DIR)libft.a
@@ -53,7 +54,8 @@ CFLAGS			+= -I$(LIBFT_SRC_DIR)
 # MANDATORY
 # -------------------------------------------------------------
 
-MANDATORY_SRC	= $(MANDATORY_DIR)main.c\
+#MANDATORY_SRC	= $(MANDATORY_DIR)main.c
+MANDATORY_SRC	= $(SRC_DIR)main.c\
 
 # Object files in the same directory as source
 MANDATORY_OBJ	= $(MANDATORY_SRC:.c=.o)
@@ -65,19 +67,19 @@ MANDATORY_OBJ	= $(MANDATORY_SRC:.c=.o)
 
 all:			$(NAME)
 
-$(NAME):		$(MANDATORY_OBJ) $(LIBFT_LIB)
+$(NAME):		$(MANDATORY_OBJ) $(LIBFT_A)
 				@echo "$(YELLOW)Compiling $(NAME) (Mandatory)...$(RESET)"
-				@$(CC) $(CFLAGS) $(MANDATORY_OBJ) $(LIBFT_LIB) -o $(NAME) -lreadline
+				@$(CC) $(CFLAGS) $(MANDATORY_OBJ) $(LIBFT_A) -o $(NAME) -lreadline
 				@echo "$(GREEN)$(NAME) compiled successfully!$(RESET)"
 
-$(LIBFT_LIB):
-				@echo "Libft library not found. Preparing Libft..."
+$(LIBFT_A):
+				@echo "$(YELLOW)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
 				@echo "-- Removing old Libft repository clone (if any)..."
 				@$(RM) $(LIBFT_REPO_DIR)
 				@echo "-- Creating parent directory $(LIB_DIR)..."
 				@mkdir -p $(LIB_DIR)
 				@echo "-- Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)..."
-				@$git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "ERROR: Clone failed" && exit 1)
+				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
 				@echo "-- Compiling Libft in $(LIBFT_SRC_DIR)..."
 				@$(MAKE) -C $(LIBFT_SRC_DIR) || (echo "ERROR: Libft make failed" && exit 1)
 				@echo "Libft compiled."
@@ -88,16 +90,16 @@ clean:
 				@echo "Cleaning project objects..."
 				@$(RM) $(MANDATORY_OBJ)
 				@echo "Cleaning Libft objects (if possible)..."
-				@-$(MAKE) -s -C $(LIBFT_SRC_DIR) clean
+				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) clean; fi
 				@echo "$(GREEN)Object files cleaned successfully!$(RESET)"
 
 fclean:			clean
 				@echo "Cleaning executable $(NAME)..."
 				@$(RM) $(NAME)
 				@echo "Cleaning Libft library (if possible)..."
-				@-$(MAKE) -s -C $(LIBFT_SRC_DIR) fclean
-				@echo "Removing entire Libft repository clone directory $(LIBFT_CLONE_DIR)..."
-				@$(RM) $(LIBFT_CLONE_DIR)
+				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) fclean; fi
+				@echo "$(YELLOW)Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)...$(RESET)"
+				@$(RM) $(LIBFT_REPO_DIR)
 				@echo "$(GREEN)Clean complete.$(RESET)"
 
 re:				fclean all

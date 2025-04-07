@@ -6,13 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 16:58:22 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 17:24:19 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-extern int g_last_exit_status;
+extern int	g_last_exit_status;
 
 /**
  * @brief Signal handler for SIGINT (Ctrl+C) in interactive mode.
@@ -30,7 +30,7 @@ static void	ms_handle_sigint_interactive(int sig)
 	(void)sig;
 	g_last_exit_status = 128 + SIGINT;
 	ft_printf("\n");
-	rl_on_new_line();
+	//rl_replace_line("", 0);
 	rl_redisplay();
 }
 

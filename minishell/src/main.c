@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 16:47:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 17:21:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,18 @@ void	ms_core_loop(void)
 		if (input_line == NULL)
 		{
 			printf("exit\n");
-			break;
+			break ;
 		}
 		if (input_line[0] == '\0')
 		{
 			free(input_line);
-			continue;
+			continue ;
 		}
 		add_history(input_line);
-		if(strcmp(input_line, "exit")==0)
+		if (strcmp(input_line, "exit") == 0)
 		{
 			free(input_line);
-			break;
+			break ;
 		}
 		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
 		free(input_line);
@@ -64,20 +64,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
-
 	// TODO: Initialize environment variables list from envp
 	// TODO: Initialize signal handlers (SIGINT, SIGQUIT)
-
 	ms_signal_handlers_init();
-
-
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
-
 	ms_core_loop();
-
 	//TODO Cleanup
-
-	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", g_last_exit_status);
-
+	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: \
+		%d" RESET "\n", g_last_exit_status);
 	return (g_last_exit_status);
 }

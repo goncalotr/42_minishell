@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/07 14:13:15 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/07 15:05:54 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ CFLAGS			+= -I$(LIBFT_SRC_DIR)
 # -------------------------------------------------------------
 
 #MANDATORY_SRC	= $(MANDATORY_DIR)main.c
-MANDATORY_SRC	= $(SRC_DIR)main.c\
+MANDATORY_SRC	= $(SRC_DIR)main.c
 
 # Object files in the same directory as source
 MANDATORY_OBJ	= $(MANDATORY_SRC:.c=.o)
@@ -67,7 +67,7 @@ MANDATORY_OBJ	= $(MANDATORY_SRC:.c=.o)
 
 all:			$(NAME)
 
-$(NAME):		$(MANDATORY_OBJ) $(LIBFT_A)
+$(NAME):		$(LIBFT_A) $(MANDATORY_OBJ) 
 				@echo "$(YELLOW)Compiling $(NAME) (Mandatory)...$(RESET)"
 				@$(CC) $(CFLAGS) $(MANDATORY_OBJ) $(LIBFT_A) -o $(NAME) -lreadline
 				@echo "$(GREEN)$(NAME) compiled successfully!$(RESET)"
@@ -81,7 +81,7 @@ $(LIBFT_A):
 				@echo "-- Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)..."
 				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
 				@echo "-- Compiling Libft in $(LIBFT_SRC_DIR)..."
-				@$(MAKE) -C $(LIBFT_SRC_DIR) || (echo "ERROR: Libft make failed" && exit 1)
+				@make -C $(LIBFT_SRC_DIR) || (echo "ERROR: Libft make failed" && exit 1)
 				@echo "Libft compiled."
 
 # --- Cleaning Rules ---

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 14:13:39 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:38:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ void	ms_core_loop(void)
 
 int	main(int argc, char **argv, char **envp)
 {
+	(void)argc;
+	(void)argv;
+
 	int test1 = argc;
 	char **test2 = argv;
 	char **test3 = envp;
@@ -38,4 +41,3 @@ int	main(int argc, char **argv, char **envp)
 
 	return (0);
 }
-

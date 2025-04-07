@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 16:26:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:47:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ int	main(int argc, char **argv, char **envp)
 
 	// TODO: Initialize environment variables list from envp
 	// TODO: Initialize signal handlers (SIGINT, SIGQUIT)
+
+	ms_signal_handlers_init();
+
 
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
 

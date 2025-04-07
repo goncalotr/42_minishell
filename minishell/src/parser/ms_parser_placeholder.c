@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 18:15:12 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:32:15 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,26 @@ int	ms_execute_command_placeholder(char **args)
 	// --- Builtin Dispatch ---
 	// Check for "cd"
 	// Use ft_strcmp if required by norminette/project rules
+
+	// cd
 	if (strcmp(args[0], "cd") == 0)
 	{
 		return (ms_execute_cd(args)); // Return status from cd function
 	}
+
+	// echo
+	// env
+	// exit
+	// export
+
+	// pwd
+	else if (strcmp(args[0], "pwd") == 0)
+	{
+		return (ms_execute_pwd(args)); // Call the new pwd function
+	}
+
+	//unset
+
 	// Add checks for other builtins here (pwd, echo, etc.)
 	// else if (strcmp(args[0], "pwd") == 0)
 	// {

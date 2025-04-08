@@ -6,11 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 22:52:12 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:01:32 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+extern int g_last_exit_status;
 
 /**
  * @brief Frees the memory allocated for a NULL-terminated string array
@@ -80,7 +82,7 @@ int	ms_execute_command_placeholder(char **args)
 	}
 	if (strcmp(args[0], "exit") == 0)
 	{
-		return (ms_execute_cd(args));
+		return (ms_execute_exit(args));
 	}
 	if (strcmp(args[0], "export") == 0)
 	{

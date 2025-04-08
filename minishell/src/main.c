@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 22:48:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:01:52 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ms_core_loop(void)
 		input_line = readline(BLUE "minishell> " RESET);
 		if (input_line == NULL)
 		{
-			printf("exit\n");
+			ft_printf("exit\n");
 			break ;
 		}
 		if (input_line[0] == '\0')
@@ -57,12 +57,14 @@ void	ms_core_loop(void)
 			g_last_exit_status = 1;
 			continue;
 		}
+		/*
 		if (args[0] && strcmp(input_line, "exit") == 0)
 		{
 			ms_free_split_args(args);
 			free(input_line);
 			break ;
 		}
+		*/
 		g_last_exit_status = ms_execute_command_placeholder(args);
 		ms_free_split_args(args);
 		free(input_line);

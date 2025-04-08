@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 22:40:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:00:58 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 
 # include <string.h>
 # include <errno.h>
+# include <limits.h>
+# include <stdbool.h>
 
 // signals
 # include <signal.h>
@@ -84,7 +86,7 @@ int		ms_execute_command_placeholder(char **args);
 int		ms_execute_cd(char **args);
 int		ms_execute_echo(char **args);
 //int		ms_execute_env(char **args);
-//int		ms_execute_exit(char **args);
+int		ms_execute_exit(char **args);
 //int		ms_execute_export(char **args);
 int		ms_execute_pwd(char **args);
 //int		ms_execute_unset(char **args);

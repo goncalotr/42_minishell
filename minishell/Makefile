@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/07 18:12:24 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/08 21:12:43 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,13 @@ GREEN			= $(shell printf "\33[32m")
 WHITE			= $(shell printf "\33[37m")
 YELLOW			= $(shell printf "\33[33m")
 BLUE			= $(shell printf "\33[34m")
+
+# --- Symbols / Emojis (requires UTF-8 terminal) ---
+CHECKMARK		= ✅
+CROSSMARK		= ❌
+GEAR			= ⚙️
+FOLDER			= 📁
+SPARKLES		= ✨
 
 # --- Program Name ---
 NAME 			= minishell
@@ -81,22 +88,28 @@ $(NAME):		$(LIBFT_A) $(MANDATORY_OBJ)
 				@echo "$(YELLOW)Compiling $(NAME) (Mandatory)...$(RESET)"
 				@$(CC) $(CFLAGS) $(MANDATORY_OBJ) $(LIBFT_A) -o $(NAME) -lreadline
 				@echo "$(GREEN)$(NAME) compiled successfully!$(RESET)"
+				@echo "$(GREEN)+---------------------------------------------+"
+				@echo "|                                             |"
+				@echo "|       $(CHECKMARK) $(NAME) build successful!        |"
+				@echo "|                                             |"
+				@echo "+---------------------------------------------+$(RESET)"
 
 $(LIBFT_A):
-				@echo "$(YELLOW)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
-				@echo "-- Removing old Libft repository clone (if any)..."
+				@echo "$(RED)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
+				@echo "Removing old Libft repository clone (if any)..."
 				@$(RM) $(LIBFT_REPO_DIR)
-				@echo "-- Creating parent directory $(LIB_DIR)..."
+				@echo "Creating parent directory $(LIB_DIR)..."
 				@mkdir -p $(LIB_DIR)
-				@echo "-- Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)..."
+				@echo "Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)...$(RESET)"
 				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
-				@echo "-- Compiling Libft in $(LIBFT_SRC_DIR)..."
-				@make -C $(LIBFT_SRC_DIR) || (echo "ERROR: Libft make failed" && exit 1)
-				@echo "Libft compiled."
+				@echo "$(YELLOW)Compiling Libft in $(LIBFT_SRC_DIR)...$(RESET)"
+				@make -s -C $(LIBFT_SRC_DIR) > /dev/null || (echo "ERROR: Libft make failed" && exit 1)
+				@echo "$(GREEN)Libft compiled successfully!$(RESET)"
 
 # --- Cleaning Rules ---
 
 clean:
+				@echo "$(YELLOW)Object files cleaning start$(RESET)"
 				@echo "Cleaning project objects..."
 				@$(RM) $(MANDATORY_OBJ)
 				@echo "Cleaning Libft objects (if possible)..."
@@ -104,11 +117,12 @@ clean:
 				@echo "$(GREEN)Object files cleaned successfully!$(RESET)"
 
 fclean:			clean
+				@echo "$(YELLOW)Executable files cleaning start$(RESET)"
 				@echo "Cleaning executable $(NAME)..."
 				@$(RM) $(NAME)
 				@echo "Cleaning Libft library (if possible)..."
 				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) fclean; fi
-				@echo "$(YELLOW)Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)...$(RESET)"
+				@echo "Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)..."
 				@$(RM) $(LIBFT_REPO_DIR)
 				@echo "$(GREEN)Clean complete.$(RESET)"
 

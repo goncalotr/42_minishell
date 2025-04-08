@@ -1,4 +1,5 @@
 minishell/lib/
+minishell/minishell
 
 # Prerequisites
 *.d

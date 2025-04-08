@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 18:15:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:36:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,22 @@
 /**************************************************************************
  * SECTION: Structs
  **************************************************************************/
+
+typedef enum e_redir_type
+{
+	REDIR_NONE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_HEREDOC,
+	REDIR_APPEND
+}	t_redir_type;
+
+typedef struct s_redirection
+{
+	t_redir_type			type;
+	char					*target;
+	struct s_redirection	*next;
+}	t_redirection;
 
 /**************************************************************************
  * SECTION: Functions

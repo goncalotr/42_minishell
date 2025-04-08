@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 18:15:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:40:52 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,22 @@
  * SECTION: Structs
  **************************************************************************/
 
+typedef enum e_redir_type
+{
+	REDIR_NONE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_HEREDOC,
+	REDIR_APPEND
+}	t_redir_type;
+
+typedef struct s_redirection
+{
+	t_redir_type			type;
+	char					*target;
+	struct s_redirection	*next;
+}	t_redirection;
+
 /**************************************************************************
  * SECTION: Functions
  **************************************************************************/
@@ -62,11 +78,16 @@ void	ms_signal_handlers_init(void);
 // placeholder
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
-int	ms_execute_command_placeholder(char **args);
+int		ms_execute_command_placeholder(char **args);
 
 // built-ins
-int	ms_execute_cd(char **args);
-
+int		ms_execute_cd(char **args);
+int		ms_execute_echo(char **args);
+//int		ms_execute_env(char **args);
+//int		ms_execute_exit(char **args);
+//int		ms_execute_export(char **args);
+int		ms_execute_pwd(char **args);
+//int		ms_execute_unset(char **args);
 
 // main
 

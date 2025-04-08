@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 18:15:12 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:52:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,36 @@ int	ms_execute_command_placeholder(char **args)
 	// --- Builtin Dispatch ---
 	// Check for "cd"
 	// Use ft_strcmp if required by norminette/project rules
+
 	if (strcmp(args[0], "cd") == 0)
 	{
-		return (ms_execute_cd(args)); // Return status from cd function
+		return (ms_execute_cd(args));
 	}
+	if (strcmp(args[0], "echo") == 0)
+	{
+		return (ms_execute_echo(args));
+	}
+	if (strcmp(args[0], "env") == 0)
+	{
+		return (ms_execute_cd(args));
+	}
+	if (strcmp(args[0], "exit") == 0)
+	{
+		return (ms_execute_cd(args));
+	}
+	if (strcmp(args[0], "export") == 0)
+	{
+		return (ms_execute_cd(args));
+	}
+	else if (strcmp(args[0], "pwd") == 0)
+	{
+		return (ms_execute_pwd(args));
+	}
+	else if (strcmp(args[0], "unset") == 0)
+	{
+		return (ms_execute_cd(args));
+	}
+
 	// Add checks for other builtins here (pwd, echo, etc.)
 	// else if (strcmp(args[0], "pwd") == 0)
 	// {

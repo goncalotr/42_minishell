@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 18:14:27 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:48:50 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	main(int argc, char **argv, char **envp)
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
 	ms_core_loop();
 	//TODO Cleanup
-	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: \
-		%d" RESET "\n", g_last_exit_status);
+	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
+		g_last_exit_status);
 	return (g_last_exit_status);
 }

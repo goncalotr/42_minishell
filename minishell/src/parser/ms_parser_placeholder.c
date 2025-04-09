@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:54:11 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 02:15:29 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,10 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 	{
 		return (ms_execute_cd(args));
 	}
+	else
+	{
+		return (ms_execute_external_command(args, envp)); // <--- CALL IT HERE
+	}
 
 	// Add checks for other builtins here (pwd, echo, etc.)
 	// else if (strcmp(args[0], "pwd") == 0)
@@ -105,6 +109,7 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 	// ...
 
 	// --- If not a known builtin ---
+	/*
 	else
 	{
 		// Placeholder for External Commands / Command Not Found
@@ -114,4 +119,5 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 		ft_putstr_fd("\n", 2);
 		return (127); // Standard "command not found" exit code
 	}
+	*/
 }

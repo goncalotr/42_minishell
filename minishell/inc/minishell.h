@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 01:52:21 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 02:13:59 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@
 
 // signals
 # include <signal.h>
+
+// waitpid
+# include <sys/wait.h> 
+
+//stat/access???
+# include <sys/stat.h>
 
 // readline, add_history
 # include <readline/readline.h>
@@ -91,6 +97,9 @@ int		ms_execute_exit(char **args);
 //int		ms_execute_export(char **args, char ***envp_ptr)
 int		ms_execute_pwd(char **args);
 //int		ms_execute_unset(char **args);
+
+// exec
+
 
 // main
 //void	ms_core_loop(char **envp);

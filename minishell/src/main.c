@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:01:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:55:06 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	g_last_exit_status = 0;
  * 6. Placeholder for parsing
  * 7. Free input line
  */
-void	ms_core_loop(void)
+void	ms_core_loop(char **envp)
 {
 	char	*input_line;
 	char	**args;
@@ -65,7 +65,7 @@ void	ms_core_loop(void)
 			break ;
 		}
 		*/
-		g_last_exit_status = ms_execute_command_placeholder(args);
+		g_last_exit_status = ms_execute_command_placeholder(args, envp);
 		ms_free_split_args(args);
 		free(input_line);
 		input_line = NULL;
@@ -80,7 +80,7 @@ int	main(int argc, char **argv, char **envp)
 	ms_signal_handlers_init();
 	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
-	ms_core_loop();
+	ms_core_loop(envp);
 	//TODO Cleanup
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_last_exit_status);

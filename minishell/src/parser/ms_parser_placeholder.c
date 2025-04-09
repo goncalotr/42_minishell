@@ -6,11 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 22:52:12 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:54:11 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+extern int g_last_exit_status;
 
 /**
  * @brief Frees the memory allocated for a NULL-terminated string array
@@ -54,7 +56,7 @@ char	**ms_parse_input_placeholder(const char *input_line)
 	return (args);
 }
 
-int	ms_execute_command_placeholder(char **args)
+int	ms_execute_command_placeholder(char **args, char **envp)
 {
 	// Check if parser produced at least one arg
 	if (args == NULL || args[0] == NULL)
@@ -76,11 +78,11 @@ int	ms_execute_command_placeholder(char **args)
 	}
 	if (strcmp(args[0], "env") == 0)
 	{
-		return (ms_execute_cd(args));
+		return (ms_execute_env(args, envp));
 	}
 	if (strcmp(args[0], "exit") == 0)
 	{
-		return (ms_execute_cd(args));
+		return (ms_execute_exit(args));
 	}
 	if (strcmp(args[0], "export") == 0)
 	{

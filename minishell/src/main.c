@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 22:48:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:55:06 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	g_last_exit_status = 0;
  * 6. Placeholder for parsing
  * 7. Free input line
  */
-void	ms_core_loop(void)
+void	ms_core_loop(char **envp)
 {
 	char	*input_line;
 	char	**args;
@@ -40,7 +40,7 @@ void	ms_core_loop(void)
 		input_line = readline(BLUE "minishell> " RESET);
 		if (input_line == NULL)
 		{
-			printf("exit\n");
+			ft_printf("exit\n");
 			break ;
 		}
 		if (input_line[0] == '\0')
@@ -57,13 +57,15 @@ void	ms_core_loop(void)
 			g_last_exit_status = 1;
 			continue;
 		}
+		/*
 		if (args[0] && strcmp(input_line, "exit") == 0)
 		{
 			ms_free_split_args(args);
 			free(input_line);
 			break ;
 		}
-		g_last_exit_status = ms_execute_command_placeholder(args);
+		*/
+		g_last_exit_status = ms_execute_command_placeholder(args, envp);
 		ms_free_split_args(args);
 		free(input_line);
 		input_line = NULL;
@@ -78,7 +80,7 @@ int	main(int argc, char **argv, char **envp)
 	ms_signal_handlers_init();
 	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
-	ms_core_loop();
+	ms_core_loop(envp);
 	//TODO Cleanup
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_last_exit_status);

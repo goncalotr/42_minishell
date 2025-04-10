@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 02:05:03 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/10 16:12:07 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:25:15 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	ms_execute_external_command(char **args, char **envp)
 {
 	(void) args;
 	(void) envp;
-
 	/*
 	char	*path;
 	pid_t	pid;

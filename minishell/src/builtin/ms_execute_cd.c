@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 17:58:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:10:09 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * @param details Optional details (like the directory name). Can be NULL.
  * @return Always returns 1 (failure exit status for cd).
  */
-static int	cd_error(char *msg, char *details)
+static int	ms_cd_error(char *msg, char *details)
 {	
 	//todo create ft_fprintf
 	//fprintf(stderr, "minishell: cd: %s", msg);
@@ -57,13 +57,13 @@ int	ms_execute_cd(char **args)
 	{
 		target_dir = getenv("HOME");
 		if (target_dir == NULL)
-			return (cd_error("HOME not set", NULL));
+			return (ms_cd_error("HOME not set", NULL));
 	}
 	else
 	{
 		if (args[2] != NULL)
 		{
-			return (cd_error("too many arguments", NULL));
+			return (ms_cd_error("too many arguments", NULL));
 		}
 		target_dir = args[1];
 	}

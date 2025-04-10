@@ -6,12 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 02:05:03 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 02:20:31 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:12:07 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/*
 static void	child_exec(const char *path, char **args, char **envp)
 {
 
@@ -22,6 +23,7 @@ static int parent_wait(pid_t pid)
 	int	status;
 	int	exit_status;
 }
+*/
 
 /**
  * @brief Executes an external command found in PATH.
@@ -40,13 +42,17 @@ static int parent_wait(pid_t pid)
  */
 int	ms_execute_external_command(char **args, char **envp)
 {
+	(void) args;
+	(void) envp;
+
+	/*
 	char	*path;
 	pid_t	pid;
 
 	if (!args || !args[0])
 		return (0);
 
-	path = ms_find_command_path(args[0], envp);
+	//path = ms_find_command_path(args[0], envp);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -55,12 +61,16 @@ int	ms_execute_external_command(char **args, char **envp)
 		return (127);
 	}
 	pid = fork();
-	if (pid = -1)
+	if (pid == -1)
 	{
 		perror("fork");
 		free(path);
 		return (1);
 	}
+	*/
+
+
+	/*
 	else if (pid == 0)
 	{
 		child_exec(path, args, envp);
@@ -70,5 +80,6 @@ int	ms_execute_external_command(char **args, char **envp)
 		free(path);
 		return(parent_wait(pid));
 	}
+	*/
 	return (1);
 }

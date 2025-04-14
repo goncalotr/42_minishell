@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 17:27:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:20:13 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,32 @@
  * SECTION: Structs
  **************************************************************************/
 
+/**
+ * @brief Holds the main state of the minishell.
+ *
+ * @param environ_list    A dynamically allocated copy of the environment variables
+ *                        (char ** array, NULL-terminated, e.g., {"VAR=value", NULL}).
+ *                        This is the list modified by export/unset.
+ * @param last_exit_status The exit status of the most recently executed foreground command ($?).
+ * @param stdin_fd         Saved original standard input file descriptor (usually 0).
+ * @param stdout_fd        Saved original standard output file descriptor (usually 1).
+ * @param stderr_fd        Saved original standard error file descriptor (usually 2).
+ * @param shell_name       The name the shell was invoked with (argv[0]), useful for errors.
+ * @param current_cmd_table Pointer to the currently parsed command structure (optional,
+ *                          can also be passed as function arguments). Manage lifecycle carefully.
+ * @param envp_orig        Pointer to the original envp from main (optional, for reference).
+ */
+typedef struct s_data
+{
+	char	**environ_list;
+	int		last_exit_status;
+	int		stdin_fd;
+	int		stdout_fd;
+	int		stderr_fd;
+	char	*shell_name;
+	char	**envp_original;
+}	t_data;
+
 typedef enum e_redir_type
 {
 	REDIR_NONE,
@@ -78,6 +104,13 @@ typedef struct s_redirection
  * SECTION: Functions
  **************************************************************************/
 
+// main
+//void	ms_core_loop(char **envp);
+//int	main(int argc, char **argv, char **envp);
+
+// init
+int	init_shell_data(t_data *data, char **argv, char **envp);
+
 // signals
 void	ms_signal_handlers_init(void);
 
@@ -86,7 +119,7 @@ void	ms_signal_handlers_init(void);
 // placeholder
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
-int		ms_execute_command_placeholder(char **args, char **envp);
+int		ms_execute_command_placeholder(char **args, char **envp, t_data *data);
 
 // built-ins
 int		ms_execute_cd(char **args);
@@ -96,14 +129,10 @@ int		ms_execute_exit(char **args);
 //int		ms_execute_export(char **args);
 //int		ms_execute_export(char **args, char ***envp_ptr)
 int		ms_execute_pwd(char **args);
-//int		ms_execute_unset(char **args);
+int		ms_execute_unset(char **args, t_data *data);
 
 // exec
 char	*ms_find_command_path(const char *cmd, char **envp);
 int		ms_execute_external_command(char **args, char **envp);
-
-// main
-//void	ms_core_loop(char **envp);
-//int	main(int argc, char **argv, char **envp);
 
 #endif

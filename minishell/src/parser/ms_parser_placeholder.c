@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 02:15:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:12:06 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	**ms_parse_input_placeholder(const char *input_line)
 	return (args);
 }
 
-int	ms_execute_command_placeholder(char **args, char **envp)
+int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
 {
 	// Check if parser produced at least one arg
 	if (args == NULL || args[0] == NULL)
@@ -94,7 +94,7 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 	}
 	else if (strcmp(args[0], "unset") == 0)
 	{
-		return (ms_execute_cd(args));
+		return (ms_execute_unset((args), data));
 	}
 	else
 	{

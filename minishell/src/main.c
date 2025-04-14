@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:55:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:23:05 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	g_last_exit_status = 0;
  * 6. Placeholder for parsing
  * 7. Free input line
  */
-void	ms_core_loop(char **envp)
+void	ms_core_loop(char **envp, t_data *data)
 {
 	char	*input_line;
 	char	**args;
@@ -65,7 +65,7 @@ void	ms_core_loop(char **envp)
 			break ;
 		}
 		*/
-		g_last_exit_status = ms_execute_command_placeholder(args, envp);
+		g_last_exit_status = ms_execute_command_placeholder(args, envp, data);
 		ms_free_split_args(args);
 		free(input_line);
 		input_line = NULL;
@@ -76,11 +76,17 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	//(void)envp;
+	t_data	shell_data; // Create an instance of the struct (on the stack)
+
+	if (init_shell_data(&shell_data, argv, envp) != 0)
+	{
+		return (EXIT_FAILURE);
+	}
 	ms_signal_handlers_init();
 	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
-	ms_core_loop(envp);
+	ms_core_loop(envp, &shell_data);
 	//TODO Cleanup
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_last_exit_status);

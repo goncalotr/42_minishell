@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 02:05:03 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 16:58:23 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:01:00 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	child_exec(const char *path, char **args, char **envp)
 	if (errno == EACCES)
 		exit(126);
 	if (errno == ENOENT)
-		eixt(127);
+		exit(127);
 	exit(EXIT_FAILURE);
 }
 
@@ -46,7 +46,7 @@ static int parent_wait(pid_t pid)
 
 	if(waitpid(pid, &status, 0) == -1)
 	{
-		perrror("minishell: waitpid");
+		perror("minishell: waitpid");
 		return (1);
 	}
 
@@ -67,7 +67,6 @@ static int parent_wait(pid_t pid)
 	return (exit_status);
 
 }
-*/
 
 /**
  * @brief Executes an external command found in PATH.
@@ -111,7 +110,7 @@ int	ms_execute_external_command(char **args, char **envp)
 			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 			return (127);
 		}
-		else // Command not found in PATH or PATH not set
+		else // Command not found in ATH or PATH not set
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			ft_putstr_fd(args[0], STDERR_FILENO);

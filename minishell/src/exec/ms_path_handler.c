@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 02:04:44 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 17:02:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:12:54 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*ms_find_command_path(const char *cmd, char **envp)
 			errno = ENOENT;
 		return (NULL);
 	}
-	path_env_value = get_path_variable(envp);
+	path_env_value = ms_get_path_variable(envp);
 	if (!path_env_value)
 		return (NULL);
 	paths = ft_split(path_env_value, ':');
@@ -120,20 +120,20 @@ char	*ms_find_command_path(const char *cmd, char **envp)
 	i = 0;
 	while (paths[i])
 	{
-		full_path = join_path(paths[i], cmd);
+		full_path = ms_join_path(paths[i], cmd);
 		if (!full_path)
 		{
-			free_paths(paths);
+			ms_free_paths(paths);
 			return (NULL);
 		}
 		if (access(full_path, X_OK) == 0)
 		{
-			free_paths(paths);
+			ms_free_paths(paths);
 			return (full_path);
 		}
 		free(full_path);
 		i++;
 	}
-	free_paths(paths);
+	ms_free_paths(paths);
 	return (NULL);
 }

@@ -257,6 +257,63 @@ Path with .
 
 ## 3 pwd
 
+Requirements:
+- Print the absolute path of the current working directory, followed by a newline.
+- No options are supported or required (e.g., -L, -P).
+- Must correctly reflect the directory changed by cd.
+- Should handle cases where the current directory might have been removed externally.
+- Should handle cases where $PWD might be unset or invalid.
+- Should return status 0 on success, non-zero on failure.
+
+### Setup Commands
+
+
+### Test Cases
+
+#### Basic Functionality
+
+Simple case
+```sh
+pwd
+> /tmp\n
+# Check $? is 0
+```
+
+After cd
+```sh
+```
+
+#### Environment Variable Interaction
+
+PWD unset
+```sh
+
+```
+
+PWD incorrect/invalid
+
+```sh
+```
+
+#### Symbolic Link Handling
+
+
+```sh
+```
+
+#### Error Handling
+
+
+```sh
+```
+
+#### Cleanup
+
+
+```sh
+```
+
+
 ## 4 export
 
 ## 5 unset

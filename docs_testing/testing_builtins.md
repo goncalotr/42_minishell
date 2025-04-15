@@ -5,7 +5,8 @@
 Requirements:
 - `-n` option
 
-### Core Functionality & Arguments
+### Test Cases
+#### Core Functionality & Arguments
 
 No arguments
 
@@ -56,7 +57,7 @@ echo hello "" world
 > hello  world\n
 ```
 
-### -n Option Testing
+#### -n Option Testing
 
 Basic `-n`
 
@@ -108,13 +109,14 @@ echo -nnnn hello
 ```
 
 `-nnnnx`
+!TODO
 
 ```sh
 echo -nnnnx hello
 >
 ```
 
-### Quotes and Expansions
+#### Quotes and Expansions
 
 Single quotes
 
@@ -178,6 +180,80 @@ echo -n $EMPTYVAR
 ```
 
 ## 2 cd
+
+Requirements:
+- Change directory using only a relative or absolute path.
+- Update PWD environment variable.
+- Update OLDPWD environment variable.
+- Handle errors gracefully.
+- No options (-L, -P).
+- No special handling for cd with no arguments (should not go to $HOME).
+- No special handling for cd -.
+
+### Setup Commands (Run before tests if needed)
+
+```sh
+mkdir /testing/minishell_cd_test
+mkdir /testing/minishell_cd_test/subdir
+touch /testing/minishell_cd_test/a_file
+mkdir /testing/minishell_cd_test/no_perms
+chmod 000 /testing/minishell_cd_test/no_perms
+cd /testing
+```
+
+### Test Cases
+#### Basic Success Cases
+
+Absolute path
+
+```sh
+pwd
+> /testing
+cd /testing/minishell_cd_test
+pwd
+> /testing/minishell_cd_test\n
+echo $PWD
+> /testing/minishell_cd_test\n
+echo $OLDPWD
+> /testing\n
+```
+
+Relative path - subdirectory
+
+```sh
+pwd
+> /testing/minishell_cd_test\n
+cd subdir
+pwd
+> /testing/minishell_cd_test/subdir\n
+echo $PWD
+> /testing/minishell_cd_test/subdir\n
+echo $OLDPWD
+> /ttestingmp/minishell_cd_test\n
+```
+
+Relative path - parent directory
+
+```sh
+pwd
+> /testing/minishell_cd_test/subdir\n
+cd ..
+pwd
+> /testing/minishell_cd_test\n
+echo $PWD
+> /testing/minishell_cd_test\n
+echo $OLDPWD
+> /testing/minishell_cd_test/subdir\n
+```
+Path with .
+
+```sh
+```
+
+### Error Handling
+
+### Environment Variable Interaction
+
 
 ## 3 pwd
 

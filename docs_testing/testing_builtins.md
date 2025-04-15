@@ -1,23 +1,190 @@
+# Minishell Testing - builtins
 
+## 1 echo
 
+Requirements:
+- `-n` option
 
-## Env
+### Core Functionality & Arguments
 
-### Useful Commands
+No arguments
 
-### Testing
 ```sh
-env
+echo
+> \n
 ```
 
+Single argument
+
 ```sh
-env foo
+echo hello
+> hello\n
 ```
 
+Multiple arguments
 
-## 
+```sh
+echo hello world 123
+> hello world 123\n
+```
 
-### unset
+Arguments with multiple spaces between them
+
+```sh
+echo hello   world
+> hello world\n
+```
+
+Multiple empty string arguments
+
+```sh
+echo ""
+> \n
+```
+
+Multiple empty string arguments
+
+```sh
+echo "" ""
+> \n
+```
+
+Mixed empty and non-empty arguments
+
+```sh
+echo hello "" world
+> hello  world\n
+```
+
+### -n Option Testing
+
+Basic `-n`
+
+```sh
+echo -n hello
+> helloNEXTPROMPT
+```
+
+`-n` with multiple arguments
+
+```sh
+echo -n hello world
+> hello worldNEXTPROMPT
+```
+
+`-n` as the only argument
+
+```sh
+echo -n
+> NEXTPROMPT
+```
+
+`-n` not as the first argument
+
+```sh
+echo hello -n world
+> hello -n world\n
+```
+
+`-n` quoted
+
+```sh
+echo "-n" hello
+> -n hello\n
+```
+
+Multiple `-n` flags
+
+```sh
+echo -n -n hello
+> -n helloNEXTPROMPT
+```
+
+`-nnnn`
+
+```sh
+echo -nnnn hello
+> helloNEXTPROMPT
+```
+
+`-nnnnx`
+
+```sh
+echo -nnnnx hello
+>
+```
+
+### Quotes and Expansions
+
+Single quotes
+
+```sh
+echo 'hello $USER'
+> hello $USER\n
+```
+
+Double quotes
+
+```sh
+echo "hello $USER"
+> hello <your_actual_username>\n
+```
+
+-n with quotes and expansion
+
+```sh
+echo -n "hello $USER"
+> hello <your_actual_username>NEXTPROMPT
+```
+
+Variable evaluates to -n
+
+```sh
+VAR="-n"
+echo $VAR hello
+> -n hello\n
+```
+
+Variable evaluates to part of the string
+
+```sh
+VAR="world"
+echo "hello $VAR"
+> hello world\n
+```
+
+Empty variable
+
+```sh
+unset EMPTYVAR
+echo $EMPTYVAR
+> \n
+```
+
+Empty variable with other args
+
+```sh
+unset EMPTYVAR
+echo hello$EMPTYVAR world
+> hello world\n
+```
+
+Empty variable with -n
+
+```sh
+unset EMPTYVAR
+echo -n $EMPTYVAR
+> NEXTPROMPT
+```
+
+## 2 cd
+
+## 3 pwd
+
+## 4 export
+
+## 5 unset
+
 
 1. Setup: Create some variables
 
@@ -73,3 +240,17 @@ env | grep ALSO_VALID   # Expected output: (nothing) - should still unset valid 
 unset
 echo $?  
 ```
+
+
+## 6 env
+
+```sh
+env
+```
+
+```sh
+env foo
+```
+
+
+## 7 exit

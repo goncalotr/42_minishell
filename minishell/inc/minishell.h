@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 18:20:13 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:59:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args);
 //int		ms_execute_export(char **args);
 //int		ms_execute_export(char **args, char ***envp_ptr)
+int		ms_execute_export(char **args, t_data *data);
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_data *data);
 

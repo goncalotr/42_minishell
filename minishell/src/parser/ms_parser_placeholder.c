@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 18:12:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:59:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
 	}
 	if (strcmp(args[0], "export") == 0)
 	{
-		return (ms_execute_cd(args));
+		return ms_execute_export(args, data);
 	}
 	else if (strcmp(args[0], "pwd") == 0)
 	{

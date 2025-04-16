@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:54:40 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:22:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@
 // signals
 # include <signal.h>
 
+// waitpid
+# include <sys/wait.h> 
+
+//stat/access???
+# include <sys/stat.h>
+
 // readline, add_history
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -40,17 +46,46 @@
  * SECTION: Macros
  **************************************************************************/
 
-// Colors
-# define RESET		"\033[0m"
-# define RED		"\033[31m"
-# define GREEN		"\033[32m"
-# define YELLOW		"\033[33m"
-# define BLUE		"\033[34m"
-# define WHITE		"\033[37m"
+// --- ANSI Color Codes ---
+# define RESET   "\033[0m"
+# define BLACK   "\033[0;30m"
+# define RED     "\033[0;31m"
+# define GREEN   "\033[0;32m"
+# define YELLOW  "\033[0;33m"
+# define BLUE    "\033[0;34m"
+# define MAGENTA "\033[0;35m"
+# define CYAN    "\033[0;36m"
+# define WHITE   "\033[0;37m"
 
 /**************************************************************************
  * SECTION: Structs
  **************************************************************************/
+
+/**
+ * @brief Holds the main state of the minishell.
+ *
+ * @param environ_list    A dynamically allocated copy of the environment variables
+ *                        (char ** array, NULL-terminated, e.g., {"VAR=value", NULL}).
+ *                        This is the list modified by export/unset.
+ * @param last_exit_status The exit status of the most recently executed foreground command ($?).
+ * @param stdin_fd         Saved original standard input file descriptor (usually 0).
+ * @param stdout_fd        Saved original standard output file descriptor (usually 1).
+ * @param stderr_fd        Saved original standard error file descriptor (usually 2).
+ * @param shell_name       The name the shell was invoked with (argv[0]), useful for errors.
+ * @param current_cmd_table Pointer to the currently parsed command structure (optional,
+ *                          can also be passed as function arguments). Manage lifecycle carefully.
+ * @param envp_orig        Pointer to the original envp from main (optional, for reference).
+ */
+typedef struct s_data
+{
+	char	**environ_list;
+	int		last_exit_status;
+	int		stdin_fd;
+	int		stdout_fd;
+	int		stderr_fd;
+	char	*shell_name;
+	char	**envp_original;
+}	t_data;
 
 typedef enum e_redir_type
 {
@@ -72,27 +107,38 @@ typedef struct s_redirection
  * SECTION: Functions
  **************************************************************************/
 
-// signals
+// --- main ---
+//void	ms_core_loop(char **envp);
+//int	main(int argc, char **argv, char **envp);
+
+// --- debug ---
+void	ms_debug_print_args(char **args);
+void	ms_debug_print_gsig();
+
+// --- init ---
+int		init_shell_data(t_data *data, char **argv, char **envp);
+
+// --- signals ---
 void	ms_signal_handlers_init(void);
 
-// parsing
+// --- parsing ---
 
-// placeholder
+// parsing placeholder 
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
-int		ms_execute_command_placeholder(char **args, char **envp);
+int		ms_execute_command_placeholder(char **args, char **envp, t_data *data);
 
-// built-ins
+// --- built-ins ---
 int		ms_execute_cd(char **args);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args);
-//int		ms_execute_export(char **args);
+int		ms_execute_export(char **args, t_data *data);
 int		ms_execute_pwd(char **args);
-//int		ms_execute_unset(char **args);
+int		ms_execute_unset(char **args, t_data *data);
 
-// main
-//void	ms_core_loop(char **envp);
-//int	main(int argc, char **argv, char **envp);
+// --- exec ---
+char	*ms_find_command_path(const char *cmd, char **envp);
+int		ms_execute_external_command(char **args, char **envp);
 
 #endif

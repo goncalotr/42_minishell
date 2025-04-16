@@ -6,13 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/07 17:24:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:53:50 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-extern int	g_last_exit_status;
+unsigned char	g_signal;
 
 /**
  * @brief Signal handler for SIGINT (Ctrl+C) in interactive mode.
@@ -24,14 +24,18 @@ extern int	g_last_exit_status;
  * 
  * rl_on_new_line, rl_replace_line, rl_redisplay are included in
  * readline/readline.h
+ * 128 + sigint
  */
-static void	ms_handle_sigint_interactive(int sig)
+static void	ms_handle_sigint_init(int sig)
 {
 	(void)sig;
-	g_last_exit_status = 128 + SIGINT;
-	ft_printf("\n");
-	//rl_replace_line("", 0);
+	g_signal = 128 + SIGINT;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
+
+	//ft_putstr_fd("\n", STDOUT_FILENO);
 }
 
 /**
@@ -47,7 +51,7 @@ void	ms_signal_handlers_init(void)
 	struct sigaction	sa_quit;
 
 	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_handler = ms_handle_sigint_interactive;
+	sa_int.sa_handler = ms_handle_sigint_init;
 	sa_int.sa_flags = 0;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{

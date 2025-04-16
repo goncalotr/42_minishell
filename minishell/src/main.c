@@ -6,14 +6,14 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:55:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:00:38 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // Definition of the global variable
-int	g_last_exit_status = 0;
+extern unsigned char	g_signal;
 
 /**
  * @brief The main interactive loop of the minishell.
@@ -29,15 +29,29 @@ int	g_last_exit_status = 0;
  * 5. Check for exit command
  * 6. Placeholder for parsing
  * 7. Free input line
+ * 
+ * 
  */
-void	ms_core_loop(char **envp)
+void	ms_core_loop(char **envp, t_data *data)
 {
 	char	*input_line;
 	char	**args;
 
+	g_signal = 0;
 	while (1)
 	{
-		input_line = readline(BLUE "minishell> " RESET);
+		if (g_signal == 130) {
+			g_signal = 0;
+		}
+		input_line = readline(BLUE "minishell" WHITE "> " RESET);
+		if (g_signal == 130)
+		{
+			int saved_errno = errno;
+			ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" RESET, saved_errno, strerror(saved_errno));
+			if (input_line)
+				free(input_line);
+			continue;
+		}
 		if (input_line == NULL)
 		{
 			ft_printf("exit\n");
@@ -49,23 +63,17 @@ void	ms_core_loop(char **envp)
 			continue ;
 		}
 		add_history(input_line);
-		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
+		ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		args = ms_parse_input_placeholder(input_line);
 		if (!args)
 		{
 			free(input_line);
-			g_last_exit_status = 1;
+			g_signal = 1;
 			continue;
 		}
-		/*
-		if (args[0] && strcmp(input_line, "exit") == 0)
-		{
-			ms_free_split_args(args);
-			free(input_line);
-			break ;
-		}
-		*/
-		g_last_exit_status = ms_execute_command_placeholder(args, envp);
+		ms_debug_print_args(args);
+		g_signal = ms_execute_command_placeholder(args, envp, data);
+		ms_debug_print_gsig();
 		ms_free_split_args(args);
 		free(input_line);
 		input_line = NULL;
@@ -76,13 +84,18 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	//(void)envp;
+	t_data	shell_data; // Create an instance of the struct (on the stack)
+
+	if (init_shell_data(&shell_data, argv, envp) != 0)
+	{
+		return (EXIT_FAILURE);
+	}
 	ms_signal_handlers_init();
 	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
-	ms_core_loop(envp);
-	//TODO Cleanup
+	ms_core_loop(envp, &shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
-		g_last_exit_status);
-	return (g_last_exit_status);
+		g_signal);
+	return (g_signal);
 }

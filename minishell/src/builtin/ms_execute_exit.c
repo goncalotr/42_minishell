@@ -6,13 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 23:43:41 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:14:49 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-extern int g_last_exit_status;
+extern unsigned char	g_signal;
 
 //todo implement in libft
 static bool	ft_isspace(char c)
@@ -103,7 +103,7 @@ int	ms_execute_exit(char **args)
 	
 	if (argc == 1)
 	{
-		exit(g_last_exit_status);
+		exit(g_signal);
 	}
 	else if (argc == 2)
 	{

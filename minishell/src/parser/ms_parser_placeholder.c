@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:54:11 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 11:56:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	**ms_parse_input_placeholder(const char *input_line)
 	return (args);
 }
 
-int	ms_execute_command_placeholder(char **args, char **envp)
+int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
 {
 	// Check if parser produced at least one arg
 	if (args == NULL || args[0] == NULL)
@@ -86,7 +86,7 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 	}
 	if (strcmp(args[0], "export") == 0)
 	{
-		return (ms_execute_cd(args));
+		return ms_execute_export(args, data);
 	}
 	else if (strcmp(args[0], "pwd") == 0)
 	{
@@ -94,7 +94,11 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 	}
 	else if (strcmp(args[0], "unset") == 0)
 	{
-		return (ms_execute_cd(args));
+		return (ms_execute_unset((args), data));
+	}
+	else
+	{
+		return (ms_execute_external_command(args, envp));
 	}
 
 	// Add checks for other builtins here (pwd, echo, etc.)
@@ -105,6 +109,7 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 	// ...
 
 	// --- If not a known builtin ---
+	/*
 	else
 	{
 		// Placeholder for External Commands / Command Not Found
@@ -114,4 +119,5 @@ int	ms_execute_command_placeholder(char **args, char **envp)
 		ft_putstr_fd("\n", 2);
 		return (127); // Standard "command not found" exit code
 	}
+	*/
 }

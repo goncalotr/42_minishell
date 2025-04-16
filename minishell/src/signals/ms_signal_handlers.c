@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 13:12:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:53:50 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,18 @@ unsigned char	g_signal;
  * 
  * rl_on_new_line, rl_replace_line, rl_redisplay are included in
  * readline/readline.h
+ * 128 + sigint
  */
 static void	ms_handle_sigint_init(int sig)
 {
 	(void)sig;
 	g_signal = 128 + SIGINT;
-	ft_printf("\n");
-	//rl_replace_line("", 0);
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
+
+	//ft_putstr_fd("\n", STDOUT_FILENO);
 }
 
 /**

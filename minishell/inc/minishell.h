@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 12:35:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:22:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_redirection
 
 // --- debug ---
 void	ms_debug_print_args(char **args);
+void	ms_debug_print_gsig();
 
 // --- init ---
 int		init_shell_data(t_data *data, char **argv, char **envp);

@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/16 12:31:23 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/16 13:21:59 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ CFLAGS			+= -I$(LIBFT_SRC_DIR)
 
 #MANDATORY_SRC	= $(MANDATORY_DIR)main.c
 MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
+				  $(SRC_DIR)/signals/ms_debug_global_signal.c\
 				  $(SRC_DIR)/parser/ms_parser_placeholder.c\
 				  $(SRC_DIR)/parser/ms_debug_input.c\
 				  $(SRC_DIR)/builtin/ms_execute_cd.c\

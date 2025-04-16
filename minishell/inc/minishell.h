@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/10 16:09:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:05:52 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,23 @@ typedef struct s_redirection
 	struct s_redirection	*next;
 }	t_redirection;
 
+typedef enum e_type
+{
+	WORD,
+	PIPE,
+	IN,
+	OUT,
+	HEREDOC,
+	APPEND
+}	t_type;
+
+typedef struct s_tokens
+{
+	char				*token;
+	t_type				type;
+	struct s_tokens		*next;
+}	t_tokens;
+
 /**************************************************************************
  * SECTION: Functions
  **************************************************************************/
@@ -82,6 +99,20 @@ typedef struct s_redirection
 void	ms_signal_handlers_init(void);
 
 // parsing
+// ms_list_utils.c
+t_tokens *ms_last_node(t_tokens *list);
+t_tokens *ms_append_node(t_tokens *list, char  *input, t_type type);
+void ms_print_list(t_tokens *list);
+
+// ms_syntax_check.c
+bool ms_unclosed_quotes(t_tokens *list);
+bool ms_syntax_check(t_tokens *list);
+bool ms_pipes_placement(t_tokens *list);
+
+//ms_tokenization.c
+t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list);
+t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list);
+void ms_tokenization(char *input);
 
 // placeholder
 void	ms_free_split_args(char **args);

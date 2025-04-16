@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 00:55:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:31:45 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ int	g_last_exit_status = 0;
 void	ms_core_loop(char **envp)
 {
 	char	*input_line;
-	char	**args;
+	// char	**args;
 
+	(void)envp;
 	while (1)
 	{
 		input_line = readline(BLUE "minishell> " RESET);
@@ -50,13 +51,14 @@ void	ms_core_loop(char **envp)
 		}
 		add_history(input_line);
 		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
-		args = ms_parse_input_placeholder(input_line);
-		if (!args)
-		{
-			free(input_line);
-			g_last_exit_status = 1;
-			continue;
-		}
+		// args = ms_parse_input_placeholder(input_line);
+		ms_tokenization(input_line);
+		// if (!args)
+		// {
+		// 	free(input_line);
+		// 	g_last_exit_status = 1;
+		// 	continue;
+		// }
 		/*
 		if (args[0] && strcmp(input_line, "exit") == 0)
 		{
@@ -65,10 +67,10 @@ void	ms_core_loop(char **envp)
 			break ;
 		}
 		*/
-		g_last_exit_status = ms_execute_command_placeholder(args, envp);
-		ms_free_split_args(args);
-		free(input_line);
-		input_line = NULL;
+		// g_last_exit_status = ms_execute_command_placeholder(args, envp);
+		// ms_free_split_args(args);
+		// free(input_line);
+		// input_line = NULL;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/15 16:59:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 11:46:03 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,16 @@
  * SECTION: Macros
  **************************************************************************/
 
-// Colors
-# define RESET		"\033[0m"
-# define RED		"\033[31m"
-# define GREEN		"\033[32m"
-# define YELLOW		"\033[33m"
-# define BLUE		"\033[34m"
-# define WHITE		"\033[37m"
+// --- ANSI Color Codes ---
+# define RESET   "\033[0m"
+# define BLACK   "\033[0;30m"
+# define RED     "\033[0;31m"
+# define GREEN   "\033[0;32m"
+# define YELLOW  "\033[0;33m"
+# define BLUE    "\033[0;34m"
+# define MAGENTA "\033[0;35m"
+# define CYAN    "\033[0;36m"
+# define WHITE   "\033[0;37m"
 
 /**************************************************************************
  * SECTION: Structs

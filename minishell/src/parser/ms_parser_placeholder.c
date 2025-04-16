@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/15 16:59:44 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 11:37:39 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
 	}
 	else
 	{
-		return (ms_execute_external_command(args, envp)); // <--- CALL IT HERE
+		return (ms_execute_external_command(args, envp));
 	}
 
 	// Add checks for other builtins here (pwd, echo, etc.)

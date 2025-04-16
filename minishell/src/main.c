@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 18:23:05 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:36:16 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ms_core_loop(char **envp, t_data *data)
 			continue ;
 		}
 		add_history(input_line);
-		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
+		ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		args = ms_parse_input_placeholder(input_line);
 		if (!args)
 		{
@@ -57,14 +57,7 @@ void	ms_core_loop(char **envp, t_data *data)
 			g_last_exit_status = 1;
 			continue;
 		}
-		/*
-		if (args[0] && strcmp(input_line, "exit") == 0)
-		{
-			ms_free_split_args(args);
-			free(input_line);
-			break ;
-		}
-		*/
+		ms_debug_print_args(args);
 		g_last_exit_status = ms_execute_command_placeholder(args, envp, data);
 		ms_free_split_args(args);
 		free(input_line);

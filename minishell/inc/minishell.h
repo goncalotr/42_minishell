@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 11:46:03 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:35:06 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,35 +107,36 @@ typedef struct s_redirection
  * SECTION: Functions
  **************************************************************************/
 
-// main
+// --- main ---
 //void	ms_core_loop(char **envp);
 //int	main(int argc, char **argv, char **envp);
 
-// init
-int	init_shell_data(t_data *data, char **argv, char **envp);
+// --- debug ---
+void	ms_debug_print_args(char **args);
 
-// signals
+// --- init ---
+int		init_shell_data(t_data *data, char **argv, char **envp);
+
+// --- signals ---
 void	ms_signal_handlers_init(void);
 
-// parsing
+// --- parsing ---
 
-// placeholder
+// parsing placeholder 
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
 int		ms_execute_command_placeholder(char **args, char **envp, t_data *data);
 
-// built-ins
+// --- built-ins ---
 int		ms_execute_cd(char **args);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args);
-//int		ms_execute_export(char **args);
-//int		ms_execute_export(char **args, char ***envp_ptr)
 int		ms_execute_export(char **args, t_data *data);
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_data *data);
 
-// exec
+// --- exec ---
 char	*ms_find_command_path(const char *cmd, char **envp);
 int		ms_execute_external_command(char **args, char **envp);
 

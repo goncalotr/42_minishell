@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 16:00:38 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:09:26 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,12 @@ void	ms_core_loop(char **envp, t_data *data)
 {
 	char	*input_line;
 	char	**args;
+	int last_status_for_expansion;
 
 	g_signal = 0;
 	while (1)
 	{
+		last_status_for_expansion = g_signal;
 		if (g_signal == 130) {
 			g_signal = 0;
 		}
@@ -50,11 +52,12 @@ void	ms_core_loop(char **envp, t_data *data)
 			ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" RESET, saved_errno, strerror(saved_errno));
 			if (input_line)
 				free(input_line);
+			last_status_for_expansion = 130;
 			continue;
 		}
 		if (input_line == NULL)
 		{
-			ft_printf("exit\n");
+			ft_printf("exit\n");	
 			break ;
 		}
 		if (input_line[0] == '\0')
@@ -71,6 +74,7 @@ void	ms_core_loop(char **envp, t_data *data)
 			g_signal = 1;
 			continue;
 		}
+		ms_expand_variables(args, last_status_for_expansion);
 		ms_debug_print_args(args);
 		g_signal = ms_execute_command_placeholder(args, envp, data);
 		ms_debug_print_gsig();

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 15:22:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:00:38 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	ms_core_loop(char **envp, t_data *data)
 		input_line = readline(BLUE "minishell" WHITE "> " RESET);
 		if (g_signal == 130)
 		{
+			int saved_errno = errno;
+			ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" RESET, saved_errno, strerror(saved_errno));
 			if (input_line)
 				free(input_line);
 			continue;

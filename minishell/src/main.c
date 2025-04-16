@@ -6,14 +6,14 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 12:36:16 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:14:11 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // Definition of the global variable
-int	g_last_exit_status = 0;
+extern unsigned char	g_signal;
 
 /**
  * @brief The main interactive loop of the minishell.
@@ -29,6 +29,8 @@ int	g_last_exit_status = 0;
  * 5. Check for exit command
  * 6. Placeholder for parsing
  * 7. Free input line
+ * 
+ * 
  */
 void	ms_core_loop(char **envp, t_data *data)
 {
@@ -37,7 +39,13 @@ void	ms_core_loop(char **envp, t_data *data)
 
 	while (1)
 	{
-		input_line = readline(BLUE "minishell> " RESET);
+		input_line = readline(BLUE "mini" CYAN "shell" BLUE "> " RESET);
+		if (g_signal)
+		{
+			if (input_line)
+				free(input_line);
+			continue;
+		}
 		if (input_line == NULL)
 		{
 			ft_printf("exit\n");
@@ -54,11 +62,11 @@ void	ms_core_loop(char **envp, t_data *data)
 		if (!args)
 		{
 			free(input_line);
-			g_last_exit_status = 1;
+			g_signal = 1;
 			continue;
 		}
 		ms_debug_print_args(args);
-		g_last_exit_status = ms_execute_command_placeholder(args, envp, data);
+		g_signal = ms_execute_command_placeholder(args, envp, data);
 		ms_free_split_args(args);
 		free(input_line);
 		input_line = NULL;
@@ -80,8 +88,7 @@ int	main(int argc, char **argv, char **envp)
 	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
 	ms_core_loop(envp, &shell_data);
-	//TODO Cleanup
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
-		g_last_exit_status);
-	return (g_last_exit_status);
+		g_signal);
+	return (g_signal);
 }

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 15:38:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:18:35 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
  * ${VAR}
 */
 
+//TODO quotes "" and ''
+
 /**
  * @brief Determines what needs expanding starting at '$' and its length.
  *
@@ -34,8 +36,13 @@
  * @return An allocated string containing the info
  * ("?", "VAR_NAME", "$") or NULL on error.
  * 
- * is valid var -> mode 0,
- * else '$' followed by invalid char
+ * Cases
+ * 1 basic checks and $ at end of string
+ * 2 $?
+ * 3 $$
+ * 4 { }
+ * 5 normal case - is valid var -> mode 0,
+ * 6 else '$' followed by invalid char -> trat $ literally
  * 
  */
 char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
@@ -52,6 +59,11 @@ char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
 	{
 		*target_len = 2;
 		info = ft_strdup("?");
+	}
+	else if (str[i] == '$')
+	{
+		*target_len = 2;
+		info = ft_strdup("$$");
 	}
 	else if (str[i] == '{')
 		info = ms_process_curly_expansion(str, i + 1, target_len, dollar_pos);
@@ -106,7 +118,7 @@ int	ms_process_one_expansion(const char *str, char **res_ptr, \
 
 /**
  * @brief Expands variables in a string using helper functions.
- *        Naive version: Ignores quoting.
+ *        !TODO QUOTES
  *
  * @param original_str The string to expand.
  * @param last_exit_status The exit status for $?.
@@ -130,7 +142,7 @@ char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 		if (ms_process_one_expansion(original_str, &result, &current_pos,
 				dollar_pos, last_exit_status) != 0)
 			return (free(result), NULL);
-		dollar_pos = ms_find_next_dollar(original_str, current_pos) != -1;
+		dollar_pos = ms_find_next_dollar(original_str, current_pos);
 	}
 	literal_part = ft_substr(original_str, current_pos,
 			ft_strlen(original_str) - current_pos);

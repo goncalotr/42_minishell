@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 15:39:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:20:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,43 @@ char	*ms_process_curly_expansion(const char *str, int i, \
 		info_str = ft_strdup("$");
 	}
 	return (info_str);
+}
+
+/**
+ * @brief Gets the expanded value for the given info.
+ *
+ * @param info The info string ("?", "VAR_NAME", "$").
+ * @param last_exit_status The exit status for $?.
+ * @return An allocated string with the value, or NULL on memory error.
+ * 
+ * 1 Error
+ * 2 $?
+ * 3 $$
+ * 4 literal $
+ * 5 $VAR adn ${VAR}
+ */
+char	*ms_get_expansion_value(const char *info, int last_exit_status)
+{
+	char	*env_val;
+	pid_t	pid;
+
+	if (!info)
+		return (NULL);
+	if (ft_strcmp(info, "?") == 0)
+		return (ft_itoa(last_exit_status));
+	else if (ft_strcmp(info, "$$") == 0)
+	{
+		pid = getpid();
+		return (ft_itoa((int)pid));
+	}
+	else if (ft_strcmp(info, "$") == 0)
+		return (ft_strdup("$"));
+	else
+	{
+		env_val = getenv(info);
+		if (env_val)
+			return (ft_strdup(env_val));
+		else
+			return (ft_strdup(""));
+	}
 }

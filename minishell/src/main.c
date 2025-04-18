@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:56:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:16:54 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@ void	ms_core_loop(char **envp, t_data *data)
 {
 	char	*input_line;
 	char	**args;
-	int last_status_for_expansion;
+	int		last_status;
 	char	*prompt_str;
 
 	g_signal = 0;
 	while (1)
 	{
-		last_status_for_expansion = g_signal;
+		last_status = g_signal;
 		if (g_signal == 130) {
 			g_signal = 0;
 		}
-		prompt_str = ms_get_prompt();
+		prompt_str = ms_get_prompt(last_status);
 		if (!prompt_str)
 		{
 			ft_putstr_fd("Critical error: Could not generate prompt. Exiting.\n", 2);
@@ -58,8 +58,10 @@ void	ms_core_loop(char **envp, t_data *data)
 			int saved_errno = errno;
 			ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" RESET, saved_errno, strerror(saved_errno));
 			if (input_line)
+			{
 				free(input_line);
-			last_status_for_expansion = 130;
+				last_status = 130;
+			}
 			continue;
 		}
 		if (input_line == NULL)
@@ -81,7 +83,7 @@ void	ms_core_loop(char **envp, t_data *data)
 			g_signal = 1;
 			continue;
 		}
-		ms_expand_variables(args, last_status_for_expansion);
+		ms_expand_variables(args, last_status);
 		ms_debug_print_args(args);
 		g_signal = ms_execute_command_placeholder(args, envp, data);
 		ms_debug_print_gsig();

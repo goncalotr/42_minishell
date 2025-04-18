@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:42:20 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:54:51 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:04:26 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,21 @@ static int	ms_build_str_append(char **base_ptr, const char *to_append)
  * Fallback: BLUE "minishell" WHITE "> " RESET
  * @return A newly allocated string containing the prompt, or NULL on error.
  *         The caller is responsible for freeing the returned string.
+ * 
+ * non zero staus represents error
  */
-char *ms_get_prompt(void)
+char	*ms_get_prompt(int last_status)
 {
 	char	*user;
 	char	*pwd;
 	char	*prompt;
+	const char	*prompt_color;
 
+	if (last_status == 0) {
+		prompt_color = GREEN;
+	} else {
+		prompt_color = RED;
+	}
 	user = getenv("USER");
 	pwd = getenv("PWD");
 	if (!user || !pwd)
@@ -69,7 +77,7 @@ char *ms_get_prompt(void)
 	if (prompt && ms_build_str_append(&prompt, user) != 0) {}
 	if (prompt && ms_build_str_append(&prompt, "@") != 0) {}
 	if (prompt && ms_build_str_append(&prompt, pwd) != 0) {}
-	if (prompt && ms_build_str_append(&prompt, BLACK) != 0) {}
+	if (prompt && ms_build_str_append(&prompt, prompt_color) != 0) {}
 	if (prompt && ms_build_str_append(&prompt, "> ") != 0) {}
 	if (prompt && ms_build_str_append(&prompt, RESET) != 0) {}
 	if (!prompt)

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/15 17:05:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:46:00 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,25 @@ static int	ms_is_valid_identifier(const char *str)
 }
 
 //todo find_env_var_index (reuse or copy from unset)
-static int find_env_var_index(const char *name, size_t name_len, char **env_list)
+// Check if the entry starts with "name="
+static int	find_env_var_index(const char *name, size_t name_len, \
+		char **env_list)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!name || !env_list)
 		return (-1);
-
 	while (env_list[i])
 	{
-		// Check if the entry starts with "name="
-		if (ft_strncmp(env_list[i], name, name_len) == 0
+		if (ft_strncmp(env_list[i], name, name_len) == 0 \
 			&& env_list[i][name_len] == '=')
 		{
-			return (i); // Found it
+			return (i);
 		}
 		i++;
 	}
-	return (-1); // Not found
+	return (-1);
 }
 
 // Prints the "not a valid identifier" error message for export.

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 13:14:49 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:44:57 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 	result = 0;
 	sign = 1;
 	i = 0;
-
 	while (ft_isspace(str[i]))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -57,10 +56,10 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 	while (ft_isdigit(str[i]))
 	{
 		if (sign == 1 && (result > LLONG_MAX / 10 || \
-		   (result == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10)))
+			(result == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10)))
 			return (false);
 		if (sign == -1 && (result > LLONG_MAX / 10 || \
-		   (result == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10 + 1)))
+			(result == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10 + 1)))
 			return (false);
 		result = result * 10 + (str[i] - '0');
 		i++;
@@ -92,15 +91,13 @@ bool	ft_atol_validate(const char *str, long long *n_out)
  */
 int	ms_execute_exit(char **args)
 {
-	int	argc;
+	int			argc;
 	long long	exit_code_ll;
 
 	argc = 0;
 	while (args[argc] != NULL)
 		argc++;
-
 	ft_putstr_fd("exit\n", STDERR_FILENO);
-	
 	if (argc == 1)
 	{
 		exit(g_signal);

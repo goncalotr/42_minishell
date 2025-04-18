@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 17:31:28 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:43:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,22 @@ char	**ms_parse_input_placeholder(const char *input_line);
 int		ms_execute_command_placeholder(char **args, char **envp, t_data *data);
 
 // --- expand ---
-int		ms_is_valid_var_start(char c);
-int		ms_is_valid_var_char(char c);
+
+// utils
+int		ms_valid_var(char c, int mode);
+int		ms_expand_error(char **args, int i, int mode);
 int		ms_find_next_dollar(const char *str, int start_pos);
-char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len);
 char	*ms_get_expansion_value(const char *info, int last_exit_status);
 int		ms_append_and_free(char **base_str_ptr, const char *to_append);
 
+// 2
+char	*ms_process_simple_var_expansion(const char *str, int i, int *t_len, int d_pos);
+char	*ms_process_curly_expansion(const char *str, int i, int *t_len, int d_pos);
+
+// 1
+int		ms_process_one_expansion(const char *str, char **res_ptr, int *cur_pos_ptr, int dol_pos, int status);
+char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len);
+int		ms_process_one_expansion(const char *str, char **res_ptr, int *cur_pos_ptr, int dol_pos, int status);
 char	*ms_expand_str_help(const char *original_str, int last_exit_status);
 void	ms_expand_variables(char **args, int last_exit_status);
 

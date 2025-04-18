@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_expand_var.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
+/*   Updated: 2025/04/18 15:38:46 by goteixei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
@@ -14,74 +25,20 @@
 */
 
 /**
- * @brief Helper for get_expansion_info to handle the $VAR case.
- *
- * @param str The full input string.
- * @param i Index position after the '$'.
- * @param t_len Pointer to update with the target length (from '$' to end of name).
- * @param d_pos Index of the original '$'.
- * @return Allocated string with variable name, or NULL on malloc error.
- */
-static char *ms_process_simple_var_expansion(const char *str, int i, int *t_len, int d_pos)
-{
-	int	name_len;	
-	char	*info_str;
-
-	name_len = 0;
-	while (ms_is_valid_var_char(str[i + name_len]))
-		name_len++;
-	*t_len = (i + name_len) - d_pos;
-	info_str = ft_substr(str, i, name_len);
-	return (info_str);
-}
-
-/**
- * @brief Helper for get_expansion_info to handle the ${VAR} case.
- *
- * @param str The full input string.
- * @param i Index position after the '{'.
- * @param t_len Pointer to update with the target length (from '$' to '}').
- * @param d_pos Index of the original '$'.
- * @return Allocated string with variable name, or "$" if syntax error, or NULL on malloc error.
- * 
- * find }
- * extract name
- * no closing } -> treat $ literally 
- */
-static char *ms_process_curly_expansion(const char *str, int i, int *t_len, int d_pos)
-{
-	int	name_len;
-	char *info_str;
-
-	name_len = 0;
-	while (str[i + name_len] && str[i + name_len] != '}')
-	{
-		name_len++;
-	}
-	if (str[i + name_len] == '}')
-	{
-		*t_len = (i + name_len + 1) - d_pos;
-		info_str = ft_substr(str, i, name_len);
-	}
-	else
-	{
-		*t_len = 1;
-		info_str = ft_strdup("$");
-	}
-	return (info_str);
-}
-
-/**
  * @brief Determines what needs expanding starting at '$' and its length.
  *
  * @param str The full input string.
  * @param d_pos Index where '$' was found (using 'd_pos' for brevity).
- * @param t_len Pointer to store the length of the target sequence (e.g., "$?" is 2).
- * @return An allocated string containing the info ("?", "VAR_NAME", "$") or NULL on error.
+ * @param t_len Pointer to store the length of the target sequence
+ * (e.g., "$?" is 2).
+ * @return An allocated string containing the info
+ * ("?", "VAR_NAME", "$") or NULL on error.
  * 
+ * is valid var -> mode 0,
  * else '$' followed by invalid char
+ * 
  */
-char *ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
+char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
 {
 	int		i;
 	char	*info;
@@ -97,22 +54,18 @@ char *ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
 		info = ft_strdup("?");
 	}
 	else if (str[i] == '{')
-	{
 		info = ms_process_curly_expansion(str, i + 1, target_len, dollar_pos);
-	}
-	else if (ms_is_valid_var_start(str[i]))
-	{
+	else if (ms_valid_var(str[i], 0))
 		info = ms_process_simple_var_expansion(str, i, target_len, dollar_pos);
-	}
 	else
 		info = ft_strdup("$");
 	return (info);
 }
 
 /**
- * @brief Processes one potential expansion segment within the main expansion loop.
+ * @brief Processes one potential expansion segment within the
+ * main expansion loop.
  *        Appends literal part, gets info, gets value, appends value.
- *        Norminette-compliant helper.
  *
  * @param str The original input string.
  * @param res_ptr Pointer to the result string pointer (modified).
@@ -121,7 +74,7 @@ char *ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
  * @param status The last exit status for $?.
  * @return 0 on success, 1 on error.
  */
-static int	ms_process_one_expansion(const char *str, char **res_ptr, \
+int	ms_process_one_expansion(const char *str, char **res_ptr, \
 									int *cur_pos_ptr, int dol_pos, int status)
 {
 	char	*info;
@@ -151,7 +104,6 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
 	return (0);
 }
 
-
 /**
  * @brief Expands variables in a string using helper functions.
  *        Naive version: Ignores quoting.
@@ -160,37 +112,31 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
  * @param last_exit_status The exit status for $?.
  * @return A newly allocated expanded string, or NULL on error.
  */
-char *ms_expand_str_help(const char *original_str, int last_exit_status)
+char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 {
 	char	*result;
 	char	*literal_part;
 	int		current_pos;
 	int		dollar_pos;
-	
+
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
 	current_pos = 0;
 	dollar_pos = -1;
-	while ((dollar_pos = ms_find_next_dollar(original_str, current_pos)) != -1)
+	dollar_pos = ms_find_next_dollar(original_str, current_pos);
+	while (dollar_pos != -1)
 	{
 		if (ms_process_one_expansion(original_str, &result, &current_pos,
-			dollar_pos, last_exit_status) != 0)
-		{
-			free(result);
-			return (NULL);
-		}
+				dollar_pos, last_exit_status) != 0)
+			return (free(result), NULL);
+		dollar_pos = ms_find_next_dollar(original_str, current_pos) != -1;
 	}
 	literal_part = ft_substr(original_str, current_pos,
-					ft_strlen(original_str) - current_pos);
+			ft_strlen(original_str) - current_pos);
 	if (!literal_part || ms_append_and_free(&result, literal_part))
-	{
-		free(literal_part);
-		free(result); 
-		return (NULL);
-	}
-	free(literal_part);
-	return (result);
+		return (free(literal_part), free(result), NULL);
+	return (free(literal_part), result);
 }
 
 /**
@@ -200,10 +146,10 @@ char *ms_expand_str_help(const char *original_str, int last_exit_status)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
-void ms_expand_variables(char **args, int last_exit_status)
+void	ms_expand_variables(char **args, int last_exit_status)
 {
-	int i;
-	char *expanded_arg;
+	int		i;
+	char	*expanded_arg;
 
 	if (!args)
 		return ;
@@ -214,11 +160,7 @@ void ms_expand_variables(char **args, int last_exit_status)
 		{
 			expanded_arg = ms_expand_str_help(args[i], last_exit_status);
 			if (!expanded_arg)
-			{
-				ft_putstr_fd("minishell: expansion memory error for arg: ", 2);
-				//ft_putstr_fd(args[i] ? args[i] : "(null)", 2);
-				ft_putstr_fd("\n", 2);
-			}
+				ms_expand_error(args, i, 1);
 			else
 			{
 				free(args[i]);

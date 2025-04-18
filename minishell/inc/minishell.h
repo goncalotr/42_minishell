@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 13:22:43 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:33:39 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,25 @@
 /**
  * @brief Holds the main state of the minishell.
  *
- * @param environ_list    A dynamically allocated copy of the environment variables
- *                        (char ** array, NULL-terminated, e.g., {"VAR=value", NULL}).
+ * @param environ_list    A dynamically allocated copy of the environment
+ * variables
+ *(char ** array, NULL-terminated, e.g., {"VAR=value", NULL}).
  *                        This is the list modified by export/unset.
- * @param last_exit_status The exit status of the most recently executed foreground command ($?).
- * @param stdin_fd         Saved original standard input file descriptor (usually 0).
- * @param stdout_fd        Saved original standard output file descriptor (usually 1).
- * @param stderr_fd        Saved original standard error file descriptor (usually 2).
- * @param shell_name       The name the shell was invoked with (argv[0]), useful for errors.
- * @param current_cmd_table Pointer to the currently parsed command structure (optional,
- *                          can also be passed as function arguments). Manage lifecycle carefully.
- * @param envp_orig        Pointer to the original envp from main (optional, for reference).
+ * @param last_exit_status The exit status of the most recently executed
+ * foreground command ($?).
+ * @param stdin_fd         Saved original standard input file descriptor
+ * (usually 0).
+ * @param stdout_fd        Saved original standard output file descriptor
+ * (usually 1).
+ * @param stderr_fd        Saved original standard error file descriptor
+ * (usually 2).
+ * @param shell_name       The name the shell was invoked with (argv[0]),
+ * useful for errors.
+ * @param current_cmd_table Pointer to the currently parsed command structure
+ * (optional, can also be passed as function arguments).
+ * Manage lifecycle carefully.
+ * @param envp_orig        Pointer to the original envp from main
+ * (optional, for reference).
  */
 typedef struct s_data
 {
@@ -111,9 +119,12 @@ typedef struct s_redirection
 //void	ms_core_loop(char **envp);
 //int	main(int argc, char **argv, char **envp);
 
+// --- prompt ---
+char	*ms_get_prompt(int last_status);
+
 // --- debug ---
 void	ms_debug_print_args(char **args);
-void	ms_debug_print_gsig();
+void	ms_debug_print_gsig(void);
 
 // --- init ---
 int		init_shell_data(t_data *data, char **argv, char **envp);
@@ -127,6 +138,31 @@ void	ms_signal_handlers_init(void);
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
 int		ms_execute_command_placeholder(char **args, char **envp, t_data *data);
+
+// --- expand ---
+
+// utils
+int		ms_valid_var(char c, int mode);
+int		ms_expand_error(char **args, int i, int mode);
+int		ms_find_next_dollar(const char *str, int start_pos);
+char	*ms_get_expansion_value(const char *info, int last_exit_status);
+int		ms_append_and_free(char **base_str_ptr, const char *to_append);
+
+// 2
+char	*ms_process_simple_var_expansion(const char *str, int i, \
+				int *t_len, int d_pos);
+char	*ms_process_curly_expansion(const char *str, int i, \
+				int *t_len, int d_pos);
+
+// 1
+int		ms_process_one_expansion(const char *str, char **res_ptr, \
+				int *cur_pos_ptr, int dol_pos, int status);
+char	*ms_get_expansion_info(const char *str, int dollar_pos, \
+				int *target_len);
+int		ms_process_one_expansion(const char *str, char **res_ptr, \
+				int *cur_pos_ptr, int dol_pos, int status);
+char	*ms_expand_str_help(const char *original_str, int last_exit_status);
+void	ms_expand_variables(char **args, int last_exit_status);
 
 // --- built-ins ---
 int		ms_execute_cd(char **args);

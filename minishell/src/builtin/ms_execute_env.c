@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 00:20:09 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/09 01:08:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:43:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * @param envp The environment variables array.
  * @return int Always returns 0 (success).
  */
-int ms_execute_env(char **args, char **envp)
+int	ms_execute_env(char **args, char **envp)
 {
 	int	i;
 

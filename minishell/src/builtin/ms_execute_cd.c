@@ -6,19 +6,14 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/10 16:10:09 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:45:33 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 /**
- * @brief Prints an error message for cd to standard error.
- * @param msg The specific error message.
- * @param details Optional details (like the directory name). Can be NULL.
- * @return Always returns 1 (failure exit status for cd).
- */
-static int	ms_cd_error(char *msg, char *details)
+ * static int	ms_cd_error(char *msg, char *details)
 {	
 	//todo create ft_fprintf
 	//fprintf(stderr, "minishell: cd: %s", msg);
@@ -27,6 +22,26 @@ static int	ms_cd_error(char *msg, char *details)
 	//	fprintf(stderr, ": %s", details);
 	//}
 	//fprintf(stderr, "\n");
+	ft_putstr_fd("minishell: cd: ", 2);
+	ft_putstr_fd(msg, 2);
+	if (details)
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(details, 2);
+	}
+	ft_putstr_fd(details, 2);
+	return (1);
+}
+ */
+
+/**
+ * @brief Prints an error message for cd to standard error.
+ * @param msg The specific error message.
+ * @param details Optional details (like the directory name). Can be NULL.
+ * @return Always returns 1 (failure exit status for cd).
+ */
+static int	ms_cd_error(char *msg, char *details)
+{
 	ft_putstr_fd("minishell: cd: ", 2);
 	ft_putstr_fd(msg, 2);
 	if (details)
@@ -70,8 +85,8 @@ int	ms_execute_cd(char **args)
 	if (chdir(target_dir) == -1)
 	{
 		char error_prefix[1024];
-		snprintf(error_prefix, sizeof(error_prefix), "minishell: cd: %s", \
-		target_dir);
+		snprintf(error_prefix, sizeof(error_prefix), \
+		"minishell: cd: %s", target_dir);
 		perror(error_prefix);
 		return (1);
 	}

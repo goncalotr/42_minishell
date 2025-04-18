@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/08 22:38:13 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:43:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ int	ms_execute_echo(char **args)
 	i = 1;
 	print_newline = 1;
 	if (args[1] == NULL)
-	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		return (0);
-	}
+		return (ft_putchar_fd('\n', STDOUT_FILENO), 0);
 	if (ft_strncmp(args[1], "-n", 3) == 0)
 	{
 		print_newline = 0;
@@ -56,8 +53,6 @@ int	ms_execute_echo(char **args)
 		i++;
 	}
 	if (print_newline)
-	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	}
 	return (0);
 }

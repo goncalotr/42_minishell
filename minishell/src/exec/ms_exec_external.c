@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 02:05:03 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 17:01:00 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:00:58 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,14 @@
 //enoent
 //126 permission denied
 //127 command not found
-static void	child_exec(const char *path, char **args, char **envp)
+static void	ms_child_exec(const char *path, char **args, char **envp)
 {
 	execve(path, args, envp);
-
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(args[0], STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(strerror(errno), STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
-
 	if (errno == EACCES)
 		exit(126);
 	if (errno == ENOENT)
@@ -39,21 +37,26 @@ static void	child_exec(const char *path, char **args, char **envp)
 
 // This function runs in the parent process.
 // It waits for the child process (pid) to finish and returns its exit status.
-static int parent_wait(pid_t pid)
+/**
+ * 	Check how the child terminated
+	if (WIFEXITED(status))
+	{
+		Child exited normally, return its exit code
+		exit_status = WEXITSTATUS(status);
+	}
+ */
+static int	ms_parent_wait(pid_t pid)
 {
 	int	status;
 	int	exit_status;
 
-	if(waitpid(pid, &status, 0) == -1)
+	if (waitpid(pid, &status, 0) == -1)
 	{
 		perror("minishell: waitpid");
 		return (1);
 	}
-
-	// Check how the child terminated
 	if (WIFEXITED(status))
 	{
-		// Child exited normally, return its exit code
 		exit_status = WEXITSTATUS(status);
 	}
 	else if (WIFSIGNALED(status))
@@ -65,7 +68,38 @@ static int parent_wait(pid_t pid)
 		exit_status = 1;
 	}
 	return (exit_status);
+}
 
+static int	ms_execute_error(char **args, int mode)
+{
+	if (mode == 1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(args[0], STDERR_FILENO);
+		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+		return (126);
+	}
+	else if (mode == 2)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(args[0], STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		return (127);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(args[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		return (127);
+	}
+}
+
+static void	ms_child_exec_help(char **args, char **envp, char *path)
+{
+	ms_child_exec(path, args, envp);
+	free(path);
+	exit(EXIT_FAILURE);
 }
 
 /**
@@ -85,59 +119,27 @@ static int parent_wait(pid_t pid)
  */
 int	ms_execute_external_command(char **args, char **envp)
 {
-	(void) args;
-	(void) envp;
 	char	*path;
 	pid_t	pid;
 
 	if (!args || !args[0])
 		return (0);
-
 	path = ms_find_command_path(args[0], envp);
 	if (!path)
 	{
 		if (ft_strchr(args[0], '/') && errno == EACCES)
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
-			return (126);
-		}
+			return (ms_execute_error(args, 1));
 		else if (ft_strchr(args[0], '/') && errno == ENOENT)
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-			return (127);
-		}
-		else // Command not found in ATH or PATH not set
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
-			return (127);
-		}
+			return (ms_execute_error(args, 2));
+		else
+			return (ms_execute_error(args, 3));
 	}
-
-
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("minishell: fork");
-		free(path);
-		return (1);
-	}
+		return (perror("minishell: fork"), free(path), 1);
 	else if (pid == 0)
-	{
-		child_exec(path, args, envp);
-		free(path);
-		exit(EXIT_FAILURE);
-	}
+		ms_child_exec_help(args, envp, path);
 	else
-	{
-		free(path);
-		return(parent_wait(pid));
-	}
-
+		return (free(path), ms_parent_wait(pid));
 	return (1);
 }

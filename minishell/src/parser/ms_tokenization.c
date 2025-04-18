@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/16 18:08:36 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:40:23 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,30 @@ t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list)
 	return list;
 }
 
+int	ms_len_word(char *input, int i)
+{
+	int len;
+
+	len = 0;
+	while (input[i])
+	{
+		if(input[i] == 32 || (input[i] >= 7 && input[i] <= 13))
+			break;
+		if(input[i] == '|' ||  (input[i] == '<' || input[i] == '>'))
+			break;
+		i++;
+		len++;
+	}
+	return (len);
+}
+
 t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list)
 {
 	char	*word;
 	int 	k;
 
-	word = malloc(1024);
+	
+	word = malloc(ms_len_word(input, *i) + 1);
 	if (!word)
 		return list;
 	k = 0;

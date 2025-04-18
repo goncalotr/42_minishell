@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/14 18:19:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:49:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  *        Handles NULL input gracefully.
  * @param envp_copy The char** list to free.
  */
-void free_envp_copy(char **envp_copy)
+void	free_envp_copy(char **envp_copy)
 {
 	int	i;
 
@@ -37,7 +37,8 @@ void free_envp_copy(char **envp_copy)
  *        Handles allocation errors.
  * @param envp The original environment array from main. Can be NULL.
  * @return A newly allocated, NULL-terminated copy of envp, or NULL on failure.
- *         Returns an allocated array containing only NULL if envp is NULL or empty.
+ *         Returns an allocated array containing only NULL if envp is
+ * NULL or empty.
  */
 char	**duplicate_envp(char **envp)
 {
@@ -46,36 +47,30 @@ char	**duplicate_envp(char **envp)
 	char	**copy;
 
 	count = 0;
-	// Count existing entries safely, handling NULL envp
 	if (envp)
 	{
 		while (envp[count])
 			count++;
 	}
-
-	// Allocate space for pointers + 1 for NULL terminator
 	copy = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!copy)
 	{
 		perror("minishell: malloc error duplicating envp");
 		return (NULL);
 	}
-
-	// Duplicate each string
 	i = 0;
 	while (i < count)
 	{
 		copy[i] = ft_strdup(envp[i]);
 		if (!copy[i])
 		{
-			// Allocation failed for one string, clean up previously allocated ones
 			perror("minishell: ft_strdup error duplicating envp entry");
-			free_envp_copy(copy); // Free the array and the strings allocated so far
+			free_envp_copy(copy);
 			return (NULL);
 		}
 		i++;
 	}
-	copy[i] = NULL; // Null-terminate the array
+	copy[i] = NULL;
 	return (copy);
 }
 
@@ -89,30 +84,26 @@ char	**duplicate_envp(char **envp)
  */
 int	init_shell_data(t_data *data, char **argv, char **envp)
 {
-	if (!data || !argv) // Basic validation
+	if (!data || !argv)
 		return (1);
-
 	// 1. Initialize pointers to NULL first for safety in cleanup
 	data->environ_list = NULL;
 	data->shell_name = NULL;
-	data->stdin_fd = -1; // Initialize FDs to invalid state
+	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
-
 	// 2. Duplicate environment variables
 	data->environ_list = duplicate_envp(envp);
 	if (!data->environ_list)
-		return (1); // Error message printed by duplicate_envp or malloc
-
+		return (1);
 	// 3. Initialize exit status
 	data->last_exit_status = 0;
-
 	// 4. Save original standard I/O file descriptors using dup()
 	data->stdin_fd = dup(STDIN_FILENO);
 	if (data->stdin_fd == -1)
 	{
 		perror("minishell: dup(STDIN_FILENO)");
-		free_envp_copy(data->environ_list); // Clean up allocated env
+		free_envp_copy(data->environ_list);
 		return (1);
 	}
 	data->stdout_fd = dup(STDOUT_FILENO);
@@ -120,7 +111,7 @@ int	init_shell_data(t_data *data, char **argv, char **envp)
 	{
 		perror("minishell: dup(STDOUT_FILENO)");
 		free_envp_copy(data->environ_list);
-		close(data->stdin_fd); // Clean up previously dup'd fd
+		close(data->stdin_fd);
 		return (1);
 	}
 	data->stderr_fd = dup(STDERR_FILENO);
@@ -129,16 +120,14 @@ int	init_shell_data(t_data *data, char **argv, char **envp)
 		perror("minishell: dup(STDERR_FILENO)");
 		free_envp_copy(data->environ_list);
 		close(data->stdin_fd);
-		close(data->stdout_fd); // Clean up previously dup'd fds
+		close(data->stdout_fd);
 		return (1);
 	}
-
 	// 5. Store shell name (duplicate it)
-	if (argv[0]) // Check if argv[0] exists
+	if (argv[0])
 		data->shell_name = ft_strdup(argv[0]);
 	else
-		data->shell_name = ft_strdup("minishell"); // Default name if argv[0] is NULL
-
+		data->shell_name = ft_strdup("minishell");
 	if (!data->shell_name) {
 		perror("minishell: ft_strdup for shell_name");
 		free_envp_copy(data->environ_list);
@@ -147,9 +136,7 @@ int	init_shell_data(t_data *data, char **argv, char **envp)
 		close(data->stderr_fd);
 		return (1);
 	}
-
 	// 6. Store pointer to original envp (no allocation needed)
 	data->envp_original = envp;
-
-	return (0); // Success!
+	return (0);
 }

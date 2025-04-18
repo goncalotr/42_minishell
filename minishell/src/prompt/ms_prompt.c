@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:42:20 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 17:04:26 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:36:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,68 @@ static int	ms_build_str_append(char **base_ptr, const char *to_append)
 	new_base = ft_strjoin(old_base, to_append);
 	free(old_base);
 	if (!new_base)
-	{
-		*base_ptr = NULL;
-		ft_putstr_fd("minishell: prompt build allocation error\n", 2);
-		return (1);
-	}
+		return (*base_ptr = NULL, \
+			ft_putstr_fd("minishell: prompt build allocation error\n", \
+			2), 1);
 	*base_ptr = new_base;
 	return (0);
+}
+
+static char	*ms_build_fallback_prompt(void)
+{
+	char	*prompt;
+
+	prompt = ft_strdup(BLUE);
+	if (prompt && ms_build_str_append(&prompt, "minishell") != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, BLACK) != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, "> ") != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, RESET) != 0)
+	{
+	}
+	if (!prompt)
+		ft_putstr_fd("minishell: prompt allocation error (fallback)\n", 2);
+	return (prompt);
+}
+
+/**
+* @brief Builds the main dynamic part of the prompt string.
+*        Format: BLUE "user@pwd" color "> " RESET
+* @param user The username string.
+* @param pwd The current directory string.
+* @param color The color string (e.g., GREEN or RED) for '>'.
+* @return Allocated string or NULL on failure.
+*/
+static char	*ms_build_dynamic_prompt(const char *user, const char *pwd, \
+	const char *color)
+{
+	char	*prompt;
+
+	prompt = ft_strdup(BLUE);
+	if (prompt && ms_build_str_append(&prompt, user) != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, "@") != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, pwd) != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, color) != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, "> ") != 0)
+	{
+	}
+	if (prompt && ms_build_str_append(&prompt, RESET) != 0)
+	{
+	}
+	return (prompt);
 }
 
 /**
@@ -54,33 +109,21 @@ static int	ms_build_str_append(char **base_ptr, const char *to_append)
  */
 char	*ms_get_prompt(int last_status)
 {
-	char	*user;
-	char	*pwd;
-	char	*prompt;
+	char		*user;
+	char		*pwd;
 	const char	*prompt_color;
 
-	if (last_status == 0) {
+	if (last_status == 0)
+	{
 		prompt_color = GREEN;
-	} else {
+	}
+	else
+	{
 		prompt_color = RED;
 	}
 	user = getenv("USER");
 	pwd = getenv("PWD");
 	if (!user || !pwd)
-	{
-		prompt = ft_strdup(BLUE "minishell" BLACK "> " RESET);
-		if (!prompt)
-			ft_putstr_fd("minishell: prompt allocation error\n", 2);
-		return (prompt);
-	}
-	prompt = ft_strdup(BLUE);
-	if (prompt && ms_build_str_append(&prompt, user) != 0) {}
-	if (prompt && ms_build_str_append(&prompt, "@") != 0) {}
-	if (prompt && ms_build_str_append(&prompt, pwd) != 0) {}
-	if (prompt && ms_build_str_append(&prompt, prompt_color) != 0) {}
-	if (prompt && ms_build_str_append(&prompt, "> ") != 0) {}
-	if (prompt && ms_build_str_append(&prompt, RESET) != 0) {}
-	if (!prompt)
-		ft_putstr_fd("minishell: failed to construct dynamic prompt\n", 2);
-	return (prompt);
+		return (ms_build_fallback_prompt());
+	return (ms_build_dynamic_prompt(user, pwd, prompt_color));
 }

@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/18 15:18:46 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/18 16:52:14 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,6 +79,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/init/ms_init_struct.c\
 				  $(SRC_DIR)/exec/ms_exec_external.c\
 				  $(SRC_DIR)/exec/ms_path_handler.c\
+				  $(SRC_DIR)/prompt/ms_prompt.c\
 				  $(SRC_DIR)main.c
 
 # Object files in the same directory as source

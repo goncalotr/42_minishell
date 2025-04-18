@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 12:27:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:56:29 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	ms_core_loop(char **envp, t_data *data)
 	char	*input_line;
 	char	**args;
 	int last_status_for_expansion;
+	char	*prompt_str;
 
 	g_signal = 0;
 	while (1)
@@ -45,7 +46,13 @@ void	ms_core_loop(char **envp, t_data *data)
 		if (g_signal == 130) {
 			g_signal = 0;
 		}
-		input_line = readline(BLUE "minishell" WHITE "> " RESET);
+		prompt_str = ms_get_prompt();
+		if (!prompt_str)
+		{
+			ft_putstr_fd("Critical error: Could not generate prompt. Exiting.\n", 2);
+			break;
+		}
+		input_line = readline(prompt_str);
 		if (g_signal == 130)
 		{
 			int saved_errno = errno;

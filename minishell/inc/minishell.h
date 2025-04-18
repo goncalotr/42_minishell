@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 15:43:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:51:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ typedef struct s_redirection
 // --- main ---
 //void	ms_core_loop(char **envp);
 //int	main(int argc, char **argv, char **envp);
+
+// --- prompt ---
+char	*ms_get_prompt(void);
 
 // --- debug ---
 void	ms_debug_print_args(char **args);

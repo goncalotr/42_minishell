@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 16:09:26 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:27:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	ms_signal_handlers_init();
 	// TODO: Initialize environment variables list from envp
-	printf(GREEN "DEBUG Welcome to Minishell!\n---\n" RESET "\n");
+	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
 	ms_core_loop(envp, &shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);

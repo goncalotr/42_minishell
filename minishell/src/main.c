@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 17:31:45 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:17:01 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ms_core_loop(char **envp)
 		add_history(input_line);
 		ft_printf(YELLOW "DEBUG Received command: <%s>\n" RESET, input_line);
 		// args = ms_parse_input_placeholder(input_line);
-		ms_tokenization(input_line);
+		ms_parsing(input_line);
 		// if (!args)
 		// {
 		// 	free(input_line);

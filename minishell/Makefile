@@ -6,7 +6,7 @@
 #    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/16 17:34:32 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/04/19 20:34:19 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ CFLAGS			+= -I$(LIBFT_SRC_DIR)
 #MANDATORY_SRC	= $(MANDATORY_DIR)main.c
 MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/parser/ms_parser_placeholder.c\
+				  $(SRC_DIR)/parser/ms_parsing.c\
 				  $(SRC_DIR)/parser/ms_syntax_check.c\
 				  $(SRC_DIR)/parser/ms_tokenization.c\
 				  $(SRC_DIR)/parser/ms_list_utils.c\

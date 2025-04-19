@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 18:05:52 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:20:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,9 @@ typedef struct s_tokens
 void	ms_signal_handlers_init(void);
 
 // parsing
+// ms_pasrsing.c
+void	ms_parsing(char *input);
+
 // ms_list_utils.c
 t_tokens *ms_last_node(t_tokens *list);
 t_tokens *ms_append_node(t_tokens *list, char  *input, t_type type);
@@ -112,7 +115,7 @@ bool ms_pipes_placement(t_tokens *list);
 //ms_tokenization.c
 t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list);
 t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list);
-void ms_tokenization(char *input);
+t_tokens *ms_tokenization(char *input, t_tokens *list);
 
 // placeholder
 void	ms_free_split_args(char **args);

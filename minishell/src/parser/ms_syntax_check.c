@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/12 17:15:11 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:37:53 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool ms_unclosed_quotes(t_tokens *list)
 		return (false);
 	else
 	{
-		ft_putstr_fd("syntax error: unclosed quotes", 2);
+		ft_putstr_fd("syntax error: unclosed quotes\n", 2);
 		return (true);
 	}
 }
@@ -58,15 +58,15 @@ bool ms_pipes_placement(t_tokens *list)
 {
 	t_tokens	*last_node;
 
-	if (ft_strncmp(list->token, "|", 1))
+	if (!ft_strncmp(list->token, "|", 1))
 	{
-		ft_putstr_fd("syntax error: misplaced pipe", 2);
+		ft_putstr_fd("syntax error: misplaced pipe\n", 2);
 		return (true);
 	}
 	last_node = ms_last_node(list);
-	if (ft_strncmp(last_node->token, "|", 1))
+	if (!ft_strncmp(last_node->token, "|", 1))
 	{
-		ft_putstr_fd("syntax error: misplaced pipe", 2);
+		ft_putstr_fd("syntax error: misplaced pipe\n", 2);
 		return (true);	
 	}
 	return (false);

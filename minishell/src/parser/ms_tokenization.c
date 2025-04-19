@@ -6,12 +6,26 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/18 21:40:23 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:08:39 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/**
+ * @brief Extracts a shell operator token (like pipe or redirection) from the input and appends it to the token list.
+ *
+ * This function checks the current character in the input string to determine
+ * if it is a shell operator: `|`, `<`, `>`, `<<`, or `>>`. It then creates the
+ * appropriate token and appends it to the token list with the correct type.
+ * The index is updated accordingly, especially for double-character operators.
+ * 
+ * @param input The full input string being tokenized.
+ * @param i A pointer to the current index in the input string; gets updated.
+ * @param list The existing token list to append the operator token to.
+ * 
+ * @return The updated token list with the new operator token added.
+ */
 t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list)
 {
 	if (input[*i] == '|')
@@ -20,11 +34,13 @@ t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list)
 	{
 		list = ms_append_node(list, "<<", HEREDOC);
 		*i += 2;
+		return (list);
 	}
 	else if (input[*i] == '>' && input[*i + 1] == '>')
 	{
 		list = ms_append_node(list, ">>", APPEND);
 		*i += 2;
+		return (list);
 	}
 	else if (input[*i] == '<')
 		list = ms_append_node(list, "<", IN);
@@ -33,6 +49,19 @@ t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list)
 	(*i)++;
 	return list;
 }
+
+/**
+ * @brief Calculates the length of the next word token in the input string.
+ *
+ * This function scans the input from the given index until it hits a shell
+ * metacharacter (`|`, `<`, `>`) or a whitespace character (space, tab, newline, etc.).
+ * The length of the continuous sequence of regular characters is returned.
+ * 
+ * @param input The full input string being scanned.
+ * @param i The starting index in the input string.
+ * 
+ * @return The length of the word token found at the given index.
+ */
 
 int	ms_len_word(char *input, int i)
 {
@@ -51,6 +80,19 @@ int	ms_len_word(char *input, int i)
 	return (len);
 }
 
+/**
+ * @brief Extracts a word token from the input and appends it to the token list.
+ *
+ * This function reads characters from the input string starting at the current
+ * index, stopping at whitespace or shell metacharacters (`|`, `<`, `>`). 
+ * The extracted word is then added to the token list as a `WORD` type token.
+ * 
+ * @param input The full input string being tokenized.
+ * @param i A pointer to the current index in the input string; gets updated.
+ * @param list The existing token list to append the word token to.
+ * 
+ * @return The updated token list with the new word token added.
+ */
 t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list)
 {
 	char	*word;
@@ -76,13 +118,25 @@ t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list)
 	free(word);
 	return (list);
 }
-void ms_tokenization(char *input)
+
+/**
+ * @brief Tokenizes the input string into a linked list of shell tokens.
+ *
+ * This function processes the given input line, identifying shell operators 
+ * (like pipes and redirections) and words, and stores them in a linked
+ * list of `t_tokens`. It also skips over whitespace and handles multiple
+ * consecutive spaces or tabs.
+ * 
+ * @param input The raw input line from the user to be tokenized.
+ * @param list The existing token list to append to (can be NULL for a fresh list).
+ * 
+ * @return A pointer to the head of the updated token list.
+ */
+t_tokens *ms_tokenization(char *input, t_tokens *list)
 {
-	t_tokens	*list;
 	int			i;
 
 	i = 0;
-	list =  NULL;
 	while (input[i])
 	{
 		while(input[i] == 32 || (input[i] >= 7 && input[i] <= 13))
@@ -95,4 +149,5 @@ void ms_tokenization(char *input)
 			list =  ms_extract_word(input, &i, list);
 	}
 	ms_print_list(list);
+	return (list);
 }																																																

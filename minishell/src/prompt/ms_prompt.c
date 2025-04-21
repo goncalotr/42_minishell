@@ -6,11 +6,49 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:42:20 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/21 14:25:47 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:28:55 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+/**
+ * @brief we could print the entire path or in this case just
+ * the current directory name
+ * 
+ * get prompt
+ * root directory
+ * search for last slash
+ * the function ends with safe fallback that shouldn't happen with absolute
+ * paths
+ */
+static char *ms_get_current_path(void)
+{
+	char		*full_path;
+	const char	*dir_name_ptr;
+	char		*last_slash;
+	char		*result_name;
+
+	full_path = getcwd(NULL, 0);
+	if (!full_path)
+		return (NULL);
+	if (strcmp(full_path, "/") == 0)
+		dir_name_ptr = "/";
+	else
+	{
+		last_slash = ft_strrchr(full_path, '/');
+		if (last_slash != NULL)
+			dir_name_ptr = last_slash + 1;
+		else
+		dir_name_ptr = full_path;
+	}
+	result_name = ft_strdup(dir_name_ptr);
+	free(full_path);
+	if (!result_name)
+		return (ft_putstr_fd("minishell: directory name allocation error\n", \
+				2), NULL);
+	return (result_name);
+}
 
 static int	ms_build_str_append(char **base_ptr, const char *to_append)
 {
@@ -110,7 +148,7 @@ static char	*ms_build_dynamic_prompt(const char *user, const char *pwd, \
 char	*ms_get_prompt(int last_status)
 {
 	char		*user;
-	char		*pwd;
+	char		*dir_name;
 	char 		*prompt;
 	const char	*prompt_color;
 
@@ -119,15 +157,15 @@ char	*ms_get_prompt(int last_status)
 	else
 		prompt_color = RED;
 	user = getenv("USER");
-	pwd = getcwd(NULL, 0);
-	if (!user || !pwd)
+	dir_name = ms_get_current_path();
+	if (!user || !dir_name)
 	{
-		if (pwd)
-			free(pwd);
+		if (dir_name)
+			free(dir_name);
 		return (ms_build_fallback_prompt(prompt_color));
 	}
-	prompt = ms_build_dynamic_prompt(user, pwd, prompt_color);
-	free(pwd);
+	prompt = ms_build_dynamic_prompt(user, dir_name, prompt_color);
+	free(dir_name);
 	if (!prompt)
 	{
 		ft_putstr_fd("minishell: prompt build allocation error\n", 2);

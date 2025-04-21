@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:42:20 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:33:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:25:47 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	ms_build_str_append(char **base_ptr, const char *to_append)
 	return (0);
 }
 
-static char	*ms_build_fallback_prompt(void)
+static char	*ms_build_fallback_prompt(const char *color)
 {
 	char	*prompt;
 
@@ -48,7 +48,7 @@ static char	*ms_build_fallback_prompt(void)
 	if (prompt && ms_build_str_append(&prompt, "minishell") != 0)
 	{
 	}
-	if (prompt && ms_build_str_append(&prompt, BLACK) != 0)
+	if (prompt && ms_build_str_append(&prompt, color) != 0)
 	{
 	}
 	if (prompt && ms_build_str_append(&prompt, "> ") != 0)
@@ -111,19 +111,27 @@ char	*ms_get_prompt(int last_status)
 {
 	char		*user;
 	char		*pwd;
+	char 		*prompt;
 	const char	*prompt_color;
 
 	if (last_status == 0)
-	{
 		prompt_color = GREEN;
-	}
 	else
-	{
 		prompt_color = RED;
-	}
 	user = getenv("USER");
-	pwd = getenv("PWD");
+	pwd = getcwd(NULL, 0);
 	if (!user || !pwd)
-		return (ms_build_fallback_prompt());
-	return (ms_build_dynamic_prompt(user, pwd, prompt_color));
+	{
+		if (pwd)
+			free(pwd);
+		return (ms_build_fallback_prompt(prompt_color));
+	}
+	prompt = ms_build_dynamic_prompt(user, pwd, prompt_color);
+	free(pwd);
+	if (!prompt)
+	{
+		ft_putstr_fd("minishell: prompt build allocation error\n", 2);
+		return (ms_build_fallback_prompt(prompt_color));
+	}
+	return (prompt);
 }

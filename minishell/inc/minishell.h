@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/21 19:00:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:06:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,13 @@ typedef struct s_token
 	int						quotes_type;
 	struct s_token			*previous;
 	struct s_token			*next;
-}
+}	t_token;
 
 typedef struct s_minishell
 {
 	char					**envp;
 	int						last_exit_status;
-}	t_minishell
+}	t_minishell;
 
 /**************************************************************************
  * SECTION: Functions

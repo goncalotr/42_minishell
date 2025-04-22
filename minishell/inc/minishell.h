@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/19 20:20:16 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:47:08 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ typedef struct s_tokens
 void	ms_signal_handlers_init(void);
 
 // parsing
+//ms_parser_utils.c
+char	*ms_remove_whitespaces(char	 *input_line);
+void	ms_skip_inside_quotes(int *i, char *input);
+void	ms_skip_whitespaces(int *i, char *input);
+
 // ms_pasrsing.c
 void	ms_parsing(char *input);
 
@@ -108,9 +113,9 @@ t_tokens *ms_append_node(t_tokens *list, char  *input, t_type type);
 void ms_print_list(t_tokens *list);
 
 // ms_syntax_check.c
-bool ms_unclosed_quotes(t_tokens *list);
-bool ms_syntax_check(t_tokens *list);
-bool ms_pipes_placement(t_tokens *list);
+bool ms_unclosed_quotes(char *input);
+bool ms_syntax_check(char *input);
+bool ms_pipes_placement(char *input);
 
 //ms_tokenization.c
 t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list);

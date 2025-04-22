@@ -6,24 +6,26 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/19 20:37:53 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:52:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool ms_syntax_check(t_tokens *list)
+bool ms_syntax_check(char *input_line)
 {
 	bool	error;
-	
-	if((error = ms_unclosed_quotes(list)) == true)
+	char	*input;
+
+	input = ms_remove_whitespaces(input_line);
+	if((error = ms_unclosed_quotes(input)) == true)
 		return (error);
-	if((error = ms_pipes_placement(list)) == true)
+	if((error = ms_pipes_placement(input)) == true)
 		return (error);
 	return (false);
 }
 
-bool ms_unclosed_quotes(t_tokens *list)
+bool ms_unclosed_quotes(char *input)
 {
 	int	singl;
 	int doubl;
@@ -32,18 +34,13 @@ bool ms_unclosed_quotes(t_tokens *list)
 	singl = 0;
 	doubl = 0;
 	i = 0;
-	while (list)
+	while (input[i])
 	{
-		i = 0;
-		while (list->token[i])
-		{
-			if (list->token[i] == 34)
-				doubl++;
-			if (list->token[i] == 39)
-				singl++;
-			i++;
-		}
-		list = list->next;
+		if (input[i] == 34)
+			doubl++;
+		if (input[i] == 39)
+			singl++;
+		i++;
 	}
 	if (singl % 2 == 0 && doubl % 2 == 0)
 		return (false);
@@ -54,20 +51,33 @@ bool ms_unclosed_quotes(t_tokens *list)
 	}
 }
 
-bool ms_pipes_placement(t_tokens *list)
+bool ms_pipes_placement(char *input)
 {
-	t_tokens	*last_node;
+	int i;
+	int	pipe;
 
-	if (!ft_strncmp(list->token, "|", 1))
+	pipe = 0;
+	i = ft_strlen(input);
+	if ((input[0] == '|') || (input[i - 1] == '|'))
 	{
 		ft_putstr_fd("syntax error: misplaced pipe\n", 2);
 		return (true);
 	}
-	last_node = ms_last_node(list);
-	if (!ft_strncmp(last_node->token, "|", 1))
+	i = 0;
+	while (input[i])
 	{
-		ft_putstr_fd("syntax error: misplaced pipe\n", 2);
-		return (true);	
+		ms_skip_whitespaces(&i, input);
+		ms_skip_inside_quotes(&i, input);
+		if (input[i] == '|')
+			pipe++;
+		else
+			pipe = 0;
+		if (pipe == 2)
+		{
+			ft_putstr_fd("syntax error: consecutive pipes\n", 2);
+			return (true);
+		}
+		i++;
 	}
 	return (false);
 }

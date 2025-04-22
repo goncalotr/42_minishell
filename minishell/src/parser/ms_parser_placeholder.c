@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/22 13:22:18 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:55:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,57 +44,36 @@ char	**ms_parse_input_placeholder(const char *input_line)
 {
 	char	**args;
 
-	args = ft_split(input_line, ' ');
+	// NOTE: This split is NOT robust (doesn't handle quotes, etc.)
+	// Replace with real tokenizer/parser later.
+	args = ft_split(input_line, ' '); // Assumes ft_split exists
 	if (!args)
 	{
 		perror("minishell: placeholder parser (ft_split) failed");
-		return (NULL);
+		// Don't free input_line here, the caller (main) still owns it
+		return (NULL); // Signal failure
 	}
 	return (args);
 }
 
 int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
 {
-	// Check if parser produced at least one arg
 	if (args == NULL || args[0] == NULL)
-	{
-		return (0); // No command entered (e.g., just spaces), success (status 0)
-	}
-
-	// --- Builtin Dispatch ---
-	// Check for "cd"
-	// Use ft_strcmp if required by norminette/project rules
-
+		return (0);
 	if (strcmp(args[0], "cd") == 0)
-	{
 		return (ms_execute_cd(args));
-	}
 	if (strcmp(args[0], "echo") == 0)
-	{
 		return (ms_execute_echo(args));
-	}
 	if (strcmp(args[0], "env") == 0)
-	{
 		return (ms_execute_env(args, envp));
-	}
 	if (strcmp(args[0], "exit") == 0)
-	{
 		return (ms_execute_exit(args));
-	}
 	if (strcmp(args[0], "export") == 0)
-	{
 		return ms_execute_export(args, data);
-	}
 	else if (strcmp(args[0], "pwd") == 0)
-	{
 		return (ms_execute_pwd(args));
-	}
 	else if (strcmp(args[0], "unset") == 0)
-	{
 		return (ms_execute_unset((args), data));
-	}
 	else
-	{
 		return (ms_execute_external_command(args, envp));
-	}
 }

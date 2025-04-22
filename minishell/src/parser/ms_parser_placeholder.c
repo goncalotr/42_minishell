@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/22 12:34:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:22:18 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,11 @@ char	**ms_parse_input_placeholder(const char *input_line)
 {
 	char	**args;
 
-	// NOTE: This split is NOT robust (doesn't handle quotes, etc.)
-	// Replace with real tokenizer/parser later.
-	args = ft_split(input_line, ' '); // Assumes ft_split exists
+	args = ft_split(input_line, ' ');
 	if (!args)
 	{
 		perror("minishell: placeholder parser (ft_split) failed");
-		// Don't free input_line here, the caller (main) still owns it
-		return (NULL); // Signal failure
+		return (NULL);
 	}
 	return (args);
 }
@@ -100,24 +97,4 @@ int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
 	{
 		return (ms_execute_external_command(args, envp));
 	}
-
-	// Add checks for other builtins here (pwd, echo, etc.)
-	// else if (strcmp(args[0], "pwd") == 0)
-	// {
-	//     return (ms_execute_pwd(args));
-	// }
-	// ...
-
-	// --- If not a known builtin ---
-	/*
-	else
-	{
-		// Placeholder for External Commands / Command Not Found
-		// TODO: Implement fork/execve for non-builtins later
-		ft_putstr_fd("minishell: command not found: ", 2); // Assumes ft_putstr_fd
-		ft_putstr_fd(args[0], 2);
-		ft_putstr_fd("\n", 2);
-		return (127); // Standard "command not found" exit code
-	}
-	*/
 }

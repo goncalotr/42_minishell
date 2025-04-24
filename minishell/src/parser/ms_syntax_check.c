@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/22 17:52:16 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:59:51 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,26 @@ bool ms_syntax_check(char *input_line)
 
 bool ms_unclosed_quotes(char *input)
 {
-	int	singl;
-	int doubl;
+	int quote_type;
 	int	i;
 
-	singl = 0;
-	doubl = 0;
 	i = 0;
-	while (input[i])
+	quote_type = 0;
+	while(input[i])
 	{
-		if (input[i] == 34)
-			doubl++;
-		if (input[i] == 39)
-			singl++;
+		if ((input[i] == '\"') || (input[i] == '\''))
+		{
+			if (quote_type == 0)
+				quote_type = input[i];
+			else if (quote_type == input[i])
+				quote_type = 0;
+		}
 		i++;
 	}
-	if (singl % 2 == 0 && doubl % 2 == 0)
+	if (quote_type == 0)
 		return (false);
 	else
-	{
-		ft_putstr_fd("syntax error: unclosed quotes\n", 2);
 		return (true);
-	}
 }
 
 bool ms_pipes_placement(char *input)

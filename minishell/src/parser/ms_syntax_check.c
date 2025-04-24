@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/24 15:59:51 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:03:39 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,39 @@ bool ms_pipes_placement(char *input)
 			return (true);
 		}
 		i++;
+	}
+	return (false);
+}
+
+void ms_consectutive_rediractions(char *input, int	*i, char c)
+{
+	(void)input;
+	(void)c;
+	ft_printf("i -> %d\n", *i);
+}
+
+bool ms_rediractions_placement(char *input)
+{
+	int	x;
+	int i;
+
+	i = 0;
+	x = ft_strlen(input) - 1;
+
+	if (input[x] == '<' || input[x] == '>')
+		return (true);
+	x = 0;
+	i = 3;
+	ms_consectutive_rediractions(input, &i, input[++i]);
+	while (input[i])
+	{
+		ms_skip_whitespaces(&i, input);
+		ms_skip_inside_quotes(&i, input);
+		if (input[i] == '>' && input[i + 1] == '>')
+		{
+			i = 3;
+			ms_consectutive_rediractions(input, &i, input[++i]);
+		}
 	}
 	return (false);
 }

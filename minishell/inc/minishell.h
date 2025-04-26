@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/22 10:06:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:54:57 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,45 @@
  * SECTION: Structs
  **************************************************************************/
 
+typedef enum e_redir_type
+{
+	REDIR_NONE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_HEREDOC,
+	REDIR_APPEND
+}	t_redir_type;
+
+typedef struct s_redirection
+{
+	t_redir_type			type;
+	char					*target;
+	struct s_redirection	*next;
+}	t_redirection;
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,			// 0 words
+	TOKEN_CMD,			// 1 commands
+	TOKEN_PIPE,			// 2 |
+	TOKEN_REDIR_IN,		// 3 <
+	TOKEN_REDIR_OUT,	// 4 >
+	TOEKN_APPEND,		// 5 >>
+	TOKEN_HEREDOC,		// 6 <<
+	TOKEN_SIMPLE_QUOTE,	// 7 "
+	TOKEN_DOUBLE_QUOTE,	// 8 '
+}	t_token_type;
+
+typedef struct s_token
+{
+	char					*value;
+	int						type;
+	int						size;
+	int						quotes_type;
+	struct s_token			*previous;
+	struct s_token			*next;
+}	t_token;
+
 /**
  * @brief Holds the main state of the minishell.
  *
@@ -84,47 +123,15 @@
  * @param envp_orig        Pointer to the original envp from main
  * (optional, for reference).
  */
-typedef struct s_data
+typedef struct s_minishell
 {
-	char	**environ_list;
+	char	**envp;
 	int		last_exit_status;
 	int		stdin_fd;
 	int		stdout_fd;
 	int		stderr_fd;
 	char	*shell_name;
 	char	**envp_original;
-}	t_data;
-
-typedef enum e_redir_type
-{
-	REDIR_NONE,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_HEREDOC,
-	REDIR_APPEND
-}	t_redir_type;
-
-typedef struct s_redirection
-{
-	t_redir_type			type;
-	char					*target;
-	struct s_redirection	*next;
-}	t_redirection;
-
-typedef struct s_token
-{
-	char					*value;
-	int						type;
-	int						size;
-	int						quotes_type;
-	struct s_token			*previous;
-	struct s_token			*next;
-}	t_token;
-
-typedef struct s_minishell
-{
-	char					**envp;
-	int						last_exit_status;
 }	t_minishell;
 
 /**************************************************************************

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:31:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/21 18:56:21 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:59:49 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,19 @@ static int	ms_find_env_var_index(const char *name, char **env_list)
  * 3. Set the last valid position (which now holds a duplicated pointer)
  *  to NULL to properly terminate the list.
 */
-static void	ms_remove_env_var_at_index(int index, t_data *data)
+static void	ms_remove_env_var_at_index(int index, t_minishell *data)
 {
 	int	i;
 
-	free(data->environ_list[index]);
-	data->environ_list[index] = NULL;
+	free(data->envp[index]);
+	data->envp[index] = NULL;
 	i = index;
-	while (data->environ_list[i + 1])
+	while (data->envp[i + 1])
 	{
-		data->environ_list[i] = data->environ_list[i + 1];
+		data->envp[i] = data->envp[i + 1];
 		i++;
 	}
-	data->environ_list[i] = NULL;
+	data->envp[i] = NULL;
 }
 
 /**
@@ -109,7 +109,7 @@ static void	ms_remove_env_var_at_index(int index, t_data *data)
  * @param data The main data structure containing the environ_list.
  * @return Exit status: 0 on success, 1 if any identifier was invalid.
 */
-int	ms_execute_unset(char **args, t_data *data)
+int	ms_execute_unset(char **args, t_minishell *data)
 {
 	int		i;
 	int		exit_status;
@@ -128,7 +128,7 @@ int	ms_execute_unset(char **args, t_data *data)
 		}
 		else
 		{
-			var_index = ms_find_env_var_index(var_name, data->environ_list);
+			var_index = ms_find_env_var_index(var_name, data->envp);
 			if (var_index != -1)
 				ms_remove_env_var_at_index(var_index, data);
 		}

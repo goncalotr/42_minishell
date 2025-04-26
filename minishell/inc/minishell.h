@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 16:58:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:42:02 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@
  * SECTION: Structs
  **************************************************************************/
 
+/*
 typedef enum e_redir_type
 {
 	REDIR_NONE,
@@ -69,13 +70,16 @@ typedef enum e_redir_type
 	REDIR_HEREDOC,
 	REDIR_APPEND
 }	t_redir_type;
+*/
 
+/*
 typedef struct s_redirection
 {
 	t_redir_type			type;
 	char					*target;
 	struct s_redirection	*next;
 }	t_redirection;
+*/
 
 typedef enum e_token_type
 {
@@ -89,6 +93,14 @@ typedef enum e_token_type
 	TOKEN_SIMPLE_QUOTE,		// 7 "
 	TOKEN_DOUBLE_QUOTE,		// 8 '
 }	t_token_type;
+
+typedef struct s_redirection
+{
+	t_token_type			type;
+	char					*target;
+	struct s_redirection	*next;
+}	t_redirection;
+
 
 typedef struct s_token
 {
@@ -150,7 +162,7 @@ void	ms_debug_print_args(char **args);
 void	ms_debug_print_gsig(void);
 
 // --- init ---
-int		init_shell_data(t_data *data, char **argv, char **envp);
+int		init_shell_data(t_minishell *data, char **argv, char **envp);
 
 // --- signals ---
 void	ms_signal_handlers_init(void);
@@ -160,7 +172,7 @@ void	ms_signal_handlers_init(void);
 // parsing placeholder 
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
-int		ms_execute_command_placeholder(char **args, char **envp, t_data *data);
+int		ms_execute_command_placeholder(char **args, char **envp, t_minishell *data);
 
 // --- expand ---
 
@@ -192,9 +204,9 @@ int		ms_execute_cd(char **args);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args);
-int		ms_execute_export(char **args, t_data *data);
+int		ms_execute_export(char **args, t_minishell *data);
 int		ms_execute_pwd(char **args);
-int		ms_execute_unset(char **args, t_data *data);
+int		ms_execute_unset(char **args, t_minishell *data);
 
 // --- exec ---
 char	*ms_find_command_path(const char *cmd, char **envp);

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 17:19:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:26:13 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	**ms_parse_input_placeholder(const char *input_line)
 	return (args);
 }
 
-int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
+int	ms_execute_command_placeholder(char **args, char **envp, t_minishell *data)
 {
 	if (args == NULL || args[0] == NULL)
 		return (0);

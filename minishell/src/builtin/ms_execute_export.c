@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:46:00 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:55:21 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,15 @@ static char *extract_var_name(const char *arg, size_t *len_name)
 }
 
 // Needed by add_or_update_env_var
-static int add_new_env_var(t_data *data, const char *new_var_str)
+static int add_new_env_var(t_minishell *data, const char *new_var_str)
 {
 	int     count = 0;
 	char    **new_environ;
 	char    *var_copy;
 	int     i;
 
-	if (data->environ_list) {
-		while (data->environ_list[count])
+	if (data->envp) {
+		while (data->envp[count])
 			count++;
 	}
 
@@ -107,7 +107,7 @@ static int add_new_env_var(t_data *data, const char *new_var_str)
 	}
 
 	for (i = 0; i < count; i++) {
-		new_environ[i] = data->environ_list[i];
+		new_environ[i] = data->envp[i];
 	}
 
 	var_copy = ft_strdup(new_var_str);
@@ -120,15 +120,15 @@ static int add_new_env_var(t_data *data, const char *new_var_str)
 	new_environ[count] = var_copy;
 	new_environ[count + 1] = NULL;
 
-	if (data->environ_list) {
-		free(data->environ_list);
+	if (data->envp) {
+		free(data->envp);
 	}
-	data->environ_list = new_environ;
+	data->envp = new_environ;
 	return (0);
 }
 
 // Needed by add_or_update_env_var
-static int update_existing_env_var(t_data *data, int index, const char *new_var_str)
+static int update_existing_env_var(t_minishell *data, int index, const char *new_var_str)
 {
 	char *var_copy;
 
@@ -138,13 +138,13 @@ static int update_existing_env_var(t_data *data, int index, const char *new_var_
 		return (1);
 	}
 
-	free(data->environ_list[index]);
-	data->environ_list[index] = var_copy;
+	free(data->envp[index]);
+	data->envp[index] = var_copy;
 	return (0);
 }
 
 // Definition for the function causing the second error
-static int add_or_update_env_var(t_data *data, const char *arg)
+static int add_or_update_env_var(t_minishell *data, const char *arg)
 {
 	char    *name;
 	size_t  name_len;
@@ -160,7 +160,7 @@ static int add_or_update_env_var(t_data *data, const char *arg)
 	    return (1);
 	}
 
-	index = find_env_var_index(name, name_len, data->environ_list);
+	index = find_env_var_index(name, name_len, data->envp);
 
 	if (index != -1) {
 		status = update_existing_env_var(data, index, arg);
@@ -173,15 +173,15 @@ static int add_or_update_env_var(t_data *data, const char *arg)
 }
 
 // Definition for the function causing the first error
-static int print_exported_vars(t_data *data)
+static int print_exported_vars(t_minishell *data)
 {
 	int     i, j, count = 0;
 	char    **env_copy = NULL;
 	char    *temp;
 	char    *value_ptr;
 
-	if (data->environ_list) {
-		while (data->environ_list[count])
+	if (data->envp) {
+		while (data->envp[count])
 			count++;
 	}
 	if (count == 0) return (0);
@@ -192,7 +192,7 @@ static int print_exported_vars(t_data *data)
 		return (1);
 	}
 	for (i = 0; i < count; i++) {
-		env_copy[i] = ft_strdup(data->environ_list[i]);
+		env_copy[i] = ft_strdup(data->envp[i]);
 		if (!env_copy[i]) {
 			perror("minishell: export: ft_strdup error for env copy entry");
 			while (--i >= 0) free(env_copy[i]);
@@ -254,7 +254,7 @@ static int print_exported_vars(t_data *data)
  * 2.3 Validate identifier
  * 2.4 Check if there is an assignment (contains '=')
  */
-int ms_execute_export(char **args, t_data *data)
+int ms_execute_export(char **args, t_minishell *data)
 {
 	int			i;
 	int			exit_status;

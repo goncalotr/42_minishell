@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 16:54:57 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:58:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,15 @@ typedef struct s_redirection
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,			// 0 words
-	TOKEN_CMD,			// 1 commands
-	TOKEN_PIPE,			// 2 |
-	TOKEN_REDIR_IN,		// 3 <
-	TOKEN_REDIR_OUT,	// 4 >
-	TOEKN_APPEND,		// 5 >>
-	TOKEN_HEREDOC,		// 6 <<
-	TOKEN_SIMPLE_QUOTE,	// 7 "
-	TOKEN_DOUBLE_QUOTE,	// 8 '
+	TOKEN_WORD,				// 0 words
+	TOKEN_CMD,				// 1 commands
+	TOKEN_PIPE,				// 2 |
+	TOKEN_REDIR_IN,			// 3 <
+	TOKEN_REDIR_OUT,		// 4 >
+	TOEKN_APPEND,			// 5 >>
+	TOKEN_HEREDOC,			// 6 <<
+	TOKEN_SIMPLE_QUOTE,		// 7 "
+	TOKEN_DOUBLE_QUOTE,		// 8 '
 }	t_token_type;
 
 typedef struct s_token
@@ -131,7 +131,7 @@ typedef struct s_minishell
 	int		stdout_fd;
 	int		stderr_fd;
 	char	*shell_name;
-	char	**envp_original;
+	char	**envp_orig;
 }	t_minishell;
 
 /**************************************************************************

@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/18 16:52:14 by goteixei         ###   ########.fr        #
+#    Updated: 2025/04/22 12:33:34 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,9 +53,16 @@ LIBFT			= $(LIBFT_DIR)libft.a
 # --- Compiler and Flags ---
 CC				= cc
 RM				= rm -rf
+SAN_FLAGS		= -fsanitize=address
+SAN_FLAGS		+= -fsanitize=leak
+SAN_FLAGS		+= -fsanitize=undefined
+SAN_FLAGS		+= -fno-omit-frame-pointer
 CFLAGS			= -Wall -Wextra -Werror -g
+CFLAGS			+= $(SAN_FLAGS)
 CFLAGS			+= -I$(INC_DIR)
 CFLAGS			+= -I$(LIBFT_SRC_DIR)
+CFLAGS			+= -I$(LIBFT_SRC_DIR)
+LDFLAGS = $(SAN_FLAGS)
 
 # -------------------------------------------------------------
 # MANDATORY

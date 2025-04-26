@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/16 11:56:43 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:26:13 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,68 +56,24 @@ char	**ms_parse_input_placeholder(const char *input_line)
 	return (args);
 }
 
-int	ms_execute_command_placeholder(char **args, char **envp, t_data *data)
+int	ms_execute_command_placeholder(char **args, char **envp, t_minishell *data)
 {
-	// Check if parser produced at least one arg
 	if (args == NULL || args[0] == NULL)
-	{
-		return (0); // No command entered (e.g., just spaces), success (status 0)
-	}
-
-	// --- Builtin Dispatch ---
-	// Check for "cd"
-	// Use ft_strcmp if required by norminette/project rules
-
+		return (0);
 	if (strcmp(args[0], "cd") == 0)
-	{
 		return (ms_execute_cd(args));
-	}
 	if (strcmp(args[0], "echo") == 0)
-	{
 		return (ms_execute_echo(args));
-	}
 	if (strcmp(args[0], "env") == 0)
-	{
 		return (ms_execute_env(args, envp));
-	}
 	if (strcmp(args[0], "exit") == 0)
-	{
 		return (ms_execute_exit(args));
-	}
 	if (strcmp(args[0], "export") == 0)
-	{
 		return ms_execute_export(args, data);
-	}
 	else if (strcmp(args[0], "pwd") == 0)
-	{
 		return (ms_execute_pwd(args));
-	}
 	else if (strcmp(args[0], "unset") == 0)
-	{
 		return (ms_execute_unset((args), data));
-	}
 	else
-	{
 		return (ms_execute_external_command(args, envp));
-	}
-
-	// Add checks for other builtins here (pwd, echo, etc.)
-	// else if (strcmp(args[0], "pwd") == 0)
-	// {
-	//     return (ms_execute_pwd(args));
-	// }
-	// ...
-
-	// --- If not a known builtin ---
-	/*
-	else
-	{
-		// Placeholder for External Commands / Command Not Found
-		// TODO: Implement fork/execve for non-builtins later
-		ft_putstr_fd("minishell: command not found: ", 2); // Assumes ft_putstr_fd
-		ft_putstr_fd(args[0], 2);
-		ft_putstr_fd("\n", 2);
-		return (127); // Standard "command not found" exit code
-	}
-	*/
 }

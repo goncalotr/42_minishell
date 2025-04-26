@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 17:16:54 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:24:02 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ extern unsigned char	g_signal;
  * 
  * 
  */
-void	ms_core_loop(char **envp, t_data *data)
+void	ms_core_loop(char **envp, t_minishell *data)
 {
 	char	*input_line;
 	char	**args;
@@ -98,7 +98,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	//(void)envp;
-	t_data	shell_data; // Create an instance of the struct (on the stack)
+	t_minishell	shell_data; // Create an instance of the struct (on the stack)
 
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 	{

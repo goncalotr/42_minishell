@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/24 20:03:39 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:47:40 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,20 @@ bool ms_syntax_check(char *input_line)
 
 	input = ms_remove_whitespaces(input_line);
 	if((error = ms_unclosed_quotes(input)) == true)
+	{
+		ft_putstr_fd("Syntax error: unclosed quotes\n", 2);
 		return (error);
+	}
 	if((error = ms_pipes_placement(input)) == true)
+	{
+		ft_putstr_fd("Syntax error: misplaced pipes\n", 2);
 		return (error);
+	}
+	if((error = ms_rediractions_placement(input)) == true)
+	{
+		ft_putstr_fd("Syntax error: misplaced rediractions\n", 2);
+		return(error);
+	}
 	return (false);
 }
 
@@ -57,10 +68,7 @@ bool ms_pipes_placement(char *input)
 	pipe = 0;
 	i = ft_strlen(input);
 	if ((input[0] == '|') || (input[i - 1] == '|'))
-	{
-		ft_putstr_fd("syntax error: misplaced pipe\n", 2);
 		return (true);
-	}
 	i = 0;
 	while (input[i])
 	{
@@ -71,20 +79,10 @@ bool ms_pipes_placement(char *input)
 		else
 			pipe = 0;
 		if (pipe == 2)
-		{
-			ft_putstr_fd("syntax error: consecutive pipes\n", 2);
 			return (true);
-		}
 		i++;
 	}
 	return (false);
-}
-
-void ms_consectutive_rediractions(char *input, int	*i, char c)
-{
-	(void)input;
-	(void)c;
-	ft_printf("i -> %d\n", *i);
 }
 
 bool ms_rediractions_placement(char *input)
@@ -94,21 +92,33 @@ bool ms_rediractions_placement(char *input)
 
 	i = 0;
 	x = ft_strlen(input) - 1;
-
 	if (input[x] == '<' || input[x] == '>')
 		return (true);
 	x = 0;
-	i = 3;
-	ms_consectutive_rediractions(input, &i, input[++i]);
+	i = 0;
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
 		ms_skip_inside_quotes(&i, input);
-		if (input[i] == '>' && input[i + 1] == '>')
+		if (input[i] == '>')
 		{
-			i = 3;
-			ms_consectutive_rediractions(input, &i, input[++i]);
+			i++;
+			if (input[i] == '>')
+				i++;
+			ms_skip_whitespaces(&i, input);
+			if ((input[i] == '>') || (input[i] == '<'))
+				return (true);
 		}
+		if (input[i] == '<')
+		{
+			i++;
+			if (input[i] == '<')
+				i++;
+			ms_skip_whitespaces(&i, input);
+			if ((input[i] == '>') || (input[i] == '<'))
+				return (true);
+		}
+		i++;
 	}
 	return (false);
 }

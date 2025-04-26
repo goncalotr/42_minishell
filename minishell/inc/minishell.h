@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/22 17:47:08 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:38:02 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void ms_print_list(t_tokens *list);
 bool ms_unclosed_quotes(char *input);
 bool ms_syntax_check(char *input);
 bool ms_pipes_placement(char *input);
+bool ms_rediractions_placement(char *input);
 
 //ms_tokenization.c
 t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list);

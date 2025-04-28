@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 11:24:44 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:08:21 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ typedef struct s_redirection
 	char					*target;
 	struct s_redirection	*next;
 }	t_redirection;
-
 
 typedef struct s_token
 {

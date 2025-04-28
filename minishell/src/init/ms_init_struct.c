@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 18:00:48 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:06:50 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,24 +81,27 @@ char	**duplicate_envp(char **envp)
  * @param argv The argument vector from main (for shell_name).
  * @param envp The environment variables from main.
  * @return 0 on success, 1 on failure (e.g., memory allocation, dup error).
+ * 
+ * 1. Initialize pointers to NULL first for safety in cleanup
+ * 2. Duplicate environment variables
+ * 3. Initialize exit status
+ * 4. Save original standard I/O file descriptors using dup()
+ * 5. Store shell name (duplicate it)
+ * 6. Store pointer to original envp (no allocation needed)
  */
 int	init_shell_data(t_minishell *data, char **argv, char **envp)
 {
 	if (!data || !argv)
 		return (1);
-	// 1. Initialize pointers to NULL first for safety in cleanup
 	data->envp = NULL;
 	data->shell_name = NULL;
 	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
-	// 2. Duplicate environment variables
 	data->envp = duplicate_envp(envp);
 	if (!data->envp)
 		return (1);
-	// 3. Initialize exit status
 	data->last_exit_status = 0;
-	// 4. Save original standard I/O file descriptors using dup()
 	data->stdin_fd = dup(STDIN_FILENO);
 	if (data->stdin_fd == -1)
 	{
@@ -123,12 +126,12 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 		close(data->stdout_fd);
 		return (1);
 	}
-	// 5. Store shell name (duplicate it)
 	if (argv[0])
 		data->shell_name = ft_strdup(argv[0]);
 	else
 		data->shell_name = ft_strdup("minishell");
-	if (!data->shell_name) {
+	if (!data->shell_name)
+	{
 		perror("minishell: ft_strdup for shell_name");
 		free_envp_copy(data->envp);
 		close(data->stdin_fd);
@@ -136,7 +139,6 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 		close(data->stderr_fd);
 		return (1);
 	}
-	// 6. Store pointer to original envp (no allocation needed)
 	data->envp = envp;
 	return (0);
 }

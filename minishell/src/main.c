@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 17:24:02 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:43:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,20 @@ extern unsigned char	g_signal;
  * 
  * 
  */
-void	ms_core_loop(char **envp, t_minishell *data)
+static void	ms_core_loop(t_minishell *data)
 {
 	char	*input_line;
 	char	**args;
-	int		last_status;
 	char	*prompt_str;
 
 	g_signal = 0;
 	while (1)
 	{
-		last_status = g_signal;
+		data->last_exit_status = g_signal;
 		if (g_signal == 130) {
 			g_signal = 0;
 		}
-		prompt_str = ms_get_prompt(last_status);
+		prompt_str = ms_get_prompt(data->last_exit_status);
 		if (!prompt_str)
 		{
 			ft_putstr_fd("Critical error: Could not generate prompt. Exiting.\n", 2);
@@ -60,7 +59,7 @@ void	ms_core_loop(char **envp, t_minishell *data)
 			if (input_line)
 			{
 				free(input_line);
-				last_status = 130;
+				data->last_exit_status = 130;
 			}
 			continue;
 		}
@@ -83,9 +82,9 @@ void	ms_core_loop(char **envp, t_minishell *data)
 			g_signal = 1;
 			continue;
 		}
-		ms_expand_variables(args, last_status);
+		ms_expand_variables(args, data->last_exit_status);
 		ms_debug_print_args(args);
-		g_signal = ms_execute_command_placeholder(args, envp, data);
+		g_signal = ms_execute_command_placeholder(args, data->envp, data);
 		ms_debug_print_gsig();
 		ms_free_split_args(args);
 		free(input_line);
@@ -93,12 +92,14 @@ void	ms_core_loop(char **envp, t_minishell *data)
 	}
 }
 
+/**
+ * shell _data is the main struct created on the stack
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	//(void)envp;
-	t_minishell	shell_data; // Create an instance of the struct (on the stack)
+	t_minishell	shell_data;
 
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 	{
@@ -107,7 +108,7 @@ int	main(int argc, char **argv, char **envp)
 	ms_signal_handlers_init();
 	// TODO: Initialize environment variables list from envp
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
-	ms_core_loop(envp, &shell_data);
+	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
 	return (g_signal);

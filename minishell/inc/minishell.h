@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 17:42:02 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:24:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ typedef struct s_minishell
 //int	main(int argc, char **argv, char **envp);
 
 // --- prompt ---
-char	*ms_get_prompt(int last_status);
+char	*ms_get_prompt(t_minishell *data);
 
 // --- debug ---
 void	ms_debug_print_args(char **args);
@@ -172,7 +172,7 @@ void	ms_signal_handlers_init(void);
 // parsing placeholder 
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
-int		ms_execute_command_placeholder(char **args, char **envp, t_minishell *data);
+int		ms_execute_command_placeholder(char **args, t_minishell *data);
 
 // --- expand ---
 

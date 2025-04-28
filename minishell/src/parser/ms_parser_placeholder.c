@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 17:26:13 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:28:22 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	**ms_parse_input_placeholder(const char *input_line)
 	return (args);
 }
 
-int	ms_execute_command_placeholder(char **args, char **envp, t_minishell *data)
+int	ms_execute_command_placeholder(char **args, t_minishell *data)
 {
 	if (args == NULL || args[0] == NULL)
 		return (0);
@@ -65,7 +65,7 @@ int	ms_execute_command_placeholder(char **args, char **envp, t_minishell *data)
 	if (strcmp(args[0], "echo") == 0)
 		return (ms_execute_echo(args));
 	if (strcmp(args[0], "env") == 0)
-		return (ms_execute_env(args, envp));
+		return (ms_execute_env(args, data->envp));
 	if (strcmp(args[0], "exit") == 0)
 		return (ms_execute_exit(args));
 	if (strcmp(args[0], "export") == 0)
@@ -75,5 +75,5 @@ int	ms_execute_command_placeholder(char **args, char **envp, t_minishell *data)
 	else if (strcmp(args[0], "unset") == 0)
 		return (ms_execute_unset((args), data));
 	else
-		return (ms_execute_external_command(args, envp));
+		return (ms_execute_external_command(args, data->envp));
 }

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 10:43:14 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:28:00 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	ms_core_loop(t_minishell *data)
 		if (g_signal == 130) {
 			g_signal = 0;
 		}
-		prompt_str = ms_get_prompt(data->last_exit_status);
+		prompt_str = ms_get_prompt(data);
 		if (!prompt_str)
 		{
 			ft_putstr_fd("Critical error: Could not generate prompt. Exiting.\n", 2);
@@ -84,7 +84,7 @@ static void	ms_core_loop(t_minishell *data)
 		}
 		ms_expand_variables(args, data->last_exit_status);
 		ms_debug_print_args(args);
-		g_signal = ms_execute_command_placeholder(args, data->envp, data);
+		g_signal = ms_execute_command_placeholder(args, data);
 		ms_debug_print_gsig();
 		ms_free_split_args(args);
 		free(input_line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/02 15:54:09 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:56:54 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,8 +180,13 @@ bool ms_rediractions_placement(char *input);
 
 //ms_tokenization.c
 t_token *ms_extract_operator(char *input, int *i, t_token *list);
+t_token *ms_extract_quotes(char *input, int *i, t_token *list);
 t_token	*ms_extract_word(char *input, int *i, t_token *list);
 t_token *ms_tokenization(char *input, t_token *list);
+
+//ms_tokenization_utils.c
+int	ms_len_word(char *input, int i);
+int ms_quote_len(char *input, int i);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

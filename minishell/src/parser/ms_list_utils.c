@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/02 15:42:20 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:02:09 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 
 void ms_print_list(t_token *list)
 {
-	char	*type[] = {"WORD", "PIPE", "IN", "OUT", "HEREDOC", "APPEND"};
+	char	*type[] = {"WORD", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "SIMPLE_QUOTE", "DOUBLE_QUOTE"};
 
 	while (list)
 	{
-		ft_printf("---------------------------------\n");
-		ft_printf("Token -> %s\n", list->value);
-		ft_printf("Type -> %s\n", type[list->type]);
+		ft_printf(GREEN"---------------------------------\n");
+		ft_printf(GREEN"Token -> %s\n", list->value);
+		ft_printf(GREEN"Type -> %s\n", type[list->type]);
 		list = list->next;
 	}
 }

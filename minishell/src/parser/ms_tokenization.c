@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/02 15:37:09 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:57:04 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,36 +51,6 @@ t_token *ms_extract_operator(char *input, int *i, t_token *list)
 }
 
 /**
- * @brief Calculates the length of the next word token in the input string.
- *
- * This function scans the input from the given index until it hits a shell
- * metacharacter (`|`, `<`, `>`) or a whitespace character (space, tab, newline, etc.).
- * The length of the continuous sequence of regular characters is returned.
- * 
- * @param input The full input string being scanned.
- * @param i The starting index in the input string.
- * 
- * @return The length of the word token found at the given index.
- */
-
-int	ms_len_word(char *input, int i)
-{
-	int len;
-
-	len = 0;
-	while (input[i])
-	{
-		if(input[i] == 32 || (input[i] >= 7 && input[i] <= 13))
-			break;
-		if(input[i] == '|' ||  (input[i] == '<' || input[i] == '>'))
-			break;
-		i++;
-		len++;
-	}
-	return (len);
-}
-
-/**
  * @brief Extracts a word token from the input and appends it to the token list.
  *
  * This function reads characters from the input string starting at the current
@@ -101,7 +71,7 @@ t_token	*ms_extract_word(char *input, int *i, t_token *list)
 	
 	word = malloc(ms_len_word(input, *i) + 1);
 	if (!word)
-		return list;
+		return NULL;
 	k = 0;
 	while (input[*i])
 	{
@@ -117,6 +87,30 @@ t_token	*ms_extract_word(char *input, int *i, t_token *list)
 	list = ms_append_node(list, word, TOKEN_WORD);
 	free(word);
 	return (list);
+}
+
+t_token *ms_extract_quotes(char *input, int *i, t_token *list)
+{
+	char	quote_type;
+	char	*quote;
+	int		k;
+	int		len;
+	
+	quote_type = input[*i];
+	len = ms_quote_len(input, *i);
+	quote = malloc(len + 1);
+	if (!quote)
+		return NULL;
+	k = 0;
+	while (input[*i] && k < len)
+		quote[k++] = input[(*i)++];
+	quote[k] = '\0';
+	if (quote_type == '\'')
+		list = ms_append_node(list, quote, TOKEN_SIMPLE_QUOTE);
+	else if (quote_type == '\"')
+		list = ms_append_node(list, quote, TOKEN_DOUBLE_QUOTE);
+	free(quote);
+	return (list);	
 }
 
 /**
@@ -139,12 +133,13 @@ t_token *ms_tokenization(char *input, t_token *list)
 	i = 0;
 	while (input[i])
 	{
-		while(input[i] == 32 || (input[i] >= 7 && input[i] <= 13))
-			i++;
+		ms_skip_whitespaces(&i, input);
 		if(!input[i])
 			break;
-		if(input[i] == '|' || (input[i] == '<' || input[i] == '>'))
+		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
+		else if((input[i] == '\'') || (input[i] == '\"'))
+			list = ms_extract_quotes(input, &i, list);
 		else
 			list =  ms_extract_word(input, &i, list);
 	}

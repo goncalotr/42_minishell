@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/05/02 15:18:30 by goteixei         ###   ########.fr        #
+#    Updated: 2025/05/02 15:59:18 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ SAN_FLAGS		+= -fsanitize=leak
 SAN_FLAGS		+= -fsanitize=undefined
 SAN_FLAGS		+= -fno-omit-frame-pointer
 CFLAGS			= -Wall -Wextra -Werror -g
-CFLAGS			+= $(SAN_FLAGS)
+#CFLAGS			+= $(SAN_FLAGS)
 CFLAGS			+= -I$(INC_DIR)
 CFLAGS			+= -I$(LIBFT_SRC_DIR)
 CFLAGS			+= -I$(LIBFT_SRC_DIR)

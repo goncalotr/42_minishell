@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/02 15:43:42 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:54:09 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,13 +204,13 @@ char	*ms_process_curly_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
 
 // 1
-int		ms_process_one_expansion(const char *str, char **res_ptr, \
-				int *cur_pos_ptr, int dol_pos, int status);
-char	*ms_get_expansion_info(const char *str, int dollar_pos, \
-				int *target_len);
-int		ms_process_one_expansion(const char *str, char **res_ptr, \
-				int *cur_pos_ptr, int dol_pos, int status);
-char	*ms_expand_str_help(const char *original_str, int last_exit_status);
+//int		ms_process_one_expansion(const char *str, char **res_ptr, \
+//				int *cur_pos_ptr, int dol_pos, int status);
+//char	*ms_get_expansion_info(const char *str, int dollar_pos, \
+//				int *target_len);
+//int		ms_process_one_expansion(const char *str, char **res_ptr, \
+//				int *cur_pos_ptr, int dol_pos, int status);
+//char	*ms_expand_str_help(const char *original_str, int last_exit_status);
 void	ms_expand_variables(char **args, int last_exit_status);
 
 // --- built-ins ---

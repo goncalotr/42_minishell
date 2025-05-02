@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:08:21 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:13:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,19 +94,11 @@ typedef enum e_token_type
 	TOKEN_DOUBLE_QUOTE,		// 8 '
 }	t_token_type;
 
-typedef struct s_redirection
-{
-	t_token_type			type;
-	char					*target;
-	struct s_redirection	*next;
-}	t_redirection;
-
 typedef struct s_token
 {
 	char					*value;
-	int						type;
+	t_token_type			type;
 	int						size;
-	int						quotes_type;
 	struct s_token			*previous;
 	struct s_token			*next;
 }	t_token;
@@ -166,7 +158,30 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 
-// --- parsing ---
+// parsing
+//ms_parser_utils.c
+char	*ms_remove_whitespaces(char	 *input_line);
+void	ms_skip_inside_quotes(int *i, char *input);
+void	ms_skip_whitespaces(int *i, char *input);
+
+// ms_pasrsing.c
+void	ms_parsing(char *input);
+
+// ms_list_utils.c
+t_tokens *ms_last_node(t_tokens *list);
+t_tokens *ms_append_node(t_tokens *list, char  *input, t_type type);
+void ms_print_list(t_tokens *list);
+
+// ms_syntax_check.c
+bool ms_unclosed_quotes(char *input);
+bool ms_syntax_check(char *input);
+bool ms_pipes_placement(char *input);
+bool ms_rediractions_placement(char *input);
+
+//ms_tokenization.c
+t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list);
+t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list);
+t_tokens *ms_tokenization(char *input, t_tokens *list);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

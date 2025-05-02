@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:23:38 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:22:24 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static void	ms_core_loop(t_minishell *data)
 		add_history(input_line);
 		ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		args = ms_parse_input_placeholder(input_line);
+		ms_syntax_check(input_line);
 		if (!args)
 		{
 			free(input_line);

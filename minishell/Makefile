@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/04/22 12:33:34 by goteixei         ###   ########.fr        #
+#    Updated: 2025/05/02 15:17:55 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,11 @@ LDFLAGS = $(SAN_FLAGS)
 MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/signals/ms_debug_global_signal.c\
 				  $(SRC_DIR)/parser/ms_parser_placeholder.c\
+				  $(SRC_DIR)/parser/ms_parser_utils.c\
+				  $(SRC_DIR)/parser/ms_parsing.c\
+				  $(SRC_DIR)/parser/ms_syntax_check.c\
+				  $(SRC_DIR)/parser/ms_tokenization.c\
+				  $(SRC_DIR)/parser/ms_list_utils.c\
 				  $(SRC_DIR)/parser/ms_debug_input.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\

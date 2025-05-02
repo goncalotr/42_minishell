@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/02 15:54:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:35:56 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,24 @@ static void	ms_core_loop(t_minishell *data)
 			continue ;
 		}
 		add_history(input_line);
-		ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
+		// ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		args = ms_parse_input_placeholder(input_line);
 		if (ms_syntax_check(input_line))
 			continue ;
 		ms_parsing(input_line);
-		if (!args)
-		{
-			free(input_line);
-			g_signal = 1;
-			continue ;
-		}
-		ms_expand_variables(args, data->last_exit_status);
-		ms_debug_print_args(args);
-		g_signal = ms_execute_command_placeholder(args, data);
-		ms_debug_print_gsig();
-		ms_free_split_args(args);
-		free(input_line);
-		input_line = NULL;
+		// if (!args)
+		// {
+		// 	free(input_line);
+		// 	g_signal = 1;
+		// 	continue ;
+		// }
+		// ms_expand_variables(args, data->last_exit_status);
+		// ms_debug_print_args(args);
+		// g_signal = ms_execute_command_placeholder(args, data);
+		// ms_debug_print_gsig();
+		// ms_free_split_args(args);
+		// free(input_line);
+		// input_line = NULL;
 	}
 }
 

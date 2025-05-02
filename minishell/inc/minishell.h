@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/02 16:56:54 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:43:33 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ typedef struct s_minishell
 	int		last_exit_status;
 	int		stdin_fd;
 	int		stdout_fd;
-	int		stderr_fd;
+	int		stderr_fd;  
 	char	*shell_name;
 	char	**envp_orig;
 }	t_minishell;

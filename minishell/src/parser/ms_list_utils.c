@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/19 21:10:20 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:42:20 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * 
  * @return A pointer to the last node in the list, or NULL if the list is empty.
  */
-t_tokens *ms_last_node(t_tokens *list)
+t_token *ms_last_node(t_token *list)
 {
 	if (!list)
 		return (NULL);
@@ -45,16 +45,17 @@ t_tokens *ms_last_node(t_tokens *list)
  * 
  * @return The updated token list including the newly added node.
  */
-t_tokens *ms_append_node(t_tokens *list, char  *input, t_type type)
+t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 {
-	t_tokens	*last_node;
-	t_tokens	*new_node;
+	t_token	*last_node;
+	t_token	*new_node;
 	
-	new_node = malloc(sizeof(t_tokens));
+	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
-	new_node->token = ft_strdup(input);
+	new_node->value = ft_strdup(input);
 	new_node->type = type;
+	new_node->previous = NULL;
 	new_node->next = NULL;
 	if  (list == NULL)
 		list = new_node;
@@ -62,18 +63,20 @@ t_tokens *ms_append_node(t_tokens *list, char  *input, t_type type)
 	{
 		last_node = ms_last_node(list);
 		last_node->next = new_node;
+		new_node->previous = last_node;
+		
 	}
 	return (list);
 }
 
-void ms_print_list(t_tokens *list)
+void ms_print_list(t_token *list)
 {
 	char	*type[] = {"WORD", "PIPE", "IN", "OUT", "HEREDOC", "APPEND"};
 
 	while (list)
 	{
 		ft_printf("---------------------------------\n");
-		ft_printf("Token -> %s\n", list->token);
+		ft_printf("Token -> %s\n", list->value);
 		ft_printf("Type -> %s\n", type[list->type]);
 		list = list->next;
 	}

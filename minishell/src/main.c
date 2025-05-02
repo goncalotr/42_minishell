@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/02 15:22:24 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:46:44 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ static void	ms_core_loop(t_minishell *data)
 		add_history(input_line);
 		ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		args = ms_parse_input_placeholder(input_line);
-		ms_syntax_check(input_line);
+		if (ms_syntax_check(input_line));
+			continue ;
+		ms_parsing(input_line);
+		ms_tokenization;
 		if (!args)
 		{
 			free(input_line);

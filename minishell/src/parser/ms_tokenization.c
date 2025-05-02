@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/04/19 21:08:39 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:37:09 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,26 @@
  * 
  * @return The updated token list with the new operator token added.
  */
-t_tokens *ms_extract_operator(char *input, int *i, t_tokens *list)
+t_token *ms_extract_operator(char *input, int *i, t_token *list)
 {
 	if (input[*i] == '|')
-		list = ms_append_node(list, "|", PIPE);
+		list = ms_append_node(list, "|", TOKEN_PIPE);
 	else if (input[*i] == '<' && input[*i + 1] == '<')
 	{
-		list = ms_append_node(list, "<<", HEREDOC);
+		list = ms_append_node(list, "<<", TOKEN_HEREDOC);
 		*i += 2;
 		return (list);
 	}
 	else if (input[*i] == '>' && input[*i + 1] == '>')
 	{
-		list = ms_append_node(list, ">>", APPEND);
+		list = ms_append_node(list, ">>", TOKEN_APPEND);
 		*i += 2;
 		return (list);
 	}
 	else if (input[*i] == '<')
-		list = ms_append_node(list, "<", IN);
+		list = ms_append_node(list, "<", TOKEN_REDIR_IN);
 	else if (input[*i] == '>')
-		list = ms_append_node(list, ">", OUT);
+		list = ms_append_node(list, ">", TOKEN_REDIR_OUT);
 	(*i)++;
 	return list;
 }
@@ -93,7 +93,7 @@ int	ms_len_word(char *input, int i)
  * 
  * @return The updated token list with the new word token added.
  */
-t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list)
+t_token	*ms_extract_word(char *input, int *i, t_token *list)
 {
 	char	*word;
 	int 	k;
@@ -114,7 +114,7 @@ t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list)
 		k++;
 	}
 	word[k] = '\0';
-	list = ms_append_node(list, word, WORD);
+	list = ms_append_node(list, word, TOKEN_WORD);
 	free(word);
 	return (list);
 }
@@ -132,7 +132,7 @@ t_tokens	*ms_extract_word(char *input, int *i, t_tokens *list)
  * 
  * @return A pointer to the head of the updated token list.
  */
-t_tokens *ms_tokenization(char *input, t_tokens *list)
+t_token *ms_tokenization(char *input, t_token *list)
 {
 	int			i;
 

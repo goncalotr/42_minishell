@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/02 18:43:33 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/03 16:25:35 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,16 @@ typedef struct s_redirection
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,				// 0 words
+	TOKEN_FILE,				// 0 file
 	TOKEN_CMD,				// 1 commands
 	TOKEN_PIPE,				// 2 |
 	TOKEN_REDIR_IN,			// 3 <
 	TOKEN_REDIR_OUT,		// 4 >
 	TOKEN_APPEND,			// 5 >>
 	TOKEN_HEREDOC,			// 6 <<
-	TOKEN_SIMPLE_QUOTE,		// 7 "
-	TOKEN_DOUBLE_QUOTE,		// 8 '
+	TOKEN_EOF,				// 7 end of file
+	TOKEN_SIMPLE_QUOTE,		// 8 "
+	TOKEN_DOUBLE_QUOTE,		// 9 '
 }	t_token_type;
 
 typedef struct s_token
@@ -181,12 +182,15 @@ bool ms_rediractions_placement(char *input);
 //ms_tokenization.c
 t_token *ms_extract_operator(char *input, int *i, t_token *list);
 t_token *ms_extract_quotes(char *input, int *i, t_token *list);
-t_token	*ms_extract_word(char *input, int *i, t_token *list);
+t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
+t_token	*ms_extract_file(char *input, int *i, t_token *list);
 t_token *ms_tokenization(char *input, t_token *list);
 
 //ms_tokenization_utils.c
-int	ms_len_word(char *input, int i);
+int	ms_len_file(char *input, int i);
+int	ms_len_cmd(char *input, int i);
 int ms_quote_len(char *input, int i);
+bool	ms_is_file(t_token	*list);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/02 16:57:04 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/03 16:26:05 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,37 @@ t_token *ms_extract_operator(char *input, int *i, t_token *list)
  * 
  * @return The updated token list with the new word token added.
  */
-t_token	*ms_extract_word(char *input, int *i, t_token *list)
+t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
 {
 	char	*word;
 	int 	k;
 
 	
-	word = malloc(ms_len_word(input, *i) + 1);
+	word = malloc(ms_len_cmd(input, *i) + 1);
+	if (!word)
+		return NULL;
+	k = 0;
+	while (input[*i])
+	{
+		if(input[*i] == '|' ||  (input[*i] == '<' || input[*i] == '>'))
+			break;
+		word[k] = input[*i];
+		(*i)++;
+		k++;
+	}
+	word[k] = '\0';
+	list = ms_append_node(list, word, TOKEN_CMD);
+	free(word);
+	return (list);
+}
+
+t_token	*ms_extract_file(char *input, int *i, t_token *list)
+{
+	char	*word;
+	int 	k;
+
+	
+	word = malloc(ms_len_file(input, *i) + 1);
 	if (!word)
 		return NULL;
 	k = 0;
@@ -84,7 +108,7 @@ t_token	*ms_extract_word(char *input, int *i, t_token *list)
 		k++;
 	}
 	word[k] = '\0';
-	list = ms_append_node(list, word, TOKEN_WORD);
+	list = ms_append_node(list, word, TOKEN_FILE);
 	free(word);
 	return (list);
 }
@@ -129,19 +153,20 @@ t_token *ms_extract_quotes(char *input, int *i, t_token *list)
 t_token *ms_tokenization(char *input, t_token *list)
 {
 	int			i;
-
+	
 	i = 0;
+	input = ms_remove_whitespaces(input);
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
-		if(!input[i])
-			break;
 		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
 		else if((input[i] == '\'') || (input[i] == '\"'))
 			list = ms_extract_quotes(input, &i, list);
+		else if(ms_is_file(list))
+			list =  ms_extract_file(input, &i, list);
 		else
-			list =  ms_extract_word(input, &i, list);
+			list = ms_extract_cmd(input, &i, list);
 	}
 	ms_print_list(list);
 	return (list);

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/03 16:26:05 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:20:12 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,11 @@ t_token *ms_extract_quotes(char *input, int *i, t_token *list)
 	
 	quote_type = input[*i];
 	len = ms_quote_len(input, *i);
-	quote = malloc(len + 1);
+	quote = malloc(len + 2);
 	if (!quote)
 		return NULL;
 	k = 0;
-	while (input[*i] && k < len)
+	while (input[*i] && k <= len)
 		quote[k++] = input[(*i)++];
 	quote[k] = '\0';
 	if (quote_type == '\'')
@@ -159,7 +159,7 @@ t_token *ms_tokenization(char *input, t_token *list)
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
-		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
+		if((input[i] == '|') || (input[i] == '<' || input[i] ==~ '>'))
 			list = ms_extract_operator(input, &i, list);
 		else if((input[i] == '\'') || (input[i] == '\"'))
 			list = ms_extract_quotes(input, &i, list);
@@ -168,6 +168,5 @@ t_token *ms_tokenization(char *input, t_token *list)
 		else
 			list = ms_extract_cmd(input, &i, list);
 	}
-	ms_print_list(list);
 	return (list);
 }																																																

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/03 16:24:08 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:06:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,18 @@ int ms_quote_len(char *input, int i)
 	i++;
 	while (input[i])
 	{
-		len++;
 		if(input[i] == quote_type)
-			break;
+		{
+			if(input[i + 1] == '\'' || input[i + 1] == '\"')
+			{
+				i++;
+				len++;
+				quote_type = input[i];
+			}
+			else
+				break;  	
+		}
+		len++;
 		i++;
 	}
 	return (len);
@@ -80,6 +89,8 @@ bool	ms_is_file(t_token	*list)
 	t_token	*last_node;
 	
 	last_node = ms_last_node(list);
+	if (last_node == NULL)
+		return (false);
 	if(last_node->type == 3 || last_node->type == 4 || last_node->type == 5)
 		return (true);
 	else

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/05 17:20:12 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:45:29 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,10 @@ t_token	*ms_extract_file(char *input, int *i, t_token *list)
 		k++;
 	}
 	word[k] = '\0';
-	list = ms_append_node(list, word, TOKEN_FILE);
+	if (ms_is_infile(list))
+		list = ms_append_node(list, word, TOKEN_INFILE);
+	else
+		list = ms_append_node(list, word, TOKEN_OUTFILE);		
 	free(word);
 	return (list);
 }
@@ -159,7 +162,7 @@ t_token *ms_tokenization(char *input, t_token *list)
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
-		if((input[i] == '|') || (input[i] == '<' || input[i] ==~ '>'))
+		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
 		else if((input[i] == '\'') || (input[i] == '\"'))
 			list = ms_extract_quotes(input, &i, list);

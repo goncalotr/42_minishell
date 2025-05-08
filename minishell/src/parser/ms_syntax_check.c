@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/05 16:14:29 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:10:02 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ bool ms_syntax_check(char *input_line)
 	{
 		ft_putstr_fd("Syntax error: unclosed quotes\n", 2);
 		return (error);
+	}
+	if((error = ms_not_required(input_line)) == true)
+	{
+		ft_putstr_fd("error: special characters which are not required by the subject\n", 2);
+		return (error);		
 	}
 	if((error = ms_pipes_placement(input)) == true)
 	{
@@ -40,7 +45,7 @@ bool ms_unclosed_quotes(char *input)
 {
 	int quote_type;
 	int	i;
-
+	
 	i = 0;
 	quote_type = 0;
 	while(input[i])
@@ -118,6 +123,31 @@ bool ms_rediractions_placement(char *input)
 			if ((input[i] == '>') || (input[i] == '<'))
 				return (true);
 		}
+		i++;
+	}
+	return (false);
+}
+
+bool ms_not_required (char *input)
+{
+	int quote_type;
+	int	i;
+
+	i = 0;
+	quote_type = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			if (quote_type == 0)
+				quote_type = input[i];
+			else if (quote_type == input[i])
+				quote_type = 0;
+		}
+		if ((input[i] == '\\' || input[i] == ';') && quote_type == 0)
+			return (true);\
+		else if ((input[i] == '&' || (input[i] == '|' && input[i + 1] == '|')) && quote_type == 0)
+			return (true);
 		i++;
 	}
 	return (false);

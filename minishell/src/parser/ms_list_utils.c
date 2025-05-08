@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/03 16:28:30 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:54:46 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 		return (NULL);
 	new_node->value = ft_strdup(input);
 	new_node->type = type;
+	new_node->expand = ms_check_expansion(input, type);
 	new_node->previous = NULL;
 	new_node->next = NULL;
 	if  (list == NULL)
@@ -71,13 +72,14 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 
 void ms_print_list(t_token *list)
 {
-	char	*type[] = {"FILE", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "EOF", "SIMPLE_QUOTE", "DOUBLE_QUOTE"};
+	char	*type[] = {" INFILE", "OUTFILE", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "EOF", "SIMPLE_QUOTE", "DOUBLE_QUOTE"};
 
 	while (list)
 	{
 		ft_printf(GREEN"---------------------------------\n");
-		ft_printf(GREEN"Token -> %s\n", list->value);
-		ft_printf(GREEN"Type -> %s\n", type[list->type]);
+		ft_printf(GREEN"value: %s\n", list->value);
+		printf("expansion: %s\n", list->expand ? "true" : "false");
+		ft_printf(GREEN"Type: %s\n", type[list->type]);
 		list = list->next;
 	}
 }

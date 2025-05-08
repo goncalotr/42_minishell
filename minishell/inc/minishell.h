@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/05 15:30:26 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:46:38 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,17 @@ typedef struct s_redirection
 
 typedef enum e_token_type
 {
-	TOKEN_FILE,				// 0 file
-	TOKEN_CMD,				// 1 commands
-	TOKEN_PIPE,				// 2 |
-	TOKEN_REDIR_IN,			// 3 <
-	TOKEN_REDIR_OUT,		// 4 >
-	TOKEN_APPEND,			// 5 >>
-	TOKEN_HEREDOC,			// 6 <<
-	TOKEN_EOF,				// 7 end of file
-	TOKEN_SIMPLE_QUOTE,		// 8 "
-	TOKEN_DOUBLE_QUOTE,		// 9 '
+	TOKEN_INFILE,				// 0 file
+	TOKEN_OUTFILE,				// 1 outfile
+	TOKEN_CMD,					// 2 commands
+	TOKEN_PIPE,					// 3 |
+	TOKEN_REDIR_IN,				// 4 <
+	TOKEN_REDIR_OUT,			// 5 >
+	TOKEN_APPEND,				// 6 >>
+	TOKEN_HEREDOC,				// 7 <<
+	TOKEN_EOF,					// 8 end of file
+	TOKEN_SIMPLE_QUOTE,			// 9 ''
+	TOKEN_DOUBLE_QUOTE,			// 10 ""
 }	t_token_type;
 
 typedef struct s_token
@@ -100,6 +101,7 @@ typedef struct s_token
 	char					*value;
 	t_token_type			type;
 	// int						size;
+	bool					expand;
 	struct s_token			*previous;
 	struct s_token			*next;
 }	t_token;
@@ -167,6 +169,7 @@ void	ms_skip_whitespaces(int *i, char *input);
 
 // ms_pasrsing.c
 void	ms_parsing(char *input);
+bool ms_check_expansion(char *input, t_token_type type);
 
 // ms_list_utils.c
 t_token *ms_last_node(t_token *list);
@@ -178,6 +181,7 @@ bool ms_unclosed_quotes(char *input);
 bool ms_syntax_check(char *input);
 bool ms_pipes_placement(char *input);
 bool ms_rediractions_placement(char *input);
+bool ms_not_required (char *input);
 
 //ms_tokenization.c
 t_token *ms_extract_operator(char *input, int *i, t_token *list);
@@ -191,6 +195,7 @@ int	ms_len_file(char *input, int i);
 int	ms_len_cmd(char *input, int i);
 int ms_quote_len(char *input, int i);
 bool	ms_is_file(t_token	*list);
+bool	ms_is_infile(t_token *list);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

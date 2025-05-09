@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/08 18:45:29 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:48:07 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
 	while (input[*i])
 	{
 		if(input[*i] == '|' ||  (input[*i] == '<' || input[*i] == '>'))
+			break;
+		else if ((input[*i] == '\'') || (input[*i] == '\"'))
 			break;
 		word[k] = input[*i];
 		(*i)++;
@@ -172,4 +174,4 @@ t_token *ms_tokenization(char *input, t_token *list)
 			list = ms_extract_cmd(input, &i, list);
 	}
 	return (list);
-}																																																
+}

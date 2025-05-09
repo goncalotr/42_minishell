@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/08 19:00:02 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:37:06 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ bool	ms_is_file(t_token	*list)
 	last_node = ms_last_node(list);
 	if (last_node == NULL)
 		return (false);
-	if(last_node->type == 4 || last_node->type == 5 || last_node->type == 6)
+	if(last_node->type == TOKEN_REDIR_IN || 
+		last_node->type == TOKEN_REDIR_OUT || 
+			last_node->type == TOKEN_APPEND)
 		return (true);
 	else
 		return (false);
@@ -102,7 +104,7 @@ bool	ms_is_infile(t_token *list)
 	t_token	*last_node;
 	
 	last_node = ms_last_node(list);
-	if(last_node->type == 4)
+	if(last_node->type == TOKEN_REDIR_IN)
 		return (true);
 	else
 		return (false);

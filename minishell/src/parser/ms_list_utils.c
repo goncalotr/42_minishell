@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/08 18:54:46 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:58:23 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 		return (NULL);
 	new_node->value = ft_strdup(input);
 	new_node->type = type;
-	new_node->expand = ms_check_expansion(input, type);
+	new_node->expand = NULL;
 	new_node->previous = NULL;
 	new_node->next = NULL;
 	if  (list == NULL)
@@ -65,7 +65,6 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 		last_node = ms_last_node(list);
 		last_node->next = new_node;
 		new_node->previous = last_node;
-		
 	}
 	return (list);
 }

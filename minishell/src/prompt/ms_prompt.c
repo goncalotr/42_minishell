@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:42:20 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/21 18:28:55 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:03:21 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * the function ends with safe fallback that shouldn't happen with absolute
  * paths
  */
-static char *ms_get_current_path(void)
+static char	*ms_get_current_path(void)
 {
 	char		*full_path;
 	const char	*dir_name_ptr;
@@ -40,7 +40,7 @@ static char *ms_get_current_path(void)
 		if (last_slash != NULL)
 			dir_name_ptr = last_slash + 1;
 		else
-		dir_name_ptr = full_path;
+			dir_name_ptr = full_path;
 	}
 	result_name = ft_strdup(dir_name_ptr);
 	free(full_path);
@@ -145,14 +145,14 @@ static char	*ms_build_dynamic_prompt(const char *user, const char *pwd, \
  * 
  * non zero staus represents error
  */
-char	*ms_get_prompt(int last_status)
+char	*ms_get_prompt(t_minishell *data)
 {
 	char		*user;
 	char		*dir_name;
-	char 		*prompt;
+	char		*prompt;
 	const char	*prompt_color;
 
-	if (last_status == 0)
+	if (data->last_exit_status == 0)
 		prompt_color = GREEN;
 	else
 		prompt_color = RED;

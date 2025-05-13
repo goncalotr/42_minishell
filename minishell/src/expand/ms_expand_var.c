@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:35:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:04:35 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
  * 6 else '$' followed by invalid char -> trat $ literally
  * 
  */
-char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
+static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
 {
 	int		i;
 	char	*info;
@@ -86,7 +86,7 @@ char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
  * @param status The last exit status for $?.
  * @return 0 on success, 1 on error.
  */
-int	ms_process_one_expansion(const char *str, char **res_ptr, \
+static int	ms_process_one_expansion(const char *str, char **res_ptr, \
 									int *cur_pos_ptr, int dol_pos, int status)
 {
 	char	*info;
@@ -124,7 +124,7 @@ int	ms_process_one_expansion(const char *str, char **res_ptr, \
  * @param last_exit_status The exit status for $?.
  * @return A newly allocated expanded string, or NULL on error.
  */
-char	*ms_expand_str_help(const char *original_str, int last_exit_status)
+static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 {
 	char	*result;
 	char	*literal_part;

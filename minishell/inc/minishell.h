@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/26 17:42:02 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:30:47 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,31 +83,33 @@ typedef struct s_redirection
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,				// 0 words
-	TOKEN_CMD,				// 1 commands
-	TOKEN_PIPE,				// 2 |
-	TOKEN_REDIR_IN,			// 3 <
-	TOKEN_REDIR_OUT,		// 4 >
-	TOEKN_APPEND,			// 5 >>
-	TOKEN_HEREDOC,			// 6 <<
-	TOKEN_SIMPLE_QUOTE,		// 7 "
-	TOKEN_DOUBLE_QUOTE,		// 8 '
+	TOKEN_INFILE,				// 0 file
+	TOKEN_OUTFILE,				// 1 outfile
+	TOKEN_CMD,					// 2 commands
+	TOKEN_PIPE,					// 3 |
+	TOKEN_REDIR_IN,				// 4 <
+	TOKEN_REDIR_OUT,			// 5 >
+	TOKEN_APPEND,				// 6 >>
+	TOKEN_HEREDOC,				// 7 <<
+	TOKEN_EOF,					// 8 end of file
+	TOKEN_SIMPLE_QUOTE,			// 9 ''
+	TOKEN_DOUBLE_QUOTE,			// 10 ""
 }	t_token_type;
 
-typedef struct s_redirection
+typedef enum s_token_state
 {
-	t_token_type			type;
-	char					*target;
-	struct s_redirection	*next;
-}	t_redirection;
-
+	GENERAL,					// 0 normal
+	DOUBLE_QUOTES,				// 1 ""
+	SIMPLE_QUOTES,				// 2 ''
+}	t_token_states;
 
 typedef struct s_token
 {
 	char					*value;
-	int						type;
-	int						size;
-	int						quotes_type;
+	t_token_type			type;
+	// int						size;
+	bool					expand;
+	int						*expand_index;
 	struct s_token			*previous;
 	struct s_token			*next;
 }	t_token;
@@ -141,7 +143,7 @@ typedef struct s_minishell
 	int		last_exit_status;
 	int		stdin_fd;
 	int		stdout_fd;
-	int		stderr_fd;
+	int		stderr_fd;  
 	char	*shell_name;
 	char	**envp_orig;
 }	t_minishell;
@@ -155,7 +157,7 @@ typedef struct s_minishell
 //int	main(int argc, char **argv, char **envp);
 
 // --- prompt ---
-char	*ms_get_prompt(int last_status);
+char	*ms_get_prompt(t_minishell *data);
 
 // --- debug ---
 void	ms_debug_print_args(char **args);
@@ -167,12 +169,49 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 
-// --- parsing ---
+// parsing
+//ms_parser_utils.c
+char	*ms_remove_whitespaces(char	 *input_line);
+void	ms_skip_inside_quotes(int *i, char *input);
+void	ms_skip_whitespaces(int *i, char *input);
+
+// ms_pasrsing.c
+void	ms_parsing(char *input);
+t_token *ms_check_eof(t_token *list);
+void	ms_normal_expansion(t_token *list);
+t_token	*ms_expansion(t_token *list);
+int		ms_count_dollar(char *string);
+
+// ms_list_utils.c
+t_token *ms_last_node(t_token *list);
+t_token *ms_append_node(t_token *list, char  *input, t_token_type type);
+void ms_print_list(t_token *list);
+
+// ms_syntax_check.c
+bool ms_unclosed_quotes(char *input);
+bool ms_syntax_check(char *input);
+bool ms_pipes_placement(char *input);
+bool ms_rediractions_placement(char *input);
+bool ms_not_required (char *input);
+
+//ms_tokenization.c
+t_token *ms_extract_operator(char *input, int *i, t_token *list);
+t_token *ms_extract_quotes(char *input, int *i, t_token *list);
+t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
+t_token	*ms_extract_file(char *input, int *i, t_token *list);
+t_token *ms_tokenization(char *input, t_token *list);
+
+//ms_tokenization_utils.c
+int	ms_len_file(char *input, int i);
+int	ms_len_cmd(char *input, int i);
+int ms_quote_len(char *input, int i);
+bool	ms_is_file(t_token	*list);
+bool	ms_is_infile(t_token *list);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
-int		ms_execute_command_placeholder(char **args, char **envp, t_minishell *data);
+int		ms_execute_command_placeholder(char **args, t_minishell *data);
 
 // --- expand ---
 
@@ -190,13 +229,13 @@ char	*ms_process_curly_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
 
 // 1
-int		ms_process_one_expansion(const char *str, char **res_ptr, \
-				int *cur_pos_ptr, int dol_pos, int status);
-char	*ms_get_expansion_info(const char *str, int dollar_pos, \
-				int *target_len);
-int		ms_process_one_expansion(const char *str, char **res_ptr, \
-				int *cur_pos_ptr, int dol_pos, int status);
-char	*ms_expand_str_help(const char *original_str, int last_exit_status);
+//int		ms_process_one_expansion(const char *str, char **res_ptr, \
+//				int *cur_pos_ptr, int dol_pos, int status);
+//char	*ms_get_expansion_info(const char *str, int dollar_pos, \
+//				int *target_len);
+//int		ms_process_one_expansion(const char *str, char **res_ptr, \
+//				int *cur_pos_ptr, int dol_pos, int status);
+//char	*ms_expand_str_help(const char *original_str, int last_exit_status);
 void	ms_expand_variables(char **args, int last_exit_status);
 
 // --- built-ins ---

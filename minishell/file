@@ -1,0 +1,8 @@
+[32mDEBUG Welcome to Minishell!
+---
+[0m
+[?2004h[34mminishell> [0m[?2004l
+exit
+[31m
+---
+DEBUG Exiting Minishell. Final status: 0[0m

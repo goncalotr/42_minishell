@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/09 16:37:04 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:30:47 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct s_token
 	t_token_type			type;
 	// int						size;
 	bool					expand;
+	int						*expand_index;
 	struct s_token			*previous;
 	struct s_token			*next;
 }	t_token;
@@ -177,7 +178,9 @@ void	ms_skip_whitespaces(int *i, char *input);
 // ms_pasrsing.c
 void	ms_parsing(char *input);
 t_token *ms_check_eof(t_token *list);
-bool ms_check_expansion(char *input, t_token_type type);
+void	ms_normal_expansion(t_token *list);
+t_token	*ms_expansion(t_token *list);
+int		ms_count_dollar(char *string);
 
 // ms_list_utils.c
 t_token *ms_last_node(t_token *list);

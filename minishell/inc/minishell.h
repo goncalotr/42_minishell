@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/13 14:30:47 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:39:08 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,9 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 
-// parsing
+
+
+// ------------------PARSER-------------------------
 //ms_parser_utils.c
 char	*ms_remove_whitespaces(char	 *input_line);
 void	ms_skip_inside_quotes(int *i, char *input);
@@ -178,9 +180,6 @@ void	ms_skip_whitespaces(int *i, char *input);
 // ms_pasrsing.c
 void	ms_parsing(char *input);
 t_token *ms_check_eof(t_token *list);
-void	ms_normal_expansion(t_token *list);
-t_token	*ms_expansion(t_token *list);
-int		ms_count_dollar(char *string);
 
 // ms_list_utils.c
 t_token *ms_last_node(t_token *list);
@@ -208,10 +207,26 @@ int ms_quote_len(char *input, int i);
 bool	ms_is_file(t_token	*list);
 bool	ms_is_infile(t_token *list);
 
+//ms_quotes.c
+void	ms_normal_index(t_token *list);
+int	*ms_put_index(t_token *list, int *index, int i, int k);
+void	ms_quotes_index(t_token *list);
+t_token	*ms_expansion_index(t_token *list);
+
+//ms_quotes_utils.c
+bool	ms_another_double(int i, char *value);
+int	ms_count_normal(char *string);
+int ms_quotes_count(t_token	*list);
+
+
 // parsing placeholder 
 void	ms_free_split_args(char **args);
 char	**ms_parse_input_placeholder(const char *input_line);
 int		ms_execute_command_placeholder(char **args, t_minishell *data);
+
+
+// --------------------------------------------------------------------
+
 
 // --- expand ---
 

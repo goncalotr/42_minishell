@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/14 13:04:04 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:58:40 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	ms_parsing(char *input)
 	list = ms_tokenization(input, list);
 	list = ms_check_eof(list);
 	list = ms_expansion_index(list);
+	//list = expansao
+	list = ms_quotes_off(list);
 	ms_print_list(list);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:02:33 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/14 13:44:15 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:00:42 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	ms_normal_index(t_token *list)
 	i = 0;
 	k = 0;
 	count = ms_count_normal(list->value);
-	if (!count)
-		exit(EXIT_FAILURE);
 	if (count == 0)
 		return ;
 	index = malloc((count + 1) * sizeof(int));
+	if (!count)
+		exit(EXIT_FAILURE);
 	while (list->value[i])
 	{
 		if (list->value[i] == '$')

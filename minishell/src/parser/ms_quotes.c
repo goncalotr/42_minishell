@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:02:33 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/14 15:00:42 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:41:18 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_token	*ms_expansion_index(t_token *list)
 			temp = temp->next;
 			continue;
 		} 
-		if (temp->type == TOKEN_DOUBLE_QUOTE || temp->type == TOKEN_SIMPLE_QUOTE)
+		if (temp->state == DOUBLE_QUOTES || temp->state == SIMPLE_QUOTES)
 			ms_quotes_index(temp);
 		else
 			ms_normal_index(temp);

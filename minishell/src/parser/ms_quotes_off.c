@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:58:29 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/14 15:42:23 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:17:35 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_token *ms_quotes_off(t_token *list)
 	temp = list;
 	while (temp)
 	{
-		if(!(temp->type == TOKEN_DOUBLE_QUOTE || temp->type == TOKEN_SIMPLE_QUOTE))
+		if(!(temp->state == DOUBLE_QUOTES || temp->state == SIMPLE_QUOTES))
 		{
 			temp = temp->next;
 			continue;

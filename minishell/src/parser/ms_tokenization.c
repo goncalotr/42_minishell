@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/09 16:48:07 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:03:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,10 +134,15 @@ t_token *ms_extract_quotes(char *input, int *i, t_token *list)
 	while (input[*i] && k <= len)
 		quote[k++] = input[(*i)++];
 	quote[k] = '\0';
-	if (quote_type == '\'')
-		list = ms_append_node(list, quote, TOKEN_SIMPLE_QUOTE);
-	else if (quote_type == '\"')
-		list = ms_append_node(list, quote, TOKEN_DOUBLE_QUOTE);
+	if(ms_is_file(list))
+	{
+		if (ms_is_infile(list))
+			list = ms_append_node(list, quote, TOKEN_INFILE);
+		else
+			list = ms_append_node(list, quote, TOKEN_OUTFILE);
+	}
+	else
+		list = ms_append_node(list, quote, TOKEN_CMD);
 	free(quote);
 	return (list);	
 }

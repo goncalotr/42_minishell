@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/14 15:44:30 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:10:35 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,6 @@ typedef enum e_token_type
 	TOKEN_APPEND,				// 6 >>
 	TOKEN_HEREDOC,				// 7 <<
 	TOKEN_EOF,					// 8 end of file
-	TOKEN_SIMPLE_QUOTE,			// 9 ''
-	TOKEN_DOUBLE_QUOTE,			// 10 ""
 }	t_token_type;
 
 typedef enum s_token_state
@@ -107,7 +105,7 @@ typedef struct s_token
 {
 	char					*value;
 	t_token_type			type;
-	// int						size;
+	t_token_states			state;
 	bool					expand;
 	int						*expand_index;
 	struct s_token			*previous;
@@ -179,6 +177,7 @@ void	ms_skip_whitespaces(int *i, char *input);
 
 // ms_pasrsing.c
 void	ms_parsing(char *input);
+t_token	*ms_assign_state(t_token *list);
 t_token *ms_check_eof(t_token *list);
 
 // ms_list_utils.c

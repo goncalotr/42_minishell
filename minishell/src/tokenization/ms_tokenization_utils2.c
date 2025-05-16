@@ -1,29 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_parsing.c                                       :+:      :+:    :+:   */
+/*   ms_toknization_utils2.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/15 12:09:38 by jpedro-f         ###   ########.fr       */
+/*   Created: 2025/05/16 16:56:27 by jpedro-f          #+#    #+#             */
+/*   Updated: 2025/05/16 16:57:57 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	ms_parsing(char *input)
+bool	ms_is_file(t_token	*list)
 {
-	t_token		*list;
+	t_token	*last_node;
+	
+	last_node = ms_last_node(list);
+	if (last_node == NULL)
+		return (false);
+	if(last_node->type == TOKEN_REDIR_IN || 
+		last_node->type == TOKEN_REDIR_OUT || 
+			last_node->type == TOKEN_APPEND)
+		return (true);
+	else
+		return (false);
+}
 
-	list = NULL;
-	list = ms_tokenization(input, list);
-	list = ms_assign_state(list);
-	list = ms_check_eof(list);
-	list = ms_expansion_index(list);
-	//list = expansao
-	list = ms_quotes_off(list);
-	ms_print_list(list);
+bool	ms_is_infile(t_token *list)
+{
+	t_token	*last_node;
+	
+	last_node = ms_last_node(list);
+	if(last_node->type == TOKEN_REDIR_IN)
+		return (true);
+	else
+		return (false);
 }
 
 t_token	*ms_assign_state(t_token *list)

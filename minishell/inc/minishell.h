@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/16 17:03:57 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:35:29 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ typedef struct s_token
 typedef struct s_ast
 {
 	t_token_type	type;
-	char			*args;
+	char			**args;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -195,12 +195,12 @@ t_token *ms_extract_quotes(char *input, int *i, t_token *list);
 t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
 t_token	*ms_extract_file(char *input, int *i, t_token *list);
 t_token *ms_start_tokenization(char *input, t_token *list);
-void	ms_tokenization(char *input);
+t_token	*ms_tokenization(char *input);
 
 // ms_list_utils.c
 t_token *ms_last_node(t_token *list);
 t_token *ms_append_node(t_token *list, char  *input, t_token_type type);
-void ms_print_list(t_token *list);
+void ms_print_tokens(t_token *list);
 
 //ms_tokenization_utils.c
 int	ms_len_file(char *input, int i);
@@ -230,7 +230,22 @@ int	ms_new_size(char *value);
 char	*ms_put_new(char *value, char *new_value);
 t_token *ms_quotes_off(t_token *list);
 
-// ms_pasrsing.c
+// ms_main_parsing.c
+void	ms_main_parsing(char *input);
+void print_indent(int level);
+const char *get_token_type_name(t_token_type type);
+void print_ast(t_ast *node, int level);
+
+// ms_parsing.c
+t_ast	*ms_parse_command(t_token **token);
+t_ast	*ms_create_file_node(t_token *token);
+t_ast	*ms_parse_redirection(t_token	**token_list);
+t_ast	*ms_parse_pipes(t_token **token_list);
+t_ast 	*ms_parse_tokens(t_token	**token_list);
+
+// ms_parsing_utils.c
+t_ast	*ms_new_ast_node(t_token_type type);
+t_ast	*ms_create_and_link_redir(t_token **token_list, t_token *temp);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

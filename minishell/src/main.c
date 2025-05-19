@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/16 17:04:21 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:04:12 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	ms_core_loop(t_minishell *data)
 		args = ms_parse_input_placeholder(input_line);
 		if (ms_syntax_check(input_line))
 			continue ;
-		ms_tokenization(input_line);
+        ms_main_parsing(input_line);
 		// if (!args)
 		// {
 		// 	free(input_line);

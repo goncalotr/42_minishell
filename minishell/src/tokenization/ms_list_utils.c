@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/15 12:14:04 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:08:51 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 	return (list);
 }
 
-void ms_print_list(t_token *list)
+void ms_print_tokens(t_token *list)
 {
 	char	*type[] = {"INFILE", "OUTFILE", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "EOF"};
 	char	*state[] = {"GENERAL", "DOUBLE_QUOTES", "SIMPLE_QUOTES"};

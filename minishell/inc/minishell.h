@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/19 15:35:29 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:09:46 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ typedef struct s_ast
 typedef struct s_minishell
 {
 	char	**envp;
+	char	*path;
 	int		last_exit_status;
 	int		stdin_fd;
 	int		stdout_fd;

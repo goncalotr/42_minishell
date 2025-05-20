@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:06:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:17:27 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h" // Adjust path as needed
+
+char *get_path(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			return (envp[i] + 5);
+		i++;
+	}
+	ft_putstr_fd("Path variable not found", 2);
+	exit(EXIT_FAILURE);
+}
 
 /**
  * @brief Frees the memory allocated for a duplicated environment list.
@@ -101,6 +116,7 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 	data->envp = duplicate_envp(envp);
 	if (!data->envp)
 		return (1);
+	data->path = get_path(envp);
 	data->last_exit_status = 0;
 	data->stdin_fd = dup(STDIN_FILENO);
 	if (data->stdin_fd == -1)

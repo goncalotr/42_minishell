@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/20 15:17:27 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:55:26 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,17 @@
 
 char *get_path(char **envp)
 {
-	int	i;
+	int		i;
+	char	*paths;
 
 	i = 0;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			return (envp[i] + 5);
+		{
+			paths = ft_split(envp[i + 5], ':');
+			return (paths);
+		}
 		i++;
 	}
 	ft_putstr_fd("Path variable not found", 2);
@@ -116,7 +120,7 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 	data->envp = duplicate_envp(envp);
 	if (!data->envp)
 		return (1);
-	data->path = get_path(envp);
+	data->paths = get_path(envp);
 	data->last_exit_status = 0;
 	data->stdin_fd = dup(STDIN_FILENO);
 	if (data->stdin_fd == -1)

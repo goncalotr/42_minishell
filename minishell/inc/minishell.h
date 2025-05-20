@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/20 15:09:46 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:54:27 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ typedef struct s_ast
 typedef struct s_minishell
 {
 	char	**envp;
-	char	*path;
+	char	**paths;
 	int		last_exit_status;
 	int		stdin_fd;
 	int		stdout_fd;
@@ -232,7 +232,7 @@ char	*ms_put_new(char *value, char *new_value);
 t_token *ms_quotes_off(t_token *list);
 
 // ms_main_parsing.c
-void	ms_main_parsing(char *input);
+void	ms_main_parsing(char *input, t_minishell *data);
 void print_indent(int level);
 const char *get_token_type_name(t_token_type type);
 void print_ast(t_ast *node, int level);

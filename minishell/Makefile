@@ -6,7 +6,7 @@
 #    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/05/19 15:27:13 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/05/21 13:01:22 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/parsing/ms_parsing.c\
 				  $(SRC_DIR)/parsing/ms_main_parsing.c\
 				  $(SRC_DIR)/parsing/ms_parsing_utils.c\
+				  $(SRC_DIR)/execution/ms_tree_exec.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_utils.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_off.c\

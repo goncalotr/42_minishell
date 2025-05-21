@@ -6,23 +6,23 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/20 15:55:26 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:05:23 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h" // Adjust path as needed
 
-char *get_path(char **envp)
+char **get_path(char **envp)
 {
 	int		i;
-	char	*paths;
+	char	**paths;
 
 	i = 0;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
-			paths = ft_split(envp[i + 5], ':');
+			paths = ft_split(envp[i] + 5, ':');
 			return (paths);
 		}
 		i++;

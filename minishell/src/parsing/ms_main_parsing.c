@@ -6,13 +6,13 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/19 15:35:04 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:04:31 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	ms_main_parsing(char *input)
+void	ms_main_parsing(char *input, t_minishell *data)
 {
 	t_token	*tokens;
 	t_ast	*ast_tree;
@@ -21,6 +21,7 @@ void	ms_main_parsing(char *input)
 	ms_print_tokens(tokens);
 	ast_tree = ms_parse_tokens(&tokens);
 	print_ast(ast_tree, 0);
+	ms_exec_tree(ast_tree, data);
 }
 
 void print_indent(int level)

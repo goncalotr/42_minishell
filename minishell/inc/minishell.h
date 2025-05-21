@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/20 15:54:27 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:02:49 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
+# include <fcntl.h>
 # include <string.h>
 # include <errno.h>
 # include <limits.h>
@@ -247,6 +247,14 @@ t_ast 	*ms_parse_tokens(t_token	**token_list);
 // ms_parsing_utils.c
 t_ast	*ms_new_ast_node(t_token_type type);
 t_ast	*ms_create_and_link_redir(t_token **token_list, t_token *temp);
+
+// ms_tree_exec.c
+int	ms_exec_tree(t_ast *node, t_minishell *data);
+int	ms_exec_cmd(t_ast *node, t_minishell *data);
+int	ms_exec_pipe(t_ast *node, t_minishell *data);
+int	ms_exec_redir_in(t_ast *node, t_minishell *data);
+int	ms_exec_redir_out(t_ast	*node, t_minishell *data);
+int	ms_exec_heredoc(t_ast *node, t_minishell *data);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

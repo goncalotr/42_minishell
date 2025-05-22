@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/20 15:21:24 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:54:30 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	ms_core_loop(t_minishell *data)
 			Exiting.\n", 2);
 			break ;
 		}
-		input_line = readline(prompt_str);
+ 		input_line = readline(prompt_str);
 		if (g_signal == 130)
 		{
 			saved_errno = errno;

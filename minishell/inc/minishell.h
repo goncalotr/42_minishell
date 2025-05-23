@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/21 13:02:49 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:42:41 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,26 +60,6 @@
 /**************************************************************************
  * SECTION: Structs
  **************************************************************************/
-
-/*
-typedef enum e_redir_type
-{
-	REDIR_NONE,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_HEREDOC,
-	REDIR_APPEND
-}	t_redir_type;
-*/
-
-/*
-typedef struct s_redirection
-{
-	t_redir_type			type;
-	char					*target;
-	struct s_redirection	*next;
-}	t_redirection;
-*/
 
 typedef enum e_token_type
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/22 15:54:30 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:04:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ extern unsigned char	g_signal;
  * Handles EOF (Ctrl+D).
  * 
  * 1. Read input with prompt
- * 2. Handle EOF (CTRL+D)
+ * 2. Handle EOF (CTRL+D) - input_line == NULL
  * 3. Handle empty input (Enter)
  * 4. Add non-empty input to history
  * 5. Check for exit command
  * 6. Placeholder for parsing
  * 7. Free input line
  * 
- * 
+ * SIGINT = 130
  */
 static void	ms_core_loop(t_minishell *data)
 {
@@ -42,34 +42,37 @@ static void	ms_core_loop(t_minishell *data)
 	g_signal = 0;
 	while (1)
 	{
-		data->last_exit_status = g_signal;
-		if (g_signal == 130)
+		if (g_signal == SIGINT)
 		{
+			data->last_exit_status = 130;
 			g_signal = 0;
 		}
+		ms_signal_handlers_set_interactive();
 		prompt_str = ms_get_prompt(data);
 		if (!prompt_str)
 		{
-			ft_putstr_fd("Critical error: Could not generate prompt. \
+			ft_putstr_fd("Minishell: Critical error generating prompt. \
 			Exiting.\n", 2);
 			break ;
 		}
- 		input_line = readline(prompt_str);
-		if (g_signal == 130)
+		input_line = readline(prompt_str);
+		free(prompt_str); 
+		if (g_signal == SIGINT)
 		{
+			data->last_exit_status = 130;
+			g_signal = 0;
+			if (input_line)
+				free(input_line);
+			
 			saved_errno = errno;
 			ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" \
 			RESET, saved_errno, strerror(saved_errno));
-			if (input_line)
-			{
-				free(input_line);
-				data->last_exit_status = 130;
-			}
+
 			continue ;
 		}
 		if (input_line == NULL)
 		{
-			ft_printf("exit\n");
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
 		}
 		if (input_line[0] == '\0')
@@ -78,11 +81,25 @@ static void	ms_core_loop(t_minishell *data)
 			continue ;
 		}
 		add_history(input_line);
+
+	
+
+		// --- Syntax check ---
 		// ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		args = ms_parse_input_placeholder(input_line);
 		if (ms_syntax_check(input_line))
+		{
+			//data->last_exit_status = 258;
+			//free(input_line);
 			continue ;
-        ms_main_parsing(input_line, data);
+		}
+	
+		// --- PARSING AND EXECUTION ---
+		
+		ms_main_parsing(input_line, data);
+
+
+
 		// if (!args)
 		// {
 		// 	free(input_line);
@@ -96,7 +113,11 @@ static void	ms_core_loop(t_minishell *data)
 		// ms_free_split_args(args);
 		// free(input_line);
 		// input_line = NULL;
+
+
+		free(input_line);
 	}
+	rl_clear_history();
 }
 
 /**

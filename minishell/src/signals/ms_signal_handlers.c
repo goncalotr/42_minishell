@@ -6,13 +6,14 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/26 13:56:51 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:58:45 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-unsigned char	g_signal;
+//unsigned char	g_signal;
+//extern volatile sig_atomic_t g_signal;
 
 /**
  * 
@@ -22,17 +23,26 @@ unsigned char	g_signal;
  * 2. Tell readline we're on a new
  * 3. Clear the current input buffer.
  * 4. Redisplay the prompt and the (now empty) line.
+ * 
+ * rl_cleanup_after_signal tells readline to clean up
+ * its internal state for signal handling.
  */
 static void	ms_handle_sigint_interactive(int signum)
 {
 	(void)signum;
 
 	g_signal = SIGINT;
+	//ft_putstr_fd("HANDLER CALLED!\n", 2);
+	//rl_cleanup_after_signal();
 	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
 	rl_replace_line("", 0);
+	rl_on_new_line();
+
+	//rl_set_prompt(prompt_str); //optional
+
 	rl_redisplay();
 }
+
 
 /**
  * SIGINT
@@ -45,7 +55,7 @@ void	ms_signal_handlers_set_interactive(void)
 
 	sa_int.sa_handler = ms_handle_sigint_interactive;
 	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = SA_RESTART;
+	//sa_int.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
 		perror("Minishell: Error setting SIGINT handler");

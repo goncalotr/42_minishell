@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/26 14:02:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:41:00 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ typedef struct s_minishell
 	char	*shell_name;
 	char	**envp_orig;
 }	t_minishell;
+
+extern volatile sig_atomic_t g_signal;
 
 /**************************************************************************
  * SECTION: Functions

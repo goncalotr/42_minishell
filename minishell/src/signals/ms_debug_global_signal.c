@@ -6,13 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:18:29 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:50:40 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:25:29 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-extern unsigned char	g_signal;
+//extern unsigned char	g_signal;
 
 void	ms_debug_print_gsig(void)
 {

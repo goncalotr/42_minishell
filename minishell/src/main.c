@@ -6,14 +6,15 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/26 13:04:14 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:56:27 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // Definition of the global variable
-extern unsigned char	g_signal;
+//extern unsigned char	g_signal;
+volatile sig_atomic_t g_signal;
 
 /**
  * @brief The main interactive loop of the minishell.
@@ -35,7 +36,7 @@ extern unsigned char	g_signal;
 static void	ms_core_loop(t_minishell *data)
 {
 	char	*input_line;
-	char	**args;
+	//char	**args;
 	char	*prompt_str;
 	int		saved_errno;
 
@@ -47,7 +48,6 @@ static void	ms_core_loop(t_minishell *data)
 			data->last_exit_status = 130;
 			g_signal = 0;
 		}
-		ms_signal_handlers_set_interactive();
 		prompt_str = ms_get_prompt(data);
 		if (!prompt_str)
 		{
@@ -56,18 +56,19 @@ static void	ms_core_loop(t_minishell *data)
 			break ;
 		}
 		input_line = readline(prompt_str);
-		free(prompt_str); 
+		free(prompt_str);
+
+		saved_errno = errno;
+		ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" \
+		RESET, saved_errno, strerror(saved_errno));
+
 		if (g_signal == SIGINT)
 		{
 			data->last_exit_status = 130;
 			g_signal = 0;
 			if (input_line)
 				free(input_line);
-			
-			saved_errno = errno;
-			ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" \
-			RESET, saved_errno, strerror(saved_errno));
-
+			rl_done = 0;
 			continue ;
 		}
 		if (input_line == NULL)
@@ -86,11 +87,11 @@ static void	ms_core_loop(t_minishell *data)
 
 		// --- Syntax check ---
 		// ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
-		args = ms_parse_input_placeholder(input_line);
+		//args = ms_parse_input_placeholder(input_line);
 		if (ms_syntax_check(input_line))
 		{
-			//data->last_exit_status = 258;
-			//free(input_line);
+			data->last_exit_status = 2; //or 258?
+			free(input_line);
 			continue ;
 		}
 	
@@ -118,6 +119,7 @@ static void	ms_core_loop(t_minishell *data)
 		free(input_line);
 	}
 	rl_clear_history();
+	// free shell data
 }
 
 /**
@@ -131,10 +133,12 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);
-	ms_signal_handlers_init();
+	//ms_signal_handlers_init();
+	ms_signal_handlers_set_interactive();
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
 	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
-	return (g_signal);
+	//return (g_signal);
+	return(shell_data.last_exit_status);
 }

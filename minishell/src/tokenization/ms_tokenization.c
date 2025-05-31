@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tokenization.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/19 15:06:33 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:01:27 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ t_token	*ms_tokenization(char *input)
 	list = ms_assign_state(list);
 	list = ms_check_eof(list);
 	list = ms_expansion_index(list);
-	//list = expansao
+	list = ms_expand_variables(list);
 	list = ms_quotes_off(list);
 	return (list);
 }

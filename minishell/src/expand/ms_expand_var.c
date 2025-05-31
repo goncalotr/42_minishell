@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:04:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:44:33 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,9 @@ static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 	return (free(literal_part), result);
 }
 
+
+
+
 /**
  * @brief Iterates through args array and expands variables in each argument
  *        using the helper-based expansion. Ignores quotes.
@@ -158,19 +161,59 @@ static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
-void	ms_expand_variables(char **args, int last_exit_status)
+t_token *ms_expand_variables(t_token *list)
 {
 	int		i;
 	char	*expanded_arg;
+	t_token	*temp_token;
+	int		current_pos;
 
-	if (!args)
-		return ;
+	if (!list)
+		return (NULL);
+	temp_token = list;
+	if (!temp_token->value)
+		return (NULL);
+
+	i = 0;
+	while (temp_token)
+	{
+		if (temp_token->expand == true)
+		{
+			while (*temp_token->expand_index)
+			{
+				temp_token->expand_index = current_pos;
+
+				// read var name
+				current_pos + 1;
+				int var_size = ft_strlen(temp_token->value);
+				char* var_name = (char *)malloc(var_size * sizeof(char));
+				int i = 0
+				while (temp_token->value[current_pos]) {
+					var_name[i];
+
+					i++;
+					current_pos++;
+				}
+
+				// search env
+
+				// copy env var content to tmp _token
+
+				// increment
+				*temp_token->expand_index++;
+			}
+		}
+		temp_token = temp_token->next;
+	}
+	return (list);
+}
+
 	i = 0;
 	while (args[i])
 	{
 		if (ft_strchr(args[i], '$'))
 		{
-			expanded_arg = ms_expand_str_help(args[i], last_exit_status);
+			expanded_arg = ms_expand_str_help(args[i], g_signal);
 			if (!expanded_arg)
 				ms_expand_error(args, i, 1);
 			else
@@ -181,4 +224,4 @@ void	ms_expand_variables(char **args, int last_exit_status)
 		}
 		i++;
 	}
-}
+	

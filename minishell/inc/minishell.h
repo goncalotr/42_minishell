@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/26 15:41:00 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:47:29 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ t_token	*ms_extract_quotes(char *input, int *i, t_token *list);
 t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
 t_token	*ms_extract_file(char *input, int *i, t_token *list);
 t_token	*ms_start_tokenization(char *input, t_token *list);
-t_token	*ms_tokenization(char *input);
+t_token	*ms_tokenization(t_minishell *data, char *input);
 
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);
@@ -264,14 +264,16 @@ char	*ms_process_curly_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
 
 // 1
+/*
 //int		ms_process_one_expansion(const char *str, char **res_ptr, \
-//				int *cur_pos_ptr, int dol_pos, int status);
+				int *cur_pos_ptr, int dol_pos, int status);
 //char	*ms_get_expansion_info(const char *str, int dollar_pos, \
-//				int *target_len);
+				int *target_len);
 //int		ms_process_one_expansion(const char *str, char **res_ptr, \
-//				int *cur_pos_ptr, int dol_pos, int status);
+				int *cur_pos_ptr, int dol_pos, int status);
 //char	*ms_expand_str_help(const char *original_str, int last_exit_status);
-void	ms_expand_variables(char **args, int last_exit_status);
+*/
+t_token	*ms_expand_variables(t_minishell *data, t_token *list);
 
 // --- built-ins ---
 int		ms_execute_cd(char **args);

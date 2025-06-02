@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 18:06:14 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:15:11 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,10 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
  * @param original_str The string to expand.
  * @param last_exit_status The exit status for $?.
  * @return A newly allocated expanded string, or NULL on error.
+ * 
+ * ! add last exit status from program struct
  */
+/*
 static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 {
 	char	*result;
@@ -150,6 +153,33 @@ static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 		return (free(literal_part), free(result), NULL);
 	return (free(literal_part), result);
 }
+*/
+static char	*ms_expand_str_help(t_minishell *data, t_token *list)
+{
+	char	*result;
+	char	*literal_part;
+	int		current_pos;
+	int		dollar_pos;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	current_pos = 0;
+	dollar_pos = -1;
+	dollar_pos = ms_find_next_dollar(list->value, current_pos);
+	while (dollar_pos != -1)
+	{
+		if (ms_process_one_expansion(list->value, &result, &current_pos,
+				dollar_pos, data->last_exit_status) != 0)
+			return (free(result), NULL);
+		dollar_pos = ms_find_next_dollar(list->value, current_pos);
+	}
+	literal_part = ft_substr(list->value, current_pos,
+			ft_strlen(list->value) - current_pos);
+	if (!literal_part || ms_append_and_free(&result, literal_part))
+		return (free(literal_part), free(result), NULL);
+	return (free(literal_part), result);
+}
 
 
 
@@ -161,12 +191,11 @@ static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
-t_token *ms_expand_variables(t_token *list)
+t_token *ms_expand_variables(t_minishell *data, t_token *list)
 {
-	int		i;
-	char	*expanded_arg;
-	int		current_pos;
-
+	//int		i;
+	//char	*expanded_arg;
+	//int		current_pos;
 	t_token	*temp_token;
 	char	*original_value;
 	char	*expanded_value;
@@ -177,7 +206,7 @@ t_token *ms_expand_variables(t_token *list)
 	if (!temp_token->value)
 		return (NULL);
 
-	i = 0;
+	//i = 0;
 	while (temp_token)
 	{
 		// here doc
@@ -197,7 +226,7 @@ t_token *ms_expand_variables(t_token *list)
 		if (temp_token->expand == true && temp_token->value)
 		{
 			original_value = temp_token->value;
-			expanded_value = ms_expand_str_help(original_value, last_exit_status, envp);
+			expanded_value = ms_expand_str_help(data, list);
 
 			// result check
 			if (!expanded_value)
@@ -208,7 +237,7 @@ STDERR_FILENO);
 			}
 			else
 			{
-				free(original_value)
+				free(original_value);
 				temp_token->value = expanded_value;
 			}
 		}

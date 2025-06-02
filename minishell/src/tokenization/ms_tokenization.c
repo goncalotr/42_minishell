@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/31 17:01:27 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:12:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ t_token	*ms_extract_file(char *input, int *i, t_token *list)
 
 t_token *ms_extract_quotes(char *input, int *i, t_token *list)
 {
-	char	quote_type;
+	//char	quote_type;
 	char	*quote;
 	int		k;
 	int		len;
 	
-	quote_type = input[*i];
+	//quote_type = input[*i];
 	len = ms_quote_len(input, *i);
 	quote = malloc(len + 2);
 	if (!quote)
@@ -117,7 +117,7 @@ t_token *ms_start_tokenization(char *input, t_token *list)
 	return (list);
 }
 
-t_token	*ms_tokenization(char *input)
+t_token	*ms_tokenization(t_minishell *data, char *input)
 {
 	t_token		*list;
 
@@ -126,7 +126,7 @@ t_token	*ms_tokenization(char *input)
 	list = ms_assign_state(list);
 	list = ms_check_eof(list);
 	list = ms_expansion_index(list);
-	list = ms_expand_variables(list);
+	list = ms_expand_variables(data, list);
 	list = ms_quotes_off(list);
 	return (list);
 }

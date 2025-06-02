@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_main_parsing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/22 15:44:33 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:39:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	t_token	*tokens;
 	t_ast	*ast_tree;
 	
-	tokens = ms_tokenization(input);
+	tokens = ms_tokenization(data, input);
 	ms_print_tokens(tokens);
 	ast_tree = ms_parse_tokens(&tokens);
 	print_ast(ast_tree, 0);

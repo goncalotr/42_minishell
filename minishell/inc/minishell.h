@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/21 13:02:49 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/31 15:00:00 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct s_redirection
 
 typedef enum e_token_type
 {
-	TOKEN_INFILE,				// 0 file
+	TOKEN_INFILE,				// 0 infile
 	TOKEN_OUTFILE,				// 1 outfile
 	TOKEN_CMD,					// 2 commands
 	TOKEN_PIPE,					// 3 |
@@ -94,18 +94,18 @@ typedef enum e_token_type
 	TOKEN_EOF,					// 8 end of file
 }	t_token_type;
 
-typedef enum s_token_state
+typedef enum e_token_state
 {
 	GENERAL,					// 0 normal
 	DOUBLE_QUOTES,				// 1 ""
 	SIMPLE_QUOTES,				// 2 ''
-}	t_token_states;
+}	t_token_state;
 
 typedef struct s_token
 {
 	char					*value;
 	t_token_type			type;
-	t_token_states			state;
+	t_token_state			state;
 	bool					expand;
 	int						*expand_index;
 	struct s_token			*previous;

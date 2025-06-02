@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/21 15:18:32 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:12:51 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	t_ast 	*cmd;
 	t_ast 	*outfile;
 	int		fd;
+	int		original_std;
+	int		status;
 
+	original_std = dup(STDOUT_FILENO);
 	cmd = node->left;
 	outfile = node->right;
 	if (node->type == TOKEN_REDIR_OUT)
@@ -72,15 +75,20 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	return (ms_exec_tree(cmd, data));
+	status = ms_exec_tree(cmd, data);
+	dup2(original_std, STDOUT_FILENO);
+	close(original_std);
+	return (status);
 }
-
 int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 {
 	t_ast	*cmd;
 	t_ast	*infile;
 	int		fd;
+	int		original_std;
+	int		status;
 	
+	original_std = dup(STDIN_FILENO);
 	cmd = node->left;
 	infile = node->right;
 	fd = open(infile->args[0], O_RDONLY);
@@ -91,7 +99,10 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	return (ms_exec_tree(cmd, data));
+	status = ms_exec_tree(cmd, data);
+	dup2(original_std, STDIN_FILENO);
+	close(original_std);
+	return (status);
 }
 
 int	ms_exec_pipe(t_ast *node, t_minishell *data)

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 18:47:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 20:04:53 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,6 @@ int		ms_execute_command_placeholder(char **args, t_minishell *data);
 int		ms_valid_var(char c, int mode);
 int		ms_expand_error(char **args, int i, int mode);
 int		ms_find_next_dollar(const char *str, int start_pos);
-char	*ms_get_expansion_value(const char *info, int last_exit_status);
 int		ms_append_and_free(char **base_str_ptr, const char *to_append);
 
 // 2
@@ -262,6 +261,7 @@ char	*ms_process_simple_var_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
 char	*ms_process_curly_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
+char	*ms_get_expansion_value(t_minishell *data, const char *info);
 
 // 1
 /*

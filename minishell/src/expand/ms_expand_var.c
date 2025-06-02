@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 19:15:11 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 23:10:57 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_
  * @param status The last exit status for $?.
  * @return 0 on success, 1 on error.
  */
-static int	ms_process_one_expansion(const char *str, char **res_ptr, \
-									int *cur_pos_ptr, int dol_pos, int status)
+static int	ms_process_one_expansion(t_minishell *data, char *str, char **res_ptr, \
+									int *cur_pos_ptr, int dol_pos)
 {
 	char	*info;
 	char	*value;
@@ -95,7 +95,7 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
 	int		target_len;
 
 	target_len = 0;
-	literal = ft_substr(str, *cur_pos_ptr, dol_pos - *cur_pos_ptr);
+	literal = ft_substr(str, (unsigned int) *cur_pos_ptr, dol_pos - *cur_pos_ptr);
 	if (!literal || ms_append_and_free(res_ptr, literal))
 	{
 		free(literal);
@@ -105,7 +105,7 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
 	info = ms_get_expansion_info(str, dol_pos, &target_len);
 	if (!info)
 		return (1);
-	value = ms_get_expansion_value(info, status);
+	value = ms_get_expansion_value(data, str);
 	free(info);
 	if (!value)
 		return (1);
@@ -169,8 +169,8 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *list)
 	dollar_pos = ms_find_next_dollar(list->value, current_pos);
 	while (dollar_pos != -1)
 	{
-		if (ms_process_one_expansion(list->value, &result, &current_pos,
-				dollar_pos, data->last_exit_status) != 0)
+		if (ms_process_one_expansion(data, list->value, &result, &current_pos,
+				dollar_pos) != 0)
 			return (free(result), NULL);
 		dollar_pos = ms_find_next_dollar(list->value, current_pos);
 	}
@@ -226,7 +226,7 @@ t_token *ms_expand_variables(t_minishell *data, t_token *list)
 		if (temp_token->expand == true && temp_token->value)
 		{
 			original_value = temp_token->value;
-			expanded_value = ms_expand_str_help(data, list);
+			expanded_value = ms_expand_str_help(data, temp_token);
 
 			// result check
 			if (!expanded_value)

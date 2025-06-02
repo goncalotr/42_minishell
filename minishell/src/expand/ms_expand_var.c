@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/31 17:44:33 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:06:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,11 @@ t_token *ms_expand_variables(t_token *list)
 {
 	int		i;
 	char	*expanded_arg;
-	t_token	*temp_token;
 	int		current_pos;
+
+	t_token	*temp_token;
+	char	*original_value;
+	char	*expanded_value;
 
 	if (!list)
 		return (NULL);
@@ -177,51 +180,48 @@ t_token *ms_expand_variables(t_token *list)
 	i = 0;
 	while (temp_token)
 	{
-		if (temp_token->expand == true)
+		// here doc
+		// no expand, clean expand_index
+		if (temp_token->type == TOKEN_EOF)
 		{
-			while (*temp_token->expand_index)
+			if (temp_token->expand_index)
 			{
-				temp_token->expand_index = current_pos;
+				free(temp_token->expand_index);
+				temp_token->expand_index = NULL;
+			}
+			temp_token->expand = false;
+			temp_token = temp_token->next;
+			continue;
+		}
 
-				// read var name
-				current_pos + 1;
-				int var_size = ft_strlen(temp_token->value);
-				char* var_name = (char *)malloc(var_size * sizeof(char));
-				int i = 0
-				while (temp_token->value[current_pos]) {
-					var_name[i];
+		if (temp_token->expand == true && temp_token->value)
+		{
+			original_value = temp_token->value;
+			expanded_value = ms_expand_str_help(original_value, last_exit_status, envp);
 
-					i++;
-					current_pos++;
-				}
-
-				// search env
-
-				// copy env var content to tmp _token
-
-				// increment
-				*temp_token->expand_index++;
+			// result check
+			if (!expanded_value)
+			{
+				ft_putstr_fd("minishell: expansion error for token value: ", \
+STDERR_FILENO);
+				ft_putendl_fd(original_value, STDERR_FILENO);
+			}
+			else
+			{
+				free(original_value)
+				temp_token->value = expanded_value;
 			}
 		}
+
+		// clean expand_index
+		if (temp_token->expand_index)
+		{
+			free(temp_token->expand_index);
+			temp_token->expand_index = NULL;
+		}
+		temp_token->expand = false;
+
 		temp_token = temp_token->next;
 	}
 	return (list);
 }
-
-	i = 0;
-	while (args[i])
-	{
-		if (ft_strchr(args[i], '$'))
-		{
-			expanded_arg = ms_expand_str_help(args[i], g_signal);
-			if (!expanded_arg)
-				ms_expand_error(args, i, 1);
-			else
-			{
-				free(args[i]);
-				args[i] = expanded_arg;
-			}
-		}
-		i++;
-	}
-	

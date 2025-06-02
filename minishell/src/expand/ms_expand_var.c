@@ -6,11 +6,37 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 23:10:57 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 23:22:15 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static char	*ms_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*substr;
+	size_t	i;
+	size_t	str_len;
+
+	if (s == NULL)
+		return (NULL);
+	str_len = ft_strlen(s);
+	if (start >= str_len)
+		return (ft_strdup(""));
+	if (len > str_len - start)
+		len = str_len - start;
+	substr = (char *)malloc((len + 1) * sizeof(char));
+	if (substr == NULL)
+		return (NULL);
+	i = start;
+	while (i < len)
+	{
+		substr[i] = s[start + i];
+		i++;
+	}
+	substr[i] = '\0';
+	return (substr);
+}
 
 /**
  * read after $
@@ -174,7 +200,7 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *list)
 			return (free(result), NULL);
 		dollar_pos = ms_find_next_dollar(list->value, current_pos);
 	}
-	literal_part = ft_substr(list->value, current_pos,
+	literal_part = ms_substr(list->value, current_pos,
 			ft_strlen(list->value) - current_pos);
 	if (!literal_part || ms_append_and_free(&result, literal_part))
 		return (free(literal_part), free(result), NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:05:23 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:30:05 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char **get_path(char **envp)
 	char	**paths;
 
 	i = 0;
-	while (envp[i])
+	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
@@ -59,16 +59,16 @@ void	free_envp_copy(char **envp_copy)
  *         Returns an allocated array containing only NULL if envp is
  * NULL or empty.
  */
-char	**duplicate_envp(char **envp)
+char	**duplicate_envp(char **original_envp)
 {
 	int		i;
 	int		count;
 	char	**copy;
 
 	count = 0;
-	if (envp)
+	if (original_envp)
 	{
-		while (envp[count])
+		while (original_envp[count])
 			count++;
 	}
 	copy = (char **)malloc(sizeof(char *) * (count + 1));
@@ -80,7 +80,7 @@ char	**duplicate_envp(char **envp)
 	i = 0;
 	while (i < count)
 	{
-		copy[i] = ft_strdup(envp[i]);
+		copy[i] = ft_strdup(original_envp[i]);
 		if (!copy[i])
 		{
 			perror("minishell: ft_strdup error duplicating envp entry");
@@ -108,7 +108,7 @@ char	**duplicate_envp(char **envp)
  * 5. Store shell name (duplicate it)
  * 6. Store pointer to original envp (no allocation needed)
  */
-int	init_shell_data(t_minishell *data, char **argv, char **envp)
+int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 {
 	if (!data || !argv)
 		return (1);
@@ -117,10 +117,10 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
-	data->envp = duplicate_envp(envp);
-	if (!data->envp)
+	data->envp = duplicate_envp(envp_main);
+	if (!data->envp && envp_main)
 		return (1);
-	data->paths = get_path(envp);
+	data->paths = get_path(data->envp ? data->envp : envp_main);
 	data->last_exit_status = 0;
 	data->stdin_fd = dup(STDIN_FILENO);
 	if (data->stdin_fd == -1)
@@ -159,6 +159,6 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 		close(data->stderr_fd);
 		return (1);
 	}
-	data->envp = envp;
+	data->envp = envp_main;
 	return (0);
 }

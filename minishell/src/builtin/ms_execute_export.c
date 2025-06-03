@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:19:31 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:09:39 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ static int	update_existing_env_var(t_minishell *data, int index, const char *new
 }
 
 // Definition for the function causing the second error
+// arg is "NAME=value" or "NAME"
 static int	add_or_update_env_var(t_minishell *data, const char *arg)
 {
 	char	*name;
@@ -151,7 +152,8 @@ static int	add_or_update_env_var(t_minishell *data, const char *arg)
 	int		status;
 
 	name = extract_var_name(arg, &name_len);
-	if (!name) return (1);
+	if (!name)
+		return (1);
 
 	if (!ms_is_valid_identifier(name))
 	{
@@ -163,9 +165,25 @@ static int	add_or_update_env_var(t_minishell *data, const char *arg)
 	index = find_env_var_index(name, name_len, data->envp);
 
 	if (index != -1) {
-		status = update_existing_env_var(data, index, arg);
-	} else {
-		status = add_new_env_var(data, arg);
+		//status = update_existing_env_var(data, index, arg);
+		if (ft_strchr(arg, '=')) { // "export NAME=new_value" - update it
+			status = update_existing_env_var(data, index, arg);
+		} else { // "export NAME" and NAME already exists. Mark for export (Bash), or no-op.
+			status = 0;
+		}
+	} else {  // Variable "NAME" does not exist
+		if (ft_strchr(arg, '=')) { // "export NAME=value"
+			status = add_new_env_var(data, arg);
+		} else { // "export NAME" (and NAME does not exist) - add as "NAME=" to expand to empty
+			char *name_with_equals = ft_strjoin(name, "=");
+			if (!name_with_equals) {
+				perror("minishell: export: ft_strjoin");
+				status = 1;
+			} else {
+				status = add_new_env_var(data, name_with_equals);
+				free(name_with_equals);
+			}
+		}
 	}
 
 	free(name);
@@ -273,7 +291,7 @@ int	ms_execute_export(char **args, t_minishell *data)
 
 	exit_status = 0;
 	i = 1;
-	if (args[i] == NULL)
+	if (args[i] == NULL) // no args, print sorted env
 		return (print_exported_vars(data));
 	while (args[i])
 	{
@@ -300,7 +318,9 @@ int	ms_execute_export(char **args, t_minishell *data)
 				exit_status = 1;
 		}
 		else
+		{
 			free(var_name);
+		}
 		i++;
 	}
 	return (exit_status);

@@ -6,13 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:44:57 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:25:52 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-extern unsigned char	g_signal;
+//extern unsigned char	g_signal;
 
 //todo implement in libft
 static bool	ft_isspace(char c)

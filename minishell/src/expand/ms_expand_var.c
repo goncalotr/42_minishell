@@ -6,11 +6,37 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:04:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/02 23:22:15 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static char	*ms_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*substr;
+	size_t	i;
+	size_t	str_len;
+
+	if (s == NULL)
+		return (NULL);
+	str_len = ft_strlen(s);
+	if (start >= str_len)
+		return (ft_strdup(""));
+	if (len > str_len - start)
+		len = str_len - start;
+	substr = (char *)malloc((len + 1) * sizeof(char));
+	if (substr == NULL)
+		return (NULL);
+	i = start;
+	while (i < len)
+	{
+		substr[i] = s[start + i];
+		i++;
+	}
+	substr[i] = '\0';
+	return (substr);
+}
 
 /**
  * read after $
@@ -86,8 +112,8 @@ static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_
  * @param status The last exit status for $?.
  * @return 0 on success, 1 on error.
  */
-static int	ms_process_one_expansion(const char *str, char **res_ptr, \
-									int *cur_pos_ptr, int dol_pos, int status)
+static int	ms_process_one_expansion(t_minishell *data, char *str, char **res_ptr, \
+									int *cur_pos_ptr, int dol_pos)
 {
 	char	*info;
 	char	*value;
@@ -95,7 +121,7 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
 	int		target_len;
 
 	target_len = 0;
-	literal = ft_substr(str, *cur_pos_ptr, dol_pos - *cur_pos_ptr);
+	literal = ft_substr(str, (unsigned int) *cur_pos_ptr, dol_pos - *cur_pos_ptr);
 	if (!literal || ms_append_and_free(res_ptr, literal))
 	{
 		free(literal);
@@ -105,7 +131,7 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
 	info = ms_get_expansion_info(str, dol_pos, &target_len);
 	if (!info)
 		return (1);
-	value = ms_get_expansion_value(info, status);
+	value = ms_get_expansion_value(data, str);
 	free(info);
 	if (!value)
 		return (1);
@@ -123,7 +149,10 @@ static int	ms_process_one_expansion(const char *str, char **res_ptr, \
  * @param original_str The string to expand.
  * @param last_exit_status The exit status for $?.
  * @return A newly allocated expanded string, or NULL on error.
+ * 
+ * ! add last exit status from program struct
  */
+/*
 static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 {
 	char	*result;
@@ -150,6 +179,36 @@ static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
 		return (free(literal_part), free(result), NULL);
 	return (free(literal_part), result);
 }
+*/
+static char	*ms_expand_str_help(t_minishell *data, t_token *list)
+{
+	char	*result;
+	char	*literal_part;
+	int		current_pos;
+	int		dollar_pos;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	current_pos = 0;
+	dollar_pos = -1;
+	dollar_pos = ms_find_next_dollar(list->value, current_pos);
+	while (dollar_pos != -1)
+	{
+		if (ms_process_one_expansion(data, list->value, &result, &current_pos,
+				dollar_pos) != 0)
+			return (free(result), NULL);
+		dollar_pos = ms_find_next_dollar(list->value, current_pos);
+	}
+	literal_part = ms_substr(list->value, current_pos,
+			ft_strlen(list->value) - current_pos);
+	if (!literal_part || ms_append_and_free(&result, literal_part))
+		return (free(literal_part), free(result), NULL);
+	return (free(literal_part), result);
+}
+
+
+
 
 /**
  * @brief Iterates through args array and expands variables in each argument
@@ -158,27 +217,66 @@ static char	*ms_expand_str_help(const char *original_str, int last_exit_status)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
-void	ms_expand_variables(char **args, int last_exit_status)
+t_token *ms_expand_variables(t_minishell *data, t_token *list)
 {
-	int		i;
-	char	*expanded_arg;
+	//int		i;
+	//char	*expanded_arg;
+	//int		current_pos;
+	t_token	*temp_token;
+	char	*original_value;
+	char	*expanded_value;
 
-	if (!args)
-		return ;
-	i = 0;
-	while (args[i])
+	if (!list)
+		return (NULL);
+	temp_token = list;
+	if (!temp_token->value)
+		return (NULL);
+
+	//i = 0;
+	while (temp_token)
 	{
-		if (ft_strchr(args[i], '$'))
+		// here doc
+		// no expand, clean expand_index
+		if (temp_token->type == TOKEN_EOF)
 		{
-			expanded_arg = ms_expand_str_help(args[i], last_exit_status);
-			if (!expanded_arg)
-				ms_expand_error(args, i, 1);
+			if (temp_token->expand_index)
+			{
+				free(temp_token->expand_index);
+				temp_token->expand_index = NULL;
+			}
+			temp_token->expand = false;
+			temp_token = temp_token->next;
+			continue;
+		}
+
+		if (temp_token->expand == true && temp_token->value)
+		{
+			original_value = temp_token->value;
+			expanded_value = ms_expand_str_help(data, temp_token);
+
+			// result check
+			if (!expanded_value)
+			{
+				ft_putstr_fd("minishell: expansion error for token value: ", \
+STDERR_FILENO);
+				ft_putendl_fd(original_value, STDERR_FILENO);
+			}
 			else
 			{
-				free(args[i]);
-				args[i] = expanded_arg;
+				free(original_value);
+				temp_token->value = expanded_value;
 			}
 		}
-		i++;
+
+		// clean expand_index
+		if (temp_token->expand_index)
+		{
+			free(temp_token->expand_index);
+			temp_token->expand_index = NULL;
+		}
+		temp_token->expand = false;
+
+		temp_token = temp_token->next;
 	}
+	return (list);
 }

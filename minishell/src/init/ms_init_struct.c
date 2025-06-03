@@ -6,11 +6,30 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:06:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:30:05 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h" // Adjust path as needed
+
+char **get_path(char **envp)
+{
+	int		i;
+	char	**paths;
+
+	i = 0;
+	while (envp && envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			paths = ft_split(envp[i] + 5, ':');
+			return (paths);
+		}
+		i++;
+	}
+	ft_putstr_fd("Path variable not found", 2);
+	exit(EXIT_FAILURE);
+}
 
 /**
  * @brief Frees the memory allocated for a duplicated environment list.
@@ -40,16 +59,16 @@ void	free_envp_copy(char **envp_copy)
  *         Returns an allocated array containing only NULL if envp is
  * NULL or empty.
  */
-char	**duplicate_envp(char **envp)
+char	**duplicate_envp(char **original_envp)
 {
 	int		i;
 	int		count;
 	char	**copy;
 
 	count = 0;
-	if (envp)
+	if (original_envp)
 	{
-		while (envp[count])
+		while (original_envp[count])
 			count++;
 	}
 	copy = (char **)malloc(sizeof(char *) * (count + 1));
@@ -61,7 +80,7 @@ char	**duplicate_envp(char **envp)
 	i = 0;
 	while (i < count)
 	{
-		copy[i] = ft_strdup(envp[i]);
+		copy[i] = ft_strdup(original_envp[i]);
 		if (!copy[i])
 		{
 			perror("minishell: ft_strdup error duplicating envp entry");
@@ -89,7 +108,7 @@ char	**duplicate_envp(char **envp)
  * 5. Store shell name (duplicate it)
  * 6. Store pointer to original envp (no allocation needed)
  */
-int	init_shell_data(t_minishell *data, char **argv, char **envp)
+int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 {
 	if (!data || !argv)
 		return (1);
@@ -98,9 +117,10 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
-	data->envp = duplicate_envp(envp);
-	if (!data->envp)
+	data->envp = duplicate_envp(envp_main);
+	if (!data->envp && envp_main)
 		return (1);
+	data->paths = get_path(data->envp ? data->envp : envp_main);
 	data->last_exit_status = 0;
 	data->stdin_fd = dup(STDIN_FILENO);
 	if (data->stdin_fd == -1)
@@ -139,6 +159,6 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp)
 		close(data->stderr_fd);
 		return (1);
 	}
-	data->envp = envp;
+	data->envp = envp_main;
 	return (0);
 }

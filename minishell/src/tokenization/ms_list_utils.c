@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/13 15:13:30 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:08:51 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 	new_node->value = ft_strdup(input);
 	new_node->type = type;
 	new_node->expand = NULL;
+	new_node->state = GENERAL;
 	new_node->expand_index = NULL;
 	new_node->previous = NULL;
 	new_node->next = NULL;
@@ -70,9 +71,10 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 	return (list);
 }
 
-void ms_print_list(t_token *list)
+void ms_print_tokens(t_token *list)
 {
-	char	*type[] = {" INFILE", "OUTFILE", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "EOF", "SIMPLE_QUOTE", "DOUBLE_QUOTE"};
+	char	*type[] = {"INFILE", "OUTFILE", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "EOF"};
+	char	*state[] = {"GENERAL", "DOUBLE_QUOTES", "SIMPLE_QUOTES"};
 	int i;
 
 	i = 0;
@@ -80,7 +82,8 @@ void ms_print_list(t_token *list)
 	{
 		ft_printf(GREEN"---------------------------------\n");
 		ft_printf(GREEN"value: %s\n", list->value);
-		ft_printf(GREEN"Type: %s\n", type[list->type]);
+		ft_printf(GREEN"Type:  %s\n", type[list->type]);
+		ft_printf(GREEN"State: %s\n", state[list->state]);
 		printf("expansion: %s\n", list->expand ? "true" : "false");
 		if (list->expand)
 		{

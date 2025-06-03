@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/09 15:37:06 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:58:35 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,28 +84,26 @@ int ms_quote_len(char *input, int i)
 	return (len);
 }
 
-bool	ms_is_file(t_token	*list)
+t_token *ms_extract_operator(char *input, int *i, t_token *list)
 {
-	t_token	*last_node;
-	
-	last_node = ms_last_node(list);
-	if (last_node == NULL)
-		return (false);
-	if(last_node->type == TOKEN_REDIR_IN || 
-		last_node->type == TOKEN_REDIR_OUT || 
-			last_node->type == TOKEN_APPEND)
-		return (true);
-	else
-		return (false);
-}
-
-bool	ms_is_infile(t_token *list)
-{
-	t_token	*last_node;
-	
-	last_node = ms_last_node(list);
-	if(last_node->type == TOKEN_REDIR_IN)
-		return (true);
-	else
-		return (false);
+	if (input[*i] == '|')
+		list = ms_append_node(list, "|", TOKEN_PIPE);
+	else if (input[*i] == '<' && input[*i + 1] == '<')
+	{
+		list = ms_append_node(list, "<<", TOKEN_HEREDOC);
+		*i += 2;
+		return (list);
+	}
+	else if (input[*i] == '>' && input[*i + 1] == '>')
+	{
+		list = ms_append_node(list, ">>", TOKEN_APPEND);
+		*i += 2;
+		return (list);
+	}
+	else if (input[*i] == '<')
+		list = ms_append_node(list, "<", TOKEN_REDIR_IN);
+	else if (input[*i] == '>')
+		list = ms_append_node(list, ">", TOKEN_REDIR_OUT);
+	(*i)++;
+	return list;
 }

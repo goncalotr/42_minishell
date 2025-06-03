@@ -6,13 +6,70 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:50:21 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:58:45 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-unsigned char	g_signal;
+//unsigned char	g_signal;
+//extern volatile sig_atomic_t g_signal;
+
+/**
+ * 
+ * signum will be SIGINT
+ * 
+ * 1. Move to a new line. - write
+ * 2. Tell readline we're on a new
+ * 3. Clear the current input buffer.
+ * 4. Redisplay the prompt and the (now empty) line.
+ * 
+ * rl_cleanup_after_signal tells readline to clean up
+ * its internal state for signal handling.
+ */
+static void	ms_handle_sigint_interactive(int signum)
+{
+	(void)signum;
+
+	g_signal = SIGINT;
+	//ft_putstr_fd("HANDLER CALLED!\n", 2);
+	//rl_cleanup_after_signal();
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+
+	//rl_set_prompt(prompt_str); //optional
+
+	rl_redisplay();
+}
+
+
+/**
+ * SIGINT
+ * SIGQUIT
+ */
+void	ms_signal_handlers_set_interactive(void)
+{
+	struct sigaction sa_int;
+	struct sigaction sa_quit;
+
+	sa_int.sa_handler = ms_handle_sigint_interactive;
+	sigemptyset(&sa_int.sa_mask);
+	//sa_int.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &sa_int, NULL) == -1)
+	{
+		perror("Minishell: Error setting SIGINT handler");
+		exit(EXIT_FAILURE);
+	}
+	sa_quit.sa_handler = SIG_IGN;
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_flags = 0;
+	if (sigaction(SIGQUIT, &sa_quit, NULL) == -1)
+	{
+		perror("Minishell: Error setting SIGQUIT handler");
+		exit(EXIT_FAILURE);
+	}
+}
 
 /**
  * @brief Signal handler for SIGINT (Ctrl+C) in interactive mode.

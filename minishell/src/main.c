@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/22 15:54:30 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/04 11:02:48 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ int	main(int argc, char **argv, char **envp)
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);
 	ms_signal_handlers_init();
-	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
 	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);

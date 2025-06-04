@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/31 15:00:00 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:49:55 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,14 @@ t_token *ms_extract_operator(char *input, int *i, t_token *list);
 bool	ms_is_file(t_token	*list);
 bool	ms_is_infile(t_token *list);
 t_token	*ms_assign_state(t_token *list);
-t_token *ms_check_eof(t_token *list);
+char *ms_parse_quotes(char *input, int *i);
+
+//ms_tokenization_utils3.c
+char	*ms_append_char(char *str, char c);
+char	*ms_str_append(char *str1, char *str2);
+char	*ms_strndup(char *str, size_t n);
+bool	ms_ismetachar(char c);
+bool	ms_isspace(char c);
 
 //ms_quotes.c
 void	ms_normal_index(t_token *list);

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/02 12:12:51 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:20:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ int	ms_exec_heredoc(t_ast *node, t_minishell *data)
 	int		pipefd[2];
 	int		pid;
 	char	*line;
+	int		status;
+	int		original_std;
 	
 	cmd = node->left;
 	limiter = node->right;
 	if (pipe(pipefd) == -1)
 		return (perror("pipe"), 1);
+	original_std = dup(STDIN_FILENO);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -50,7 +53,10 @@ int	ms_exec_heredoc(t_ast *node, t_minishell *data)
 	waitpid(pid, NULL, 0);
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);
-	return (ms_exec_tree(cmd, data));
+	status = ms_exec_tree(cmd, data);
+	dup2(original_std, STDIN_FILENO);
+	close(original_std);
+	return (status);
 }
 
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
@@ -118,7 +124,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
-		exit(ms_exec_tree(node->left, data));	
+		exit(ms_exec_tree(node->left, data));
 	}
 	if ((pid_2 = fork()) == 0)
 	{

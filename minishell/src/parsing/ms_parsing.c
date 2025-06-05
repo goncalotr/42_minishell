@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/19 15:41:03 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:00:35 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_ast	*ms_create_file_node(t_token *token)
 {
 	t_ast	*node;
 
-	node = malloc(sizeof(t_ast));
+	node = ms_new_ast_node(token->type);
 	if (!node)
 		return (NULL);
 	node->type = token->type;

@@ -6,57 +6,51 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/04 13:20:16 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:52:44 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	ms_exec_heredoc(t_ast *node, t_minishell *data)
+void	ms_exec_heredoc(t_ast *node)
 {
-	t_ast	*cmd;
-	t_ast	*limiter;
-	int		pipefd[2];
-	int		pid;
+	char 	file_name[1024];
+	char	*node_nbr;
+	int		fd;
 	char	*line;
-	int		status;
-	int		original_std;
+	char	*limiter;
 	
-	cmd = node->left;
-	limiter = node->right;
-	if (pipe(pipefd) == -1)
-		return (perror("pipe"), 1);
-	original_std = dup(STDIN_FILENO);
-	pid = fork();
-	if (pid == 0)
+	limiter = node->right->args[0];
+	node_nbr = ft_itoa(node->node_nbr);
+	if (!node_nbr)
+		return ;
+	ft_strlcpy(file_name, "heredoc_", sizeof(file_name));
+	ft_strlcat(file_name, node_nbr, sizeof(file_name));
+	fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
 	{
-		close(pipefd[0]);
-		while (1)
-		{
-			write(1, "> ", 2);
-			line = get_next_line(STDIN_FILENO);
-			if (!line)
-				break ;
-			if (ft_strncmp(line, limiter->args[0], ft_strlen(limiter->args[0])) == 0
-				&& line[ft_strlen(limiter->args[0])] == '\n')
-			{
-				free(line);
-				break ;
-			}
-			write(pipefd[1], line, ft_strlen(line));
-			free(line);
-		}
-		close(pipefd[1]);
-		exit(0);
+		perror("error heredoc");
+		free(node_nbr);
+		return ;
 	}
-	close(pipefd[1]);
-	waitpid(pid, NULL, 0);
-	dup2(pipefd[0], STDIN_FILENO);
-	close(pipefd[0]);
-	status = ms_exec_tree(cmd, data);
-	dup2(original_std, STDIN_FILENO);
-	close(original_std);
-	return (status);
+	while(1)
+	{
+		write(1, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		if (!line)
+			break ;
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+			&& line[ft_strlen(limiter)] == '\n')
+		{
+			free(line);
+			break ;
+		}
+		write(fd, line, ft_strlen(line));
+		free(line);
+	}
+	close(fd);
+	free(node_nbr);
+	return ;
 }
 
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
@@ -97,11 +91,26 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 	original_std = dup(STDIN_FILENO);
 	cmd = node->left;
 	infile = node->right;
-	fd = open(infile->args[0], O_RDONLY);
-	if (fd < 0)
+	if (node->type == TOKEN_HEREDOC)
 	{
-		perror("open infile");
-		return (1);
+		char	*node_nbr;
+		char	file_name[1024];
+		
+		node_nbr = ft_itoa(node->node_nbr);
+		if (!node_nbr)
+			return (1);
+		ft_strlcpy(file_name, "heredoc_", sizeof(file_name));
+		ft_strlcat(file_name, node_nbr, sizeof(file_name));
+		fd = open(file_name, O_RDONLY);
+	}
+	else
+	{
+		fd = open(infile->args[0], O_RDONLY);
+		if (fd < 0)
+		{
+			perror("open infile");
+			return (1);
+		}
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -181,6 +190,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)
 {
+	ms_prepare_heredocs(node);
 	if (!node)
 		return 0;
 	if (node->type == TOKEN_CMD)
@@ -194,7 +204,7 @@ int	ms_exec_tree(t_ast *node, t_minishell *data)
 	if (node->type == TOKEN_APPEND)
 		return (ms_exec_redir_out(node, data));
 	if (node->type == TOKEN_HEREDOC)
-		return (ms_exec_heredoc(node, data));
+		return (ms_exec_redir_in(node, data));
 	if (node->type == TOKEN_INFILE || node->type == TOKEN_OUTFILE
 		|| node->type == TOKEN_EOF)
 		return (0);

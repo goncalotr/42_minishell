@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:12:32 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/22 15:56:27 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:37:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 t_ast	*ms_new_ast_node(t_token_type type)
 {
-	t_ast	*node;
+	t_ast		*node;
+	static int	node_nbr = 0;
 
 	node = malloc(sizeof(t_ast));
 	if (!node)
@@ -23,6 +24,7 @@ t_ast	*ms_new_ast_node(t_token_type type)
 	node->args = NULL;
 	node->left = NULL;
 	node->right = NULL;
+	node->node_nbr = node_nbr++;
 	return (node);
 }
 

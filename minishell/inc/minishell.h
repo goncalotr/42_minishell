@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 16:49:55 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:47:49 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_ast
 {
 	t_token_type	type;
 	char			**args;
+	int				node_nbr;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -261,7 +262,10 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data);
 int	ms_exec_pipe(t_ast *node, t_minishell *data);
 int	ms_exec_redir_in(t_ast *node, t_minishell *data);
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data);
-int	ms_exec_heredoc(t_ast *node, t_minishell *data);
+void	ms_exec_heredoc(t_ast *node);
+
+// ms_tree_exec_utils.c
+void	ms_prepare_heredocs(t_ast *node);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

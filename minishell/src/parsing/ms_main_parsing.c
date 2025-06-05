@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/04 10:56:34 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:38:52 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	
 	(void)data;
 	tokens = ms_tokenization(input);
-	// ms_print_tokens(tokens);
+	ms_print_tokens(tokens);
 	ast_tree = ms_parse_tokens(&tokens);
 	print_ast(ast_tree, 0);
 	ms_exec_tree(ast_tree, data);
@@ -48,12 +48,13 @@ const char *get_token_type_name(t_token_type type)
 	}
 }
 
-
 void print_ast(t_ast *node, int level)
 {
 	if (!node)
 		return;
 
+	print_indent(level);
+	printf("Node Number: %d\n", node->node_nbr);      // <-- added this line
 	print_indent(level);
 	printf("Node Type: %s\n", get_token_type_name(node->type));
 
@@ -80,3 +81,4 @@ void print_ast(t_ast *node, int level)
 		print_ast(node->right, level + 1);
 	}
 }
+

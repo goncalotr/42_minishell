@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/05 15:47:49 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:29:18 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct s_ast
 	t_token_type	type;
 	char			**args;
 	int				node_nbr;
+	char			*file_name;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -266,6 +267,7 @@ void	ms_exec_heredoc(t_ast *node);
 
 // ms_tree_exec_utils.c
 void	ms_prepare_heredocs(t_ast *node);
+void	ms_strip_extra_redirs_in(t_ast *node);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

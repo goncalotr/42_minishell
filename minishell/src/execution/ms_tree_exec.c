@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/05 15:52:44 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:29:36 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,17 @@
 
 void	ms_exec_heredoc(t_ast *node)
 {
-	char 	file_name[1024];
-	char	*node_nbr;
 	int		fd;
 	char	*line;
 	char	*limiter;
-	
-	limiter = node->right->args[0];
-	node_nbr = ft_itoa(node->node_nbr);
-	if (!node_nbr)
+
+	if (!node || !node->file_name)
 		return ;
-	ft_strlcpy(file_name, "heredoc_", sizeof(file_name));
-	ft_strlcat(file_name, node_nbr, sizeof(file_name));
-	fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	limiter = node->right->args[0];
+	fd = open(node->file_name, O_CREAT | O_WRONLY | O_TRUNC , 0644);
 	if (fd < 0)
 	{
 		perror("error heredoc");
-		free(node_nbr);
 		return ;
 	}
 	while(1)
@@ -49,8 +43,6 @@ void	ms_exec_heredoc(t_ast *node)
 		free(line);
 	}
 	close(fd);
-	free(node_nbr);
-	return ;
 }
 
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
@@ -88,30 +80,18 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 	int		original_std;
 	int		status;
 	
-	original_std = dup(STDIN_FILENO);
 	cmd = node->left;
 	infile = node->right;
 	if (node->type == TOKEN_HEREDOC)
-	{
-		char	*node_nbr;
-		char	file_name[1024];
-		
-		node_nbr = ft_itoa(node->node_nbr);
-		if (!node_nbr)
-			return (1);
-		ft_strlcpy(file_name, "heredoc_", sizeof(file_name));
-		ft_strlcat(file_name, node_nbr, sizeof(file_name));
-		fd = open(file_name, O_RDONLY);
-	}
+		fd = open(node->file_name, O_RDONLY);
 	else
-	{
 		fd = open(infile->args[0], O_RDONLY);
-		if (fd < 0)
-		{
-			perror("open infile");
-			return (1);
-		}
+	if (fd < 0)
+	{
+		perror("open infile");
+		return (1);
 	}
+	original_std = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	status = ms_exec_tree(cmd, data);
@@ -191,6 +171,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 int	ms_exec_tree(t_ast *node, t_minishell *data)
 {
 	ms_prepare_heredocs(node);
+	ms_strip_extra_redirs_in(node);
 	if (!node)
 		return 0;
 	if (node->type == TOKEN_CMD)

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:12:32 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/05 12:37:16 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:50:26 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_ast	*ms_new_ast_node(t_token_type type)
 	node->left = NULL;
 	node->right = NULL;
 	node->node_nbr = node_nbr++;
+	node->file_name = NULL;
 	return (node);
 }
 

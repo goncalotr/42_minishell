@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tree_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/21 15:18:32 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/07 16:11:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,42 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	return (WEXITSTATUS(status));	
 }
 
+static int	ms_exec_cmd_builtin(t_minishell *data, t_ast *node)
+{
+	if (node->args == NULL || node->args[0] == NULL)
+		return (0);
+	if (strcmp(node->args[0], "cd") == 0)
+		return (ms_execute_cd(node->args));
+	if (strcmp(node->args[0], "echo") == 0)
+		return (ms_execute_echo(node->args));
+	if (strcmp(node->args[0], "env") == 0)
+		return (ms_execute_env(node->args, data->envp));
+	if (strcmp(node->args[0], "exit") == 0)
+		return (ms_execute_exit(node->args));
+	if (strcmp(node->args[0], "export") == 0)
+		return ms_execute_export(node->args, data);
+	else if (strcmp(node->args[0], "pwd") == 0)
+		return (ms_execute_pwd(node->args));
+	else if (strcmp(node->args[0], "unset") == 0)
+		return (ms_execute_unset((node->args), data));
+	else
+		return (1);
+}
+
 int	ms_exec_cmd(t_ast *node, t_minishell *data)
 {
 	int		i;
 	char 	full_path[1024];
 	pid_t	pid;
 	int		status;
-	
+
+	// builtins
+	if (ms_exec_cmd_builtin(data, node) == 1)
+	{
+		return (127);
+	}
+
+	// external commands
 	i = 0;
 	if ((pid = fork()) == 0)
 	{

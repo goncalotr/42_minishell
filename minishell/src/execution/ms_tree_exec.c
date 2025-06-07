@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/07 16:11:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/07 16:22:16 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	return (WEXITSTATUS(status));	
 }
 
-static int	ms_exec_cmd_builtin(t_minishell *data, t_ast *node)
+static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
@@ -153,7 +153,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	int		status;
 
 	// builtins
-	if (ms_exec_cmd_builtin(data, node) == 1)
+	if (ms_exec_cmd_builtins(data, node) == 1)
 	{
 		return (127);
 	}

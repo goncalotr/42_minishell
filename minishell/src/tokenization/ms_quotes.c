@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:02:33 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/08 15:33:09 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:50:31 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int	*ms_put_index(t_token *list, int *index, int i, int k)
 		if (list->value[i] == '\"')
 		{
 			i++;
-//			while (list->value[i] != '\"' && list->value[i] && ms_another_double(i, list->value))
-			while (list->value[i] != '\"' && list->value[i])
+			while (list->value[i] != '\"' && list->value[i] && ms_another_double(i, list->value))
+			//while (list->value[i] != '\"' && list->value[i])
 			{
 				if (list->value[i] == '$')
 				{

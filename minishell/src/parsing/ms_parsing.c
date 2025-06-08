@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ms_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/19 15:41:03 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:54:22 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/*
 t_ast	*ms_parse_command(t_token **token)
 {
 	t_ast	*command_node;
@@ -24,6 +25,68 @@ t_ast	*ms_parse_command(t_token **token)
 	command_node->args = args;
 	free(*token);
 	return(command_node);
+}
+*/
+
+t_ast	*ms_parse_command(t_token **token_list_ptr)
+{
+	t_ast	*command_node;
+	char	*full_str;
+	char	*temp_str;
+	t_token	*current;
+	t_token	*to_free;
+
+	// Check for an empty list
+	if (!token_list_ptr || !*token_list_ptr)
+		return (NULL);
+	current = *token_list_ptr;
+	// 1. Start with the value of the first token.
+	full_str = ft_strdup(current->value);
+	if (!full_str)
+		return (NULL); // Malloc failed
+	// 2. Consume the first token
+	to_free = current;
+	current = current->next;
+	free(to_free->value);
+	free(to_free);
+	// 3. Loop through subsequent tokens and append them if they are also part of the command
+	while (current && current->type == TOKEN_CMD)
+	{
+		// Append a space
+		temp_str = ft_strjoin(full_str, " ");
+		free(full_str);
+		full_str = temp_str;
+		if (!full_str)
+			return (NULL); // Malloc failed
+		// Append the next token's value
+		temp_str = ft_strjoin(full_str, current->value);
+		free(full_str);
+		full_str = temp_str;
+		if (!full_str)
+			return (NULL); // Malloc failed
+		// Consume the token we just appended
+		to_free = current;
+		current = current->next;
+		free(to_free->value);
+		free(to_free);
+	}
+	// 4. Update the original list to point to the remaining unconsumed tokens
+	*token_list_ptr = current;
+	// 5. Create the AST node by splitting the combined string
+	command_node = ms_new_ast_node(TOKEN_CMD);
+	if (!command_node)
+	{
+		free(full_str);
+		return (NULL);
+	}
+	command_node->args = ft_split(full_str, ' ');
+	free(full_str);
+	if (!command_node->args)
+	{
+		free(command_node);
+		return (NULL);
+	}
+	return (command_node);
 }
 
 t_ast	*ms_create_file_node(t_token *token)

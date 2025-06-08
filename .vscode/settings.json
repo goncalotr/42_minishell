@@ -2,6 +2,15 @@
 	"files.associations": {
 		"minishell.h": "c",
 		"type_traits": "c",
-		"utility": "c"
+		"utility": "c",
+		"charconv": "c",
+		"chrono": "c",
+		"optional": "c",
+		"format": "c",
+		"ratio": "c",
+		"system_error": "c",
+		"array": "c",
+		"functional": "c",
+		"tuple": "c"
 	}
 }

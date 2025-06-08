@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 23:22:15 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/08 11:45:42 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ static int	ms_process_one_expansion(t_minishell *data, char *str, char **res_ptr
 	target_len = 0;
 	literal = ft_substr(str, (unsigned int) *cur_pos_ptr, dol_pos - *cur_pos_ptr);
 	if (!literal || ms_append_and_free(res_ptr, literal))
-	{
+	{ 
 		free(literal);
 		return (1);
 	}
@@ -217,45 +217,42 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *list)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
-t_token *ms_expand_variables(t_minishell *data, t_token *list)
+t_token *ms_expand_variables(t_minishell *data, t_token *list_head)
 {
-	//int		i;
-	//char	*expanded_arg;
-	//int		current_pos;
-	t_token	*temp_token;
+	t_token	*current_token;
 	char	*original_value;
-	char	*expanded_value;
+	char	*expanded_value_str;
 
-	if (!list)
+	if (!list_head)
 		return (NULL);
-	temp_token = list;
-	if (!temp_token->value)
+	current_token = list_head;
+	if (!current_token->value)
 		return (NULL);
 
 	//i = 0;
-	while (temp_token)
+	while (current_token)
 	{
 		// here doc
 		// no expand, clean expand_index
-		if (temp_token->type == TOKEN_EOF)
+		if (current_token->type == TOKEN_EOF)
 		{
-			if (temp_token->expand_index)
+			if (current_token->expand_index)
 			{
-				free(temp_token->expand_index);
-				temp_token->expand_index = NULL;
+				free(current_token->expand_index);
+				current_token->expand_index = NULL;
 			}
-			temp_token->expand = false;
-			temp_token = temp_token->next;
+			current_token->expand = false;
+			current_token = current_token->next;
 			continue;
 		}
 
-		if (temp_token->expand == true && temp_token->value)
+		if (current_token->expand == true && current_token->value)
 		{
-			original_value = temp_token->value;
-			expanded_value = ms_expand_str_help(data, temp_token);
+			original_value = current_token->value;
+			expanded_value_str = ms_expand_str_help(data, current_token);
 
 			// result check
-			if (!expanded_value)
+			if (!expanded_value_str)
 			{
 				ft_putstr_fd("minishell: expansion error for token value: ", \
 STDERR_FILENO);
@@ -264,19 +261,19 @@ STDERR_FILENO);
 			else
 			{
 				free(original_value);
-				temp_token->value = expanded_value;
+				current_token->value = expanded_value_str;
 			}
 		}
 
 		// clean expand_index
-		if (temp_token->expand_index)
+		if (current_token->expand_index)
 		{
-			free(temp_token->expand_index);
-			temp_token->expand_index = NULL;
+			free(current_token->expand_index);
+			current_token->expand_index = NULL;
 		}
-		temp_token->expand = false;
+		current_token->expand = false;
 
-		temp_token = temp_token->next;
+		current_token = current_token->next;
 	}
-	return (list);
+	return (list_head);
 }

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/02 20:04:53 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/08 11:34:59 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,7 +273,7 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info);
 				int *cur_pos_ptr, int dol_pos, int status);
 //char	*ms_expand_str_help(const char *original_str, int last_exit_status);
 */
-t_token	*ms_expand_variables(t_minishell *data, t_token *list);
+t_token	*ms_expand_variables(t_minishell *data, t_token *list_head);
 
 // --- built-ins ---
 int		ms_execute_cd(char **args);

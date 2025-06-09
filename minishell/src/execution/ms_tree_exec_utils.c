@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:27:10 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/09 15:57:33 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:04:49 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,15 @@ void	ms_clean_heredocs(t_ast *node)
 	}
 	ms_clean_heredocs(node->left);
 	ms_clean_heredocs(node->right);
+}
+
+void	ms_command_not_found(char **cmds)
+{
+	if (!cmds || !cmds[0])
+	{
+		ft_putstr_fd("command not found: \n", 2);
+		return ;
+	}
+	ft_putstr_fd(cmds[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 }

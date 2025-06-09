@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/07 19:00:00 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:02:08 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,13 +156,11 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 			ft_strlcat(full_path, "/", sizeof(full_path));
 			ft_strlcat(full_path, node->args[0], sizeof(full_path));
 			if (access(full_path, X_OK) == 0)
-			{
 				execve(full_path, node->args, data->envp);
-				perror(full_path);
-				exit (127);
-			}
 			i++;
 		}
+		ms_command_not_found(node->args);
+		exit (127);
 	}
 	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/09 15:53:24 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:58:17 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,7 @@ void	ms_exec_heredoc(t_ast *node);
 // ms_tree_exec_utils.c
 void	ms_prepare_heredocs(t_ast *node);
 void	ms_clean_heredocs(t_ast *node);
+void	ms_command_not_found(char **cmds);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

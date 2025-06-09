@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/06 18:29:36 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/07 19:00:00 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,6 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)
 {
-	ms_prepare_heredocs(node);
-	ms_strip_extra_redirs_in(node);
 	if (!node)
 		return 0;
 	if (node->type == TOKEN_CMD)

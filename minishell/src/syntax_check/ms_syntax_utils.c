@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:43:34 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/02 12:57:54 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:42:00 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	ms_skip_inside_quotes(int *i, char *input)
 		while (input[*i] && input[*i] != 39 && input[*i + 1] != 39)
 			(*i)++;
 	}
-	(*i)++;
 }
 
 void	ms_skip_whitespaces(int *i, char *input)

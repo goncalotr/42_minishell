@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 18:55:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:48:36 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,20 +167,24 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	}
 
 	// external commands
-	i = 0;
-	if ((pid = fork()) == 0)
+	pid = fork();
+	if ((pid) == 0)
 	{
+		printf("fork");
 		if (ft_strchr(node->args[0], '/'))
 		{
 			if (access(node->args[0], X_OK) == 0)
 			{
 				execve(node->args[0], node->args, data->envp);
+				data->last_exit_status = 127;
 				perror(node->args[0]);
 				exit(127);
 			}
+			data->last_exit_status = 127;
 			perror(node->args[0]);
 			exit(127);
 		}
+		i = 0;
 		while (data->paths[i])
 		{
 			ft_strlcpy(full_path, data->paths[i], sizeof(full_path));
@@ -190,10 +194,15 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 				execve(full_path, node->args, data->envp);
 			i++;
 		}
+		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
-		exit (127);
+		exit(127);
 	}
 	waitpid(pid, &status, 0);
+	ms_signal_handlers_set_interactive();
+	data->last_exit_status = WEXITSTATUS(status);
+	printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
+
 	return (WEXITSTATUS(status));
 }
 

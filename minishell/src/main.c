@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/10 16:43:59 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:32:17 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static void	ms_core_loop(t_minishell *data)
 		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{
+			data->last_exit_status = 0;
 			free(input_line);
 			continue ;
 		}

@@ -6,24 +6,11 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/16 16:58:35 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:54:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/**
- * @brief Calculates the length of the next word token in the input string.
- *
- * This function scans the input from the given index until it hits a shell
- * metacharacter (`|`, `<`, `>`) or a whitespace character (space, tab, newline, etc.).
- * The length of the continuous sequence of regular characters is returned.
- * 
- * @param input The full input string being scanned.
- * @param i The starting index in the input string.
- * 
- * @return The length of the word token found at the given index.
- */
 
 int	ms_len_file(char *input, int i)
 {
@@ -84,6 +71,30 @@ int ms_quote_len(char *input, int i)
 	return (len);
 }
 
+t_token	*ms_eof_node(t_token *list, char * input, int *i)
+{
+	char 	*eof;
+	int		x;
+	
+	ms_skip_whitespaces(i, input);
+	x = (*i);
+	while (input[x] && !(input[x] == 32 || (input[x] >= 7 && input[x] <= 13)))
+		x++;
+	eof = malloc((x - (*i)) + 1);
+	if (!eof)
+		return (NULL);
+	x = 0;
+	while (input[*i] && !(input[*i] == 32 || (input[*i] >= 7 && input[*i] <= 13)))
+	{
+		eof[x] = input[*i];
+		(*i)++;
+		x++;
+	}
+	eof[x] = '\0';
+	list = ms_append_node(list, eof, TOKEN_EOF);
+	return (list);
+}
+
 t_token *ms_extract_operator(char *input, int *i, t_token *list)
 {
 	if (input[*i] == '|')
@@ -92,12 +103,14 @@ t_token *ms_extract_operator(char *input, int *i, t_token *list)
 	{
 		list = ms_append_node(list, "<<", TOKEN_HEREDOC);
 		*i += 2;
+		list = ms_eof_node(list, input, i);
 		return (list);
 	}
 	else if (input[*i] == '>' && input[*i + 1] == '>')
 	{
 		list = ms_append_node(list, ">>", TOKEN_APPEND);
 		*i += 2;
+		list = ms_eof_node(list, input, i);
 		return (list);
 	}
 	else if (input[*i] == '<')

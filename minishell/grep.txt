@@ -1,0 +1,7 @@
+CFLAGS			=  -Wall -Wextra -Werror -g
+all:			$(NAME)
+re:				fclean all
+#				@echo "$(GREEN)Use 'make' or 'make all' to recompile everything.$(RESET)"
+valgrind:		all
+				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
+.PHONY:			all clean fclean re valgrind

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/08 11:34:59 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:45:03 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@
 
 typedef enum e_token_type
 {
-	TOKEN_INFILE,				// 0 file
+	TOKEN_INFILE,				// 0 infile
 	TOKEN_OUTFILE,				// 1 outfile
 	TOKEN_CMD,					// 2 commands
 	TOKEN_PIPE,					// 3 |
@@ -74,18 +74,18 @@ typedef enum e_token_type
 	TOKEN_EOF,					// 8 end of file
 }	t_token_type;
 
-typedef enum s_token_state
+typedef enum e_token_state
 {
 	GENERAL,					// 0 normal
 	DOUBLE_QUOTES,				// 1 ""
 	SIMPLE_QUOTES,				// 2 ''
-}	t_token_states;
+}	t_token_state;
 
 typedef struct s_token
 {
 	char					*value;
 	t_token_type			type;
-	t_token_states			state;
+	t_token_state			state;
 	bool					expand;
 	int						*expand_index;
 	struct s_token			*previous;
@@ -96,6 +96,8 @@ typedef struct s_ast
 {
 	t_token_type	type;
 	char			**args;
+	int				node_nbr;
+	char			*file_name;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -196,7 +198,14 @@ t_token	*ms_extract_operator(char *input, int *i, t_token *list);
 bool	ms_is_file(t_token	*list);
 bool	ms_is_infile(t_token *list);
 t_token	*ms_assign_state(t_token *list);
-t_token	*ms_check_eof(t_token *list);
+char *ms_parse_quotes(char *input, int *i);
+
+//ms_tokenization_utils3.c
+char	*ms_append_char(char *str, char c);
+char	*ms_str_append(char *str1, char *str2);
+char	*ms_strndup(char *str, size_t n);
+bool	ms_ismetachar(char c);
+bool	ms_isspace(char c);
 
 //ms_quotes.c
 void	ms_normal_index(t_token *list);
@@ -229,15 +238,20 @@ t_ast 	*ms_parse_tokens(t_token	**token_list);
 
 // ms_parsing_utils.c
 t_ast	*ms_new_ast_node(t_token_type type);
-t_ast	*ms_create_and_link_redir(t_token **token_list, t_token *temp);
+t_ast	*ms_create_and_link_redir(t_token **token_list);
 
 // ms_tree_exec.c
-int		ms_exec_tree(t_ast *node, t_minishell *data);
-int		ms_exec_cmd(t_ast *node, t_minishell *data);
-int		ms_exec_pipe(t_ast *node, t_minishell *data);
-int		ms_exec_redir_in(t_ast *node, t_minishell *data);
-int		ms_exec_redir_out(t_ast	*node, t_minishell *data);
-int		ms_exec_heredoc(t_ast *node, t_minishell *data);
+int	ms_exec_tree(t_ast *node, t_minishell *data);
+int	ms_exec_cmd(t_ast *node, t_minishell *data);
+int	ms_exec_pipe(t_ast *node, t_minishell *data);
+int	ms_exec_redir_in(t_ast *node, t_minishell *data);
+int	ms_exec_redir_out(t_ast	*node, t_minishell *data);
+void	ms_exec_heredoc(t_ast *node);
+
+// ms_tree_exec_utils.c
+void	ms_prepare_heredocs(t_ast *node);
+void	ms_clean_heredocs(t_ast *node);
+void	ms_command_not_found(char **cmds);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);

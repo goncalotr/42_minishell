@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/08 15:14:37 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:50:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
 	{
 		if(input[*i] == '|' ||  (input[*i] == '<' || input[*i] == '>'))
 			break;
-		else if ((input[*i] == '\'') || (input[*i] == '\"'))
-			break;
+		// else if ((input[*i] == '\'') || (input[*i] == '\"'))
+		// 	break;
 		word[k] = input[*i];
 		(*i)++;
 		k++;
@@ -67,33 +67,24 @@ t_token	*ms_extract_file(char *input, int *i, t_token *list)
 	return (list);
 }
 
-t_token *ms_extract_quotes(char *input, int *i, t_token *list)
+t_token	*ms_extract_quotes(char *input, int *i, t_token *list)
 {
-	//char	quote_type;
-	char	*quote;
-	int		k;
-	int		len;
-	
-	//quote_type = input[*i];
-	len = ms_quote_len(input, *i);
-	quote = malloc(len + 2);
-	if (!quote)
-		return NULL;
-	k = 0;
-	while (input[*i] && k <= len)
-		quote[k++] = input[(*i)++];
-	quote[k] = '\0';
-	if(ms_is_file(list))
+	char	*word;
+
+	word = ms_parse_quotes(input, i);
+	if (!word)
+		return list;
+	if (ms_is_file(list))
 	{
 		if (ms_is_infile(list))
-			list = ms_append_node(list, quote, TOKEN_INFILE);
+			list = ms_append_node(list, word, TOKEN_INFILE);
 		else
-			list = ms_append_node(list, quote, TOKEN_OUTFILE);
+			list = ms_append_node(list, word, TOKEN_OUTFILE);
 	}
 	else
-		list = ms_append_node(list, quote, TOKEN_CMD);
-	free(quote);
-	return (list);	
+		list = ms_append_node(list, word, TOKEN_CMD);
+	free(word);
+	return (list);
 }
 
 t_token *ms_start_tokenization(char *input, t_token *list)
@@ -124,9 +115,9 @@ t_token	*ms_tokenization(t_minishell *data, char *input)
 	list = NULL;
 	list = ms_start_tokenization(input, list);
 	list = ms_assign_state(list);
-	list = ms_check_eof(list);
+	// list = ms_check_eof(list);
 	list = ms_expansion_index(list);
-	list = ms_expand_variables(data, list);
-	list = ms_quotes_off(list);
+	//list = expansao
+	// list = ms_quotes_off(list);
 	return (list);
 }

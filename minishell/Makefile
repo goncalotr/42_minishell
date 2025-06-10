@@ -6,7 +6,7 @@
 #    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/05/21 13:01:22 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/06/05 15:48:32 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ SAN_FLAGS		= -fsanitize=address
 SAN_FLAGS		+= -fsanitize=leak
 SAN_FLAGS		+= -fsanitize=undefined
 SAN_FLAGS		+= -fno-omit-frame-pointer
-CFLAGS			= -Wall -Wextra -Werror -g
+CFLAGS			=  -Wall -Wextra -Werror -g
 #CFLAGS			+= $(SAN_FLAGS)
 CFLAGS			+= -I$(INC_DIR)
 CFLAGS			+= -I$(LIBFT_SRC_DIR)
@@ -79,12 +79,14 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/parsing/ms_main_parsing.c\
 				  $(SRC_DIR)/parsing/ms_parsing_utils.c\
 				  $(SRC_DIR)/execution/ms_tree_exec.c\
+				  $(SRC_DIR)/execution/ms_tree_exec_utils.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_utils.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_off.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils2.c\
+				  $(SRC_DIR)/tokenization/ms_tokenization_utils3.c\
 				  $(SRC_DIR)/tokenization/ms_list_utils.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\

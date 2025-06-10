@@ -6,13 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/08 15:54:22 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/08 16:59:40 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-/*
+
 t_ast	*ms_parse_command(t_token **token)
 {
 	t_ast	*command_node;
@@ -26,8 +26,9 @@ t_ast	*ms_parse_command(t_token **token)
 	free(*token);
 	return(command_node);
 }
-*/
 
+
+/*
 t_ast	*ms_parse_command(t_token **token_list_ptr)
 {
 	t_ast	*command_node;
@@ -88,6 +89,7 @@ t_ast	*ms_parse_command(t_token **token_list_ptr)
 	}
 	return (command_node);
 }
+*/
 
 t_ast	*ms_create_file_node(t_token *token)
 {

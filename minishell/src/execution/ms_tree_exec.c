@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 17:04:43 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:55:29 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,11 +157,13 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	char 	full_path[1024];
 	pid_t	pid;
 	int		status;
+	int 	builtin_status;
 
 	// builtins
-	if (ms_exec_cmd_builtins(data, node) == 1)
+	builtin_status = ms_exec_cmd_builtins(data, node);
+	if (builtin_status != 1)
 	{
-		return (127);
+		return (builtin_status);
 	}
 
 	// external commands

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/10 12:49:38 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:43:59 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,8 @@ static void	ms_core_loop(t_minishell *data)
 	char	*input_line;
 	//char	**args;
 	char	*prompt_str;
-	int		saved_errno;
+	//int		saved_errno;
 
-	g_signal = 0;
 	while (1)
 	{
 		if (g_signal == SIGINT)
@@ -48,6 +47,7 @@ static void	ms_core_loop(t_minishell *data)
 			data->last_exit_status = 130;
 			g_signal = 0;
 		}
+		ms_signal_handlers_set_interactive();
 		prompt_str = ms_get_prompt(data);
 		if (!prompt_str)
 		{
@@ -55,35 +55,28 @@ static void	ms_core_loop(t_minishell *data)
 			Exiting.\n", 2);
 			break ;
 		}
+
 		input_line = readline(prompt_str);
 		free(prompt_str);
 
-		saved_errno = errno;
-		ft_printf(YELLOW "DEBUG SIGINT detected! errno=%d (%s)\n" \
-		RESET, saved_errno, strerror(saved_errno));
-
-		if (g_signal == SIGINT)
-		{
-			data->last_exit_status = 130;
-			g_signal = 0;
-			if (input_line)
-				free(input_line);
-			rl_done = 0;
-			continue ;
-		}
+		// 2. Handle readline's return value
 		if (input_line == NULL)
 		{
+			if (g_signal == SIGINT)
+				continue;
+
 			ft_putstr_fd("exit\n", STDOUT_FILENO);
-			break ;
+			break;
 		}
+
+		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{
 			free(input_line);
 			continue ;
 		}
-		add_history(input_line);
-
 	
+		add_history(input_line);
 
 		// --- Syntax check ---
 		// ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
@@ -96,25 +89,7 @@ static void	ms_core_loop(t_minishell *data)
 		}
 	
 		// --- PARSING AND EXECUTION ---
-		
 		ms_main_parsing(input_line, data);
-
-
-
-		// if (!args)
-		// {
-		// 	free(input_line);
-		// 	g_signal = 1;
-		// 	continue ;
-		// }
-		// ms_expand_variables(args, data->last_exit_status);
-		// ms_debug_print_args(args);
-		// g_signal = ms_execute_command_placeholder(args, data);
-		// ms_debug_print_gsig();
-		// ms_free_split_args(args);
-		// free(input_line);
-		// input_line = NULL;
-
 
 		free(input_line);
 	}
@@ -131,10 +106,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
+	g_signal = 0;
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);
 	//ms_signal_handlers_init();
-	ms_signal_handlers_set_interactive();
+	//ms_signal_handlers_set_interactive();
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
 	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \

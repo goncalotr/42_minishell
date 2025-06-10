@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 19:59:00 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:02:00 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_token *ms_start_tokenization(char *input, t_token *list)
 	return (list);
 }
 
-t_token	*ms_tokenization(char *input)
+t_token	*ms_tokenization(t_minishell *data, char *input)
 {
 	t_token		*list;
 
@@ -118,6 +118,7 @@ t_token	*ms_tokenization(char *input)
 	// list = ms_check_eof(list);
 	list = ms_expansion_index(list);
 	//list = expansao
+	list = ms_expand_variables(data, list);
 	// list = ms_quotes_off(list);
 	return (list);
 }

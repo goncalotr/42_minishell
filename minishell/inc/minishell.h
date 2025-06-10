@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/10 12:55:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:01:53 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,8 @@ t_token	*ms_extract_quotes(char *input, int *i, t_token *list);
 t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
 t_token	*ms_extract_file(char *input, int *i, t_token *list);
 t_token	*ms_start_tokenization(char *input, t_token *list);
-t_token	*ms_tokenization(char *input);
+//t_token	*ms_tokenization(char *input);
+t_token	*ms_tokenization(t_minishell *data, char *input);
 
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);

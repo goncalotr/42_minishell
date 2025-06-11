@@ -74,6 +74,21 @@ echo -n -x test1 test2 | cat -e
 echo - | cat -e
 ```
 
+### Test 7
+```bash
+echo -n -n test1 test2 | cat -e
+```
+
+### Test 8
+```bash
+echo test1 -n test2 | cat -e
+```
+
+### Test 9
+```bash
+echo test1 -n -n test2 | cat -e
+```
+
 ## Quote and Expansion Tests
 
 Set variable

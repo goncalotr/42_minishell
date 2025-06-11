@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:03:38 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/14 13:03:57 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:23:47 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,31 @@ int	ms_count_normal(char *string)
 	return (count);
 }
 
-int ms_quotes_count(t_token	*list)
+int ms_dollar_count(t_token	*list)
 {
 	int	i;
 	int	count;
-
+	int	inside_double;
+	
+	inside_double = 0;
 	count = 0;
 	i = 0;
 	while (list->value[i])
 	{
-		if (list->value[i] == '\'')
-		{
-			i++;
-			while (list->value[i] != '\''  && list->value[i])
-				i++;
-		}
 		if (list->value[i] == '\"')
+			inside_double++;
+		if (list->value[i] == '\'' && inside_double % 2 == 0)
 		{
 			i++;
-			while (list->value[i] != '\"' && list->value[i] && ms_another_double(i, list->value))
-			{
-				if (list->value[i] == '$')
-					count++;
+			while (list->value[i] && list->value[i] != '\'')
 				i++;
-			}
+			if (list->value[i] == '\'')
+				i++;
+			continue;
 		}
+		if (list->value[i] == '$')
+			count++;
 		i++;
-	}
+	}	
 	return (count);
 }

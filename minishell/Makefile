@@ -6,7 +6,7 @@
 #    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/11 13:57:22 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/06/11 18:30:21 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ LIBFT_SRC_DIR	= $(LIBFT_REPO_DIR)libft/
 # Path to the compiled libft.a file (TARGET FILE)
 LIBFT_A			= $(LIBFT_SRC_DIR)libft.a
 # Libft Repository URL
-LIBFT_REPO_URL	= https://github.com/goncalotr/42_libft_v2.git
+LIBFT_REPO_URL	= https://github.com/jvieira96/42_libft.git
 
 # --- Source Directories ---
 #MANDATORY_DIR	= $(SRC_DIR)mandatory/

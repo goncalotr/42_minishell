@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/11 14:04:41 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:47:08 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ t_token	*ms_expansion_index(t_token *list);
 //ms_quotes_utils.c
 bool	ms_another_double(int i, char *value);
 int	ms_count_normal(char *string);
-int ms_quotes_count(t_token	*list);
+int ms_dollar_count(t_token	*list);
 
 //ms_quotes_off.c
 int	ms_new_size(char *value);

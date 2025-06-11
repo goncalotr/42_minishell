@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:02:33 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/15 12:41:18 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:28:33 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,27 @@ void	ms_normal_index(t_token *list)
 
 int	*ms_put_index(t_token *list, int *index, int i, int k)
 {
+	int	inside_double;
+	
+	inside_double = 0;
 	while (list->value[i])
 	{
-		if (list->value[i] == '\'')
-		{
-			i++;
-			while (list->value[i] != '\''  && list->value[i])
-				i++;
-		}
 		if (list->value[i] == '\"')
+			inside_double++;
+		if (list->value[i] == '\'' && inside_double % 2 == 0)
 		{
 			i++;
-			while (list->value[i] != '\"' && list->value[i] && ms_another_double(i, list->value))
-			{
-				if (list->value[i] == '$')
-				{
-					list->expand = true;
-					index[k] = i;
-					k++;
-				}
+			while (list->value[i] && list->value[i] != '\'')
 				i++;
-			}
+			if (list->value[i] == '\'')
+				i++;
+			continue;
+		}
+		if (list->value[i] == '$')
+		{
+			list->expand = true;
+			index[k] = i;
+			k++;
 		}
 		i++;
 	}
@@ -75,7 +75,7 @@ void ms_quotes_index(t_token *list)
 	int	*index;
 	int	count;
 
-	count = ms_quotes_count(list);
+	count = ms_dollar_count(list);
 	if (count == 0)
 		return ;
 	index = malloc((count + 1) * sizeof(int));

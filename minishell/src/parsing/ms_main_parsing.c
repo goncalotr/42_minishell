@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 20:01:41 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:26:32 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	t_ast	*ast_tree;
 	
 	(void)data;
-	(void)ast_tree; // -> delete
+	//(void)ast_tree; // -> delete
 	tokens = ms_tokenization(data, input);
 	ms_print_tokens(tokens);
 	ast_tree = ms_parse_tokens(&tokens);

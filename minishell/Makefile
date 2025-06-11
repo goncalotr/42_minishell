@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
+#    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/05 15:48:32 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/06/11 02:01:59 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -101,6 +101,8 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/init/ms_init_struct.c\
 				  $(SRC_DIR)/exec/ms_exec_external.c\
 				  $(SRC_DIR)/exec/ms_path_handler.c\
+				  $(SRC_DIR)/utils/ms_utils_exit.c\
+				  $(SRC_DIR)/utils/ms_utils_pid.c\
 				  $(SRC_DIR)/prompt/ms_prompt.c\
 				  $(SRC_DIR)main.c
 

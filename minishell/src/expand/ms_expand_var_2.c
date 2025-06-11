@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/10 20:09:39 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/11 02:03:23 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info)
 		return (ft_itoa(data->last_exit_status));
 	else if (ft_strcmp(info, "$$") == 0)
 	{
-		pid = getpid(); //! nao se pode usar
+		pid = getpid();
+		pid = ms_getpid();
 		return (ft_itoa((int)pid));
 	}
 	else if (ft_strcmp(info, "$") == 0)

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/11 16:56:46 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:46:30 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	(void)data;
 	//(void)ast_tree; // -> delete
 	tokens = ms_tokenization(input);
-	ms_print_tokens(tokens);
+	// ms_print_tokens(tokens);
 	ast_tree = ms_parse_tokens(&tokens);
-	print_ast(ast_tree, 0);
+	// print_ast(ast_tree, 0);
 	ms_prepare_heredocs(ast_tree);
 	ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(ast_tree);

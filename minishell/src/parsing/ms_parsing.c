@@ -6,22 +6,11 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/11 18:01:23 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:49:23 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-void	print_args(char **args)
-{
-	int	i = 0;
-
-	while(args[i])
-	{
-		printf("args[%d]: %s\n", i, args[i]);
-		i++;
-	}
-}
 
 t_ast	*ms_parse_command(t_token **token)
 {
@@ -30,9 +19,7 @@ t_ast	*ms_parse_command(t_token **token)
 
 	if (!(*token))
 		return NULL;
-	printf("sending to split: %s\n", (*token)->value);
 	args = ft_split((*token)->value, ' ');
-	print_args(args);
 	if (!args)
 		return NULL;
 	command_node = ms_new_ast_node(TOKEN_CMD);

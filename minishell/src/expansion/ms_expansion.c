@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 14:02:55 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 17:40:20 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:05:33 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ char **ms_extract_expansion(t_token *token)
 	return (expansions);
 }
 
-char	*ms_new_value(t_token  *token, char **expansions)
-{
+// char	*ms_new_value(t_token  *token, char **expansions)
+// {
 	
-}
+// }
 
 t_token	*ms_expansion_main(t_token *tokens)
 {
 	t_token	*temp;
 	char	**expansions;
-	char	*new_value;
+	//char	*new_value;
 	
 	temp = tokens;
 	while (temp)
@@ -54,7 +54,7 @@ t_token	*ms_expansion_main(t_token *tokens)
 		if (temp->expand == true)
 		{
 			expansions = ms_extract_expansion(temp);
-			new_value = ms_new_value(temp, expansions);
+			//new_value = ms_new_value(temp, expansions);
 		}
 		temp = temp->next;
 	}

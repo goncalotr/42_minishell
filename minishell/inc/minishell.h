@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/09 17:58:17 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:04:41 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,15 @@ char	*ms_str_append(char *str1, char *str2);
 char	*ms_strndup(char *str, size_t n);
 bool	ms_ismetachar(char c);
 bool	ms_isspace(char c);
+
+//ms_expansion.c
+char **ms_extract_expansion(t_token *token);
+t_token	*ms_expansion_main(t_token *tokens);
+
+//ms_expansion_utils.c
+int	ms_nbr_expansions(int *array);
+char *ms_extract_variable(char *string);
+bool	ms_is_expandable(int  *array, int index);
 
 //ms_quotes.c
 void	ms_normal_index(t_token *list);

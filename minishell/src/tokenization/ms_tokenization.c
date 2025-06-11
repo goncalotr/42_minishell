@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 14:16:12 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:56:24 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ t_token	*ms_tokenization(char *input)
 	tokens = ms_assign_state(tokens);
 	// list = ms_check_eof(list);
 	tokens = ms_expansion_index(tokens);
-	tokens = ms_expansion(tokens);
+	// tokens = ms_expansion(tokens);
 	// list = ms_quotes_off(list);
 	return (tokens);
 }

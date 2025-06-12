@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/11 14:21:47 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:33:41 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
-	printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
+	//printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
 
 	return (WEXITSTATUS(status));
 }

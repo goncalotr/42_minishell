@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/11 02:01:59 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/12 14:01:24 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -172,8 +172,16 @@ re:				fclean all
 # Rule to use valgrind
 valgrind:		all
 				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
+					--track-origins=yes --trace-children=yes ./minishell
+
+reval: re valgrind
+
+valgrind_sup:		all
+				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
 					--track-origins=yes --trace-children=yes --suppressions=readline.supp ./minishell
 
-.PHONY:			all clean fclean re valgrind
+reval_sup: re valgrind_sup
+
+.PHONY:			all clean fclean re valgrind reval valgrind_sup reval_sup
 
 #.SILENT

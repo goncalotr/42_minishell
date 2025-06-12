@@ -6,30 +6,35 @@
 
 ```bash
 echo test | cat -e
+echo $?
 ```
 
 ### Test 2
 
 ```bash
 echo | cat -e
+echo $?
 ```
 
 ### Test 3
 
 ```bash
 echo test1 test2 test3 test4 | cat -e
+echo $?
 ```
 
 ### Test 4
 
 ```bash
 echo test1 test2  test       test4	test5 | cat -e
+echo $?
 ```
 
 ### Test 5
 
 ```bash
 echo longstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstring | cat -e
+echo $?
 ```
 
 ## Flag Tests
@@ -38,18 +43,21 @@ echo longstringlongstringlongstringlongstringlongstringlongstringlongstringlongs
 
 ```bash
 echo -n test1 test2 | cat -e
+echo $?
 ```
 
 ### Test 2
 
 ```bash
 echo -n -n -n test1 test2 | cat -e
+echo $?
 ```
 
 ### Test 3
 
 ```bash
 echo -nnn test1 test2 | cat -e
+echo $?
 ```
 
 Expected result:

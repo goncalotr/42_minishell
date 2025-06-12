@@ -9,12 +9,16 @@ echo test | cat -e
 echo $?
 ```
 
+20250612 OK
+
 ### Test 2
 
 ```bash
 echo | cat -e
 echo $?
 ```
+
+20250612 OK
 
 ### Test 3
 
@@ -23,6 +27,8 @@ echo test1 test2 test3 test4 | cat -e
 echo $?
 ```
 
+20250612 OK
+
 ### Test 4
 
 ```bash
@@ -30,12 +36,19 @@ echo test1 test2  test       test4	test5 | cat -e
 echo $?
 ```
 
+with no tabs - 20250612 OK
+
+how to test with tabs?
+test with tabs - ???
+
 ### Test 5
 
 ```bash
 echo longstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstring | cat -e
 echo $?
 ```
+
+20250612 OK
 
 ## Flag Tests
 
@@ -46,12 +59,16 @@ echo -n test1 test2 | cat -e
 echo $?
 ```
 
+20250612 OK
+
 ### Test 2
 
 ```bash
 echo -n -n -n test1 test2 | cat -e
 echo $?
 ```
+
+20250612 OK
 
 ### Test 3
 

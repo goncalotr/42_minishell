@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
+#    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/05/21 13:01:22 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/06/12 16:07:17 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,9 +35,9 @@ SRC_DIR			= src/
 
 # --- Libft Setup ---
 # Directory where the Libft repository will be cloned
-LIBFT_REPO_DIR	= $(LIB_DIR)libft_repo/
+#LIBFT_REPO_DIR	= $(LIB_DIR)libft_repo/
 # Path to the actual Libft source code *inside* the cloned repository
-LIBFT_SRC_DIR	= $(LIBFT_REPO_DIR)libft/
+LIBFT_SRC_DIR	= $(LIB_DIR)libft/
 # Path to the compiled libft.a file (TARGET FILE)
 LIBFT_A			= $(LIBFT_SRC_DIR)libft.a
 # Libft Repository URL
@@ -57,12 +57,12 @@ SAN_FLAGS		= -fsanitize=address
 SAN_FLAGS		+= -fsanitize=leak
 SAN_FLAGS		+= -fsanitize=undefined
 SAN_FLAGS		+= -fno-omit-frame-pointer
-CFLAGS			= -Wall -Wextra -Werror -g
+CFLAGS			=  -Wall -Wextra -Werror -g
 #CFLAGS			+= $(SAN_FLAGS)
 CFLAGS			+= -I$(INC_DIR)
 CFLAGS			+= -I$(LIBFT_SRC_DIR)
-CFLAGS			+= -I$(LIBFT_SRC_DIR)
-LDFLAGS = $(SAN_FLAGS)
+#CFLAGS			+= -I$(LIBFT_SRC_DIR)
+LDFLAGS			= $(SAN_FLAGS)
 
 # -------------------------------------------------------------
 # MANDATORY
@@ -79,12 +79,14 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/parsing/ms_main_parsing.c\
 				  $(SRC_DIR)/parsing/ms_parsing_utils.c\
 				  $(SRC_DIR)/execution/ms_tree_exec.c\
+				  $(SRC_DIR)/execution/ms_tree_exec_utils.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_utils.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_off.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils2.c\
+				  $(SRC_DIR)/tokenization/ms_tokenization_utils3.c\
 				  $(SRC_DIR)/tokenization/ms_list_utils.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\
@@ -99,6 +101,8 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/init/ms_init_struct.c\
 				  $(SRC_DIR)/exec/ms_exec_external.c\
 				  $(SRC_DIR)/exec/ms_path_handler.c\
+				  $(SRC_DIR)/utils/ms_utils_exit.c\
+				  $(SRC_DIR)/utils/ms_utils_pid.c\
 				  $(SRC_DIR)/prompt/ms_prompt.c\
 				  $(SRC_DIR)main.c
 
@@ -123,13 +127,13 @@ $(NAME):		$(LIBFT_A) $(MANDATORY_OBJ)
 				@echo "+---------------------------------------------+$(RESET)"
 
 $(LIBFT_A):
-				@echo "$(RED)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
-				@echo "Removing old Libft repository clone (if any)..."
-				@$(RM) $(LIBFT_REPO_DIR)
-				@echo "Creating parent directory $(LIB_DIR)..."
-				@mkdir -p $(LIB_DIR)
-				@echo "Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)...$(RESET)"
-				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
+#				@echo "$(RED)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
+#				@echo "Removing old Libft repository clone (if any)..."
+#				@$(RM) $(LIBFT_REPO_DIR)
+#				@echo "Creating parent directory $(LIB_DIR)..."
+#				@mkdir -p $(LIB_DIR)
+#				@echo "Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)...$(RESET)"
+#				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
 				@echo "$(YELLOW)Compiling Libft in $(LIBFT_SRC_DIR)...$(RESET)"
 				@make -s -C $(LIBFT_SRC_DIR) > /dev/null || (echo "ERROR: Libft make failed" && exit 1)
 				@echo "$(GREEN)Libft compiled successfully!$(RESET)"
@@ -148,10 +152,10 @@ fclean:			clean
 				@echo "$(YELLOW)Executable files cleaning start$(RESET)"
 				@echo "Cleaning executable $(NAME)..."
 				@$(RM) $(NAME)
-				@echo "Cleaning Libft library (if possible)..."
-				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) fclean; fi
-				@echo "Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)..."
-				@$(RM) $(LIBFT_REPO_DIR)
+#				@echo "Cleaning Libft library (if possible)..."
+#				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) fclean; fi
+#				@echo "Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)..."
+#				@$(RM) $(LIBFT_REPO_DIR)
 				@echo "$(GREEN)Clean complete.$(RESET)"
 
 re:				fclean all
@@ -168,8 +172,16 @@ re:				fclean all
 # Rule to use valgrind
 valgrind:		all
 				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
+					--track-origins=yes --trace-children=yes ./minishell
+
+reval: re valgrind
+
+valgrind_sup:		all
+				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
 					--track-origins=yes --trace-children=yes --suppressions=readline.supp ./minishell
 
-.PHONY:			all clean fclean re valgrind
+reval_sup: re valgrind_sup
+
+.PHONY:			all clean fclean re valgrind reval valgrind_sup reval_sup
 
 #.SILENT

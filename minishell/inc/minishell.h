@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/08 11:34:59 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/12 16:01:40 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # include <readline/history.h>
 
 // non-standard librarys
-# include "../lib/libft_repo/libft/libft.h"
+# include "../lib/libft/libft.h"
 
 /**************************************************************************
  * SECTION: Macros
@@ -63,7 +63,7 @@
 
 typedef enum e_token_type
 {
-	TOKEN_INFILE,				// 0 file
+	TOKEN_INFILE,				// 0 infile
 	TOKEN_OUTFILE,				// 1 outfile
 	TOKEN_CMD,					// 2 commands
 	TOKEN_PIPE,					// 3 |
@@ -74,18 +74,18 @@ typedef enum e_token_type
 	TOKEN_EOF,					// 8 end of file
 }	t_token_type;
 
-typedef enum s_token_state
+typedef enum e_token_state
 {
 	GENERAL,					// 0 normal
 	DOUBLE_QUOTES,				// 1 ""
 	SIMPLE_QUOTES,				// 2 ''
-}	t_token_states;
+}	t_token_state;
 
 typedef struct s_token
 {
 	char					*value;
 	t_token_type			type;
-	t_token_states			state;
+	t_token_state			state;
 	bool					expand;
 	int						*expand_index;
 	struct s_token			*previous;
@@ -96,6 +96,8 @@ typedef struct s_ast
 {
 	t_token_type	type;
 	char			**args;
+	int				node_nbr;
+	char			*file_name;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -130,12 +132,12 @@ typedef struct s_minishell
 	int		last_exit_status;
 	int		stdin_fd;
 	int		stdout_fd;
-	int		stderr_fd;  
+	int		stderr_fd;
 	char	*shell_name;
 	char	**envp_orig;
 }	t_minishell;
 
-extern volatile sig_atomic_t g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 /**************************************************************************
  * SECTION: Functions
@@ -167,10 +169,10 @@ bool	ms_unclosed_quotes(char *input);
 bool	ms_syntax_check(char *input);
 bool	ms_pipes_placement(char *input);
 bool	ms_rediractions_placement(char *input);
-bool	ms_not_required (char *input);
+bool	ms_not_required(char *input);
 
 //ms_syntax_utils.c
-char	*ms_remove_whitespaces(char	 *input_line);
+char	*ms_remove_whitespaces(char *input_line);
 void	ms_skip_inside_quotes(int *i, char *input);
 void	ms_skip_whitespaces(int *i, char *input);
 
@@ -179,24 +181,32 @@ t_token	*ms_extract_quotes(char *input, int *i, t_token *list);
 t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
 t_token	*ms_extract_file(char *input, int *i, t_token *list);
 t_token	*ms_start_tokenization(char *input, t_token *list);
+//t_token	*ms_tokenization(char *input);
 t_token	*ms_tokenization(t_minishell *data, char *input);
 
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);
-t_token	*ms_append_node(t_token *list, char  *input, t_token_type type);
+t_token	*ms_append_node(t_token *list, char *input, t_token_type type);
 void	ms_print_tokens(t_token *list);
 
 //ms_tokenization_utils.c
 int		ms_len_file(char *input, int i);
 int		ms_len_cmd(char *input, int i);
-int 	ms_quote_len(char *input, int i);
+int	ms_quote_len(char *input, int i);
 t_token	*ms_extract_operator(char *input, int *i, t_token *list);
 
 //ms_tokenization_utils2.c
 bool	ms_is_file(t_token	*list);
 bool	ms_is_infile(t_token *list);
 t_token	*ms_assign_state(t_token *list);
-t_token	*ms_check_eof(t_token *list);
+char	*ms_parse_quotes(char *input, int *i);
+
+//ms_tokenization_utils3.c
+char	*ms_append_char(char *str, char c);
+char	*ms_str_append(char *str1, char *str2);
+char	*ms_strndup(char *str, size_t n);
+bool	ms_ismetachar(char c);
+bool	ms_isspace(char c);
 
 //ms_quotes.c
 void	ms_normal_index(t_token *list);
@@ -212,7 +222,7 @@ int		ms_quotes_count(t_token	*list);
 //ms_quotes_off.c
 int		ms_new_size(char *value);
 char	*ms_put_new(char *value, char *new_value);
-t_token *ms_quotes_off(t_token *list);
+t_token	*ms_quotes_off(t_token *list);
 
 // ms_main_parsing.c
 void	ms_main_parsing(char *input, t_minishell *data);
@@ -229,15 +239,20 @@ t_ast 	*ms_parse_tokens(t_token	**token_list);
 
 // ms_parsing_utils.c
 t_ast	*ms_new_ast_node(t_token_type type);
-t_ast	*ms_create_and_link_redir(t_token **token_list, t_token *temp);
+t_ast	*ms_create_and_link_redir(t_token **token_list);
 
 // ms_tree_exec.c
-int		ms_exec_tree(t_ast *node, t_minishell *data);
-int		ms_exec_cmd(t_ast *node, t_minishell *data);
-int		ms_exec_pipe(t_ast *node, t_minishell *data);
-int		ms_exec_redir_in(t_ast *node, t_minishell *data);
-int		ms_exec_redir_out(t_ast	*node, t_minishell *data);
-int		ms_exec_heredoc(t_ast *node, t_minishell *data);
+int	ms_exec_tree(t_ast *node, t_minishell *data);
+int	ms_exec_cmd(t_ast *node, t_minishell *data);
+int	ms_exec_pipe(t_ast *node, t_minishell *data);
+int	ms_exec_redir_in(t_ast *node, t_minishell *data);
+int	ms_exec_redir_out(t_ast	*node, t_minishell *data);
+void	ms_exec_heredoc(t_ast *node);
+
+// ms_tree_exec_utils.c
+void	ms_prepare_heredocs(t_ast *node);
+void	ms_clean_heredocs(t_ast *node);
+void	ms_command_not_found(char **cmds);
 
 // parsing placeholder 
 void	ms_free_split_args(char **args);
@@ -287,5 +302,9 @@ int		ms_execute_unset(char **args, t_minishell *data);
 // --- exec ---
 char	*ms_find_command_path(const char *cmd, char **envp);
 int		ms_execute_external_command(char **args, char **envp);
+
+// --- utils ---
+int		ms_exit_with_code(t_minishell *data, int status);
+int		ms_getpid(void);
 
 #endif

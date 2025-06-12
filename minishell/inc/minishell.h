@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/11 02:04:57 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/12 16:01:40 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # include <readline/history.h>
 
 // non-standard librarys
-# include "../lib/libft_repo/libft/libft.h"
+# include "../lib/libft/libft.h"
 
 /**************************************************************************
  * SECTION: Macros

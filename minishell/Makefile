@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/12 14:01:24 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/12 16:07:17 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,9 +35,9 @@ SRC_DIR			= src/
 
 # --- Libft Setup ---
 # Directory where the Libft repository will be cloned
-LIBFT_REPO_DIR	= $(LIB_DIR)libft_repo/
+#LIBFT_REPO_DIR	= $(LIB_DIR)libft_repo/
 # Path to the actual Libft source code *inside* the cloned repository
-LIBFT_SRC_DIR	= $(LIBFT_REPO_DIR)libft/
+LIBFT_SRC_DIR	= $(LIB_DIR)libft/
 # Path to the compiled libft.a file (TARGET FILE)
 LIBFT_A			= $(LIBFT_SRC_DIR)libft.a
 # Libft Repository URL
@@ -61,8 +61,8 @@ CFLAGS			=  -Wall -Wextra -Werror -g
 #CFLAGS			+= $(SAN_FLAGS)
 CFLAGS			+= -I$(INC_DIR)
 CFLAGS			+= -I$(LIBFT_SRC_DIR)
-CFLAGS			+= -I$(LIBFT_SRC_DIR)
-LDFLAGS = $(SAN_FLAGS)
+#CFLAGS			+= -I$(LIBFT_SRC_DIR)
+LDFLAGS			= $(SAN_FLAGS)
 
 # -------------------------------------------------------------
 # MANDATORY
@@ -127,13 +127,13 @@ $(NAME):		$(LIBFT_A) $(MANDATORY_OBJ)
 				@echo "+---------------------------------------------+$(RESET)"
 
 $(LIBFT_A):
-				@echo "$(RED)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
-				@echo "Removing old Libft repository clone (if any)..."
-				@$(RM) $(LIBFT_REPO_DIR)
-				@echo "Creating parent directory $(LIB_DIR)..."
-				@mkdir -p $(LIB_DIR)
-				@echo "Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)...$(RESET)"
-				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
+#				@echo "$(RED)Libft library ($(LIBFT_A)) not found or needs update. Preparing Libft...$(RESET)"
+#				@echo "Removing old Libft repository clone (if any)..."
+#				@$(RM) $(LIBFT_REPO_DIR)
+#				@echo "Creating parent directory $(LIB_DIR)..."
+#				@mkdir -p $(LIB_DIR)
+#				@echo "Cloning $(LIBFT_REPO_URL) into $(LIBFT_REPO_DIR)...$(RESET)"
+#				@git clone --depth 1 $(LIBFT_REPO_URL) $(LIBFT_REPO_DIR) || (echo "$(RED)ERROR: Clone failed$(RESET)" && exit 1)
 				@echo "$(YELLOW)Compiling Libft in $(LIBFT_SRC_DIR)...$(RESET)"
 				@make -s -C $(LIBFT_SRC_DIR) > /dev/null || (echo "ERROR: Libft make failed" && exit 1)
 				@echo "$(GREEN)Libft compiled successfully!$(RESET)"
@@ -152,10 +152,10 @@ fclean:			clean
 				@echo "$(YELLOW)Executable files cleaning start$(RESET)"
 				@echo "Cleaning executable $(NAME)..."
 				@$(RM) $(NAME)
-				@echo "Cleaning Libft library (if possible)..."
-				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) fclean; fi
-				@echo "Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)..."
-				@$(RM) $(LIBFT_REPO_DIR)
+#				@echo "Cleaning Libft library (if possible)..."
+#				@-if [ -d "$(LIBFT_SRC_DIR)" ]; then make -s -C $(LIBFT_SRC_DIR) fclean; fi
+#				@echo "Removing entire Libft repository clone directory $(LIBFT_REPO_DIR)..."
+#				@$(RM) $(LIBFT_REPO_DIR)
 				@echo "$(GREEN)Clean complete.$(RESET)"
 
 re:				fclean all

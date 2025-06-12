@@ -1,5 +1,5 @@
-minishell/lib/
 minishell/minishell
+#minishell/lib/ # using local libft
 
 # Prerequisites
 *.d

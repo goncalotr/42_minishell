@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:58:29 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/02 17:08:29 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:48:09 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,28 @@ int	ms_new_size(char *value)
 {
 	int	i;
 	int	len;
-	int	quote_type;
+	int	quote;
 
-	quote_type = value[0];
-	i = 1;
+	i = 0;
+	quote = 0;
 	len = 0;
 	while (value[i])
 	{
-		if (value[i] == quote_type && value[i + 1])
+		if (value[i] == '\'' || value[i] == '\"')
 		{
-			i++;
-			quote_type = value[i];
-			i++;
-			continue;
+			if (quote == 0)
+			{
+				quote = value[i];
+				i++;
+				continue;
+			}
+			else if (quote == value[i])
+			{
+				quote = 0;
+				i++;
+				continue;
+			}
 		}
-		else if (value[i] == quote_type && !value[i + 1])
-			break ;
 		len++;
 		i++;
 	}
@@ -42,22 +48,28 @@ char	*ms_put_new(char *value, char *new_value)
 {
 	int	i;
 	int	k;
-	int	quote_type;
+	int	quote;
 
-	quote_type = value[0];
-	i = 1;
+	quote = 0;
+	i = 0;
 	k = 0;
 	while (value[i])
 	{
-		if(value[i] == quote_type && value[i + 1])
+		if (value[i] == '\'' || value[i] == '\"')
 		{
-			i++;
-			quote_type = value[i];
-			i++;
-			continue;
+			if (quote == 0)
+			{
+				quote = value[i];
+				i++;
+				continue;
+			}
+			else if (quote == value[i])
+			{
+				quote = 0;
+				i++;
+				continue;
+			}
 		}
-		else if (value[i] == quote_type && !value[i + 1])
-			break ;
 		new_value[k] = value[i];
 		k++;
 		i++;
@@ -75,7 +87,8 @@ t_token *ms_quotes_off(t_token *list)
 	temp = list;
 	while (temp)
 	{
-		if(!(temp->state == DOUBLE_QUOTES || temp->state == SIMPLE_QUOTES))
+		if((temp->state == DOUBLE_QUOTES || temp->state == SIMPLE_QUOTES) 
+			&& temp->type == TOKEN_CMD)
 		{
 			temp = temp->next;
 			continue;

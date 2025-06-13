@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/11 15:23:58 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:39:52 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
 	{
 		if(input[*i] == '|' ||  (input[*i] == '<' || input[*i] == '>'))
 			break;
-		// else if ((input[*i] == '\'') || (input[*i] == '\"'))
-		// 	break;
 		word[k] = input[*i];
 		(*i)++;
 		k++;
@@ -95,7 +93,6 @@ t_token *ms_start_tokenization(char *input, t_token *list)
 	input = ms_remove_whitespaces(input);
 	while (input[i])
 	{
-		ms_skip_whitespaces(&i, input);
 		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
 		else if((input[i] == '\'') || (input[i] == '\"'))
@@ -115,7 +112,6 @@ t_token	*ms_tokenization(char *input)
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);
 	tokens = ms_assign_state(tokens);
-	// list = ms_check_eof(list);
 	tokens = ms_expansion_index(tokens);
 	// tokens = ms_expansion(tokens);
 	// tokens = ms_quotes_off(tokens);

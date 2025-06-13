@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:02:33 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/11 17:28:33 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/12 14:56:08 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ t_token	*ms_expansion_index(t_token *list)
 			temp = temp->next;
 			continue;
 		} 
-		if (temp->state == DOUBLE_QUOTES || temp->state == SIMPLE_QUOTES)
-			ms_quotes_index(temp);
-		else
-			ms_normal_index(temp);
+		// if (temp->state == DOUBLE_QUOTES || temp->state == SIMPLE_QUOTES)
+		ms_quotes_index(temp);
+		// else
+		// 	ms_normal_index(temp);
 		temp = temp->next;
 	}
 	return (list);

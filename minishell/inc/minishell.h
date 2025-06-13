@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/11 14:47:08 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/13 19:07:09 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,9 +178,6 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 
-
-
-// ------------------PARSER-------------------------
 // ms_syntax_check.c
 bool ms_unclosed_quotes(char *input);
 bool ms_syntax_check(char *input);
@@ -224,15 +221,6 @@ char	*ms_strndup(char *str, size_t n);
 bool	ms_ismetachar(char c);
 bool	ms_isspace(char c);
 
-//ms_expansion.c
-char **ms_extract_expansion(t_token *token);
-t_token	*ms_expansion_main(t_token *tokens);
-
-//ms_expansion_utils.c
-int	ms_nbr_expansions(int *array);
-char *ms_extract_variable(char *string);
-bool	ms_is_expandable(int  *array, int index);
-
 //ms_quotes.c
 void	ms_normal_index(t_token *list);
 int	*ms_put_index(t_token *list, int *index, int i, int k);
@@ -248,12 +236,20 @@ int ms_dollar_count(t_token	*list);
 int	ms_new_size(char *value);
 char	*ms_put_new(char *value, char *new_value);
 t_token *ms_quotes_off(t_token *list);
+char	**ms_spaces_off(char **args);
 
 // ms_main_parsing.c
 void	ms_main_parsing(char *input, t_minishell *data);
 void print_indent(int level);
 const char *get_token_type_name(t_token_type type);
 void print_ast(t_ast *node, int level);
+
+// ms_special_case.c
+char	**ms_special_case(t_token **token);
+void	ms_free_array(char **array);
+int		ms_len_array_strs(char **strs);
+char	*ms_cpy_array(char *str, char **strs);
+int	ms_array_len(char **array);
 
 // ms_parsing.c
 t_ast	*ms_parse_command(t_token **token);

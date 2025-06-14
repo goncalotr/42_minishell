@@ -6,7 +6,7 @@
 #    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/12 17:49:15 by jpedro-f         ###   ########.fr        #
+#    Updated: 2025/06/14 15:23:53 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,6 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils2.c\
-				  $(SRC_DIR)/tokenization/ms_tokenization_utils3.c\
 				  $(SRC_DIR)/tokenization/ms_list_utils.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\

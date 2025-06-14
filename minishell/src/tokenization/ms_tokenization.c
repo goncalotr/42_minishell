@@ -6,82 +6,77 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/13 20:39:52 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:00:31 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
+int	ms_len_token(char *input, int i)
 {
-	char	*word;
-	int 	k;
+	int len;
+	int	quote;
+	int	x;
 
-	
-	word = malloc(ms_len_cmd(input, *i) + 1);
-	if (!word)
-		return NULL;
-	k = 0;
-	while (input[*i])
+	quote = 0;
+	x = i;
+	while (input[x])
 	{
-		if(input[*i] == '|' ||  (input[*i] == '<' || input[*i] == '>'))
-			break;
-		word[k] = input[*i];
-		(*i)++;
-		k++;
+		if(ms_is_quote(input[x]) && !quote)
+			quote = input[x];
+		else if (ms_is_quote(input[x]) && quote == input[x])
+			quote = 0;
+		if ((ms_isspace(input[x]) || ms_ismetachar(input[x]))
+			&& quote == 0)
+				break ;
+		x++;
 	}
-	word[k] = '\0';
-	list = ms_append_node(list, word, TOKEN_CMD);
-	free(word);
-	return (list);
+	len = x - i;
+	return (len);
 }
 
-t_token	*ms_extract_file(char *input, int *i, t_token *list)
+char	*ms_cpy_token(char *input, int *i)
 {
-	char	*word;
-	int 	k;
-
+	char 	*token;
+	int		x;
+	int		quote;
 	
-	word = malloc(ms_len_file(input, *i) + 1);
-	if (!word)
-		return NULL;
-	k = 0;
+	quote = 0;
+	x = 0;
+	ms_skip_whitespaces(i, input);
+	token = malloc(ms_len_token(input, *i) + 1);
+	if (!token)
+		return (NULL);
 	while (input[*i])
 	{
-		if(input[*i] == 32 || (input[*i] >= 7 && input[*i] <= 13))
-			break;
-		if(input[*i] == '|' ||  (input[*i] == '<' || input[*i] == '>'))
-			break;
-		word[k] = input[*i];
+		if (ms_is_quote(input[*i]) && !quote)
+			quote = input[*i];
+		else if (ms_is_quote(input[*i]) && quote == input[*i])
+			quote = 0;
+		if ((ms_isspace(input[*i]) || ms_ismetachar(input[*i]))
+			&& quote == 0)
+				break ;
+		token[x] = input[*i];
 		(*i)++;
-		k++;
+		x++;
 	}
-	word[k] = '\0';
-	if (ms_is_infile(list))
-		list = ms_append_node(list, word, TOKEN_INFILE);
-	else
-		list = ms_append_node(list, word, TOKEN_OUTFILE);		
-	free(word);
-	return (list);
+	token[x] = '\0';
+	return (token);
 }
 
-t_token	*ms_extract_quotes(char *input, int *i, t_token *list)
+t_token	*ms_assign_state(t_token *list)
 {
-	char	*word;
+	t_token	*temp; 
 
-	word = ms_parse_quotes(input, i);
-	if (!word)
-		return list;
-	if (ms_is_file(list))
+	temp = list;
+	while (temp)
 	{
-		if (ms_is_infile(list))
-			list = ms_append_node(list, word, TOKEN_INFILE);
-		else
-			list = ms_append_node(list, word, TOKEN_OUTFILE);
+		if (temp->value[0] == '\'')
+			temp->state = SIMPLE_QUOTES;
+		else if (temp->value[0] == '\"')
+				temp->state = DOUBLE_QUOTES;
+		temp = temp->next;
 	}
-	else
-		list = ms_append_node(list, word, TOKEN_CMD);
-	free(word);
 	return (list);
 }
 

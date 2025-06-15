@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/14 16:00:31 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/15 18:26:43 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	ms_len_token(char *input, int i)
 			quote = input[x];
 		else if (ms_is_quote(input[x]) && quote == input[x])
 			quote = 0;
-		if ((ms_isspace(input[x]) || ms_ismetachar(input[x]))
-			&& quote == 0)
+		if (ms_ismetachar(input[x]) && quote == 0)
 				break ;
 		x++;
 	}
@@ -53,8 +52,7 @@ char	*ms_cpy_token(char *input, int *i)
 			quote = input[*i];
 		else if (ms_is_quote(input[*i]) && quote == input[*i])
 			quote = 0;
-		if ((ms_isspace(input[*i]) || ms_ismetachar(input[*i]))
-			&& quote == 0)
+		if (ms_ismetachar(input[*i]) && quote == 0)
 				break ;
 		token[x] = input[*i];
 		(*i)++;
@@ -90,12 +88,8 @@ t_token *ms_start_tokenization(char *input, t_token *list)
 	{
 		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
-		else if((input[i] == '\'') || (input[i] == '\"'))
-			list = ms_extract_quotes(input, &i, list);
-		else if(ms_is_file(list))
-			list =  ms_extract_file(input, &i, list);
-		else
-			list = ms_extract_cmd(input, &i, list);
+		else 
+			list = ms_extract_word(input, &i, list);
 	}
 	return (list);
 }
@@ -106,9 +100,9 @@ t_token	*ms_tokenization(char *input)
 
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);
-	tokens = ms_assign_state(tokens);
-	tokens = ms_expansion_index(tokens);
-	// tokens = ms_expansion(tokens);
+	// tokens = ms_assign_state(tokens);
+	tokens = ms_expansion_check(tokens);
+	tokens = ms_handle_quotes(tokens);
 	// tokens = ms_quotes_off(tokens);
 	return (tokens);
 }

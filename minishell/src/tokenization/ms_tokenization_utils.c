@@ -6,13 +6,13 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/14 15:24:47 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/15 18:20:30 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
+/* t_token	*ms_extract_cmd(char *input, int *i, t_token *list)
 {
 	char	*cmd;
 
@@ -33,9 +33,9 @@ t_token	*ms_extract_file(char *input, int *i, t_token *list)
 		list = ms_append_node(list, file, TOKEN_OUTFILE);		
 	free(file);
 	return (list);
-}
+} */
 
-t_token	*ms_extract_quotes(char *input, int *i, t_token *list)
+t_token	*ms_extract_word(char *input, int *i, t_token *list)
 {
 	char	*word;
 

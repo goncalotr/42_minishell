@@ -76,6 +76,7 @@ echo $?
 echo -nnn test1 test2 | cat -e
 echo $?
 ```
+2025-06-15 v
 
 Expected result:
 
@@ -85,6 +86,8 @@ test1 test2goteixei@c2r5s1:~$
 ```
 
 test above not working correctly
+
+2025-06-15 v
 
 ### Test 4
 

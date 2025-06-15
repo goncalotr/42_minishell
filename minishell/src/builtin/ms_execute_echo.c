@@ -6,11 +6,29 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:43:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/15 16:58:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+int	ms_check_n_flag(char *str)
+{
+	int	i;
+
+	if (!str || str[0] != '-')
+		return (0);
+	i = 1;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 /**
  * @brief Executes the echo builtin command using a simple argv array.
@@ -38,10 +56,10 @@ int	ms_execute_echo(char **args)
 	print_newline = 1;
 	if (args[1] == NULL)
 		return (ft_putchar_fd('\n', STDOUT_FILENO), 0);
-	if (ft_strncmp(args[1], "-n", 3) == 0)
+	while (args[i] && ms_check_n_flag(args[i]))
 	{
 		print_newline = 0;
-		i = 2;
+		i++;
 	}
 	while (args[i] != NULL)
 	{

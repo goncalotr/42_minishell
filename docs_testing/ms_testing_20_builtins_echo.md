@@ -6,31 +6,49 @@
 
 ```bash
 echo test | cat -e
+echo $?
 ```
+
+20250612 OK
 
 ### Test 2
 
 ```bash
 echo | cat -e
+echo $?
 ```
+
+20250612 OK
 
 ### Test 3
 
 ```bash
 echo test1 test2 test3 test4 | cat -e
+echo $?
 ```
+
+20250612 OK
 
 ### Test 4
 
 ```bash
 echo test1 test2  test       test4	test5 | cat -e
+echo $?
 ```
+
+with no tabs - 20250612 OK
+
+how to test with tabs?
+test with tabs - ???
 
 ### Test 5
 
 ```bash
 echo longstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstringlongstring | cat -e
+echo $?
 ```
+
+20250612 OK
 
 ## Flag Tests
 
@@ -38,19 +56,27 @@ echo longstringlongstringlongstringlongstringlongstringlongstringlongstringlongs
 
 ```bash
 echo -n test1 test2 | cat -e
+echo $?
 ```
+
+20250612 OK
 
 ### Test 2
 
 ```bash
 echo -n -n -n test1 test2 | cat -e
+echo $?
 ```
+
+20250612 OK
 
 ### Test 3
 
 ```bash
 echo -nnn test1 test2 | cat -e
+echo $?
 ```
+2025-06-15 v
 
 Expected result:
 
@@ -60,6 +86,8 @@ test1 test2goteixei@c2r5s1:~$
 ```
 
 test above not working correctly
+
+2025-06-15 v
 
 ### Test 4
 

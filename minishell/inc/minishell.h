@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/12 16:01:40 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 14:21:02 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_token
 	char					*value;
 	t_token_type			type;
 	t_token_state			state;
+	char					**args;
 	bool					expand;
 	int						*expand_index;
 	struct s_token			*previous;
@@ -161,8 +162,6 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 void	ms_signal_handlers_init(void);
 void	ms_signal_handlers_set_interactive(void);
 
-
-
 // ------------------PARSER-------------------------
 // ms_syntax_check.c
 bool	ms_unclosed_quotes(char *input);
@@ -189,14 +188,25 @@ t_token	*ms_last_node(t_token *list);
 t_token	*ms_append_node(t_token *list, char *input, t_token_type type);
 void	ms_print_tokens(t_token *list);
 
+//ms_tokenization.c
+int	ms_len_token(char *input, int i);
+char	*ms_cpy_token(char *input, int *i);
+char	*ms_cpy_token_cmd(char *input, int *i);
+t_token *ms_start_tokenization(char *input, t_token *list);
+t_token	*ms_tokenization(char *input);
+
 //ms_tokenization_utils.c
+t_token	*ms_extract_word(char *input, int *i, t_token *list);
+t_token	*ms_extract_eof(t_token *list, char * input, int *i);
+t_token *ms_extract_operator(char *input, int *i, t_token *list);
+t_token	*ms_assign_state(t_token *list);
 int		ms_len_file(char *input, int i);
 int		ms_len_cmd(char *input, int i);
 int	ms_quote_len(char *input, int i);
 t_token	*ms_extract_operator(char *input, int *i, t_token *list);
 
 //ms_tokenization_utils2.c
-bool	ms_is_file(t_token	*list);
+bool	ms_is_quote(char c);
 bool	ms_is_infile(t_token *list);
 t_token	*ms_assign_state(t_token *list);
 char	*ms_parse_quotes(char *input, int *i);
@@ -207,28 +217,38 @@ char	*ms_str_append(char *str1, char *str2);
 char	*ms_strndup(char *str, size_t n);
 bool	ms_ismetachar(char c);
 bool	ms_isspace(char c);
+bool	ms_is_file(t_token	*list);
 
 //ms_quotes.c
-void	ms_normal_index(t_token *list);
-int		*ms_put_index(t_token *list, int *index, int i, int k);
-void	ms_quotes_index(t_token *list);
-t_token	*ms_expansion_index(t_token *list);
+int	ms_new_value_len(char *value);
+char	*ms_put_new_value(char *value, char *new_value);
+char	*ms_quotes_off(char *value);
+t_token *ms_handle_quotes(t_token *list);
 
-//ms_quotes_utils.c
-bool	ms_another_double(int i, char *value);
-int		ms_count_normal(char *string);
-int		ms_quotes_count(t_token	*list);
+//ms_quotes_cmd.c
+int	ms_len_args(char *value);
+int	ms_len_arg(char *value, int *i);
+char	 *ms_put_args(char *value,int *i);
+t_token	*ms_quotes_cmd(t_token *token);
 
-//ms_quotes_off.c
-int		ms_new_size(char *value);
-char	*ms_put_new(char *value, char *new_value);
-t_token	*ms_quotes_off(t_token *list);
+//ms_expansion_check.c
+int	*ms_expansion_index(char *value, int *index);
+int ms_expansion_count(char *value);
+void ms_expansion_search(t_token *list);
+t_token	*ms_expansion_check(t_token *list);
 
 // ms_main_parsing.c
 void	ms_main_parsing(char *input, t_minishell *data);
-void	print_indent(int level);
-const char	*get_token_type_name(t_token_type type);
-void	print_ast(t_ast *node, int level);
+void print_indent(int level);
+const char *get_token_type_name(t_token_type type);
+void print_ast(t_ast *node, int level);
+
+// ms_special_case.c
+char	**ms_special_case(t_token **token);
+void	ms_free_array(char **array);
+int		ms_len_array_strs(char **strs);
+char	*ms_cpy_array(char *str, char **strs);
+int	ms_array_len(char **array);
 
 // ms_parsing.c
 t_ast	*ms_parse_command(t_token **token);

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/11 02:03:23 by goteixei         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/11 18:36:32 by jpedro-f         ###   ########.fr       */
+>>>>>>> feature/parsing-main
 /*                                                                            */
 /* ************************************************************************** */
 

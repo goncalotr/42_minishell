@@ -1,5 +1,6 @@
 {
 	"files.associations": {
+<<<<<<< HEAD
 		"minishell.h": "c",
 		"type_traits": "c",
 		"utility": "c",
@@ -12,5 +13,8 @@
 		"array": "c",
 		"functional": "c",
 		"tuple": "c"
+=======
+		"minishell.h": "c"
+>>>>>>> feature/parsing-main
 	}
 }

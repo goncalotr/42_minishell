@@ -6,7 +6,11 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2025/06/12 16:07:17 by goteixei         ###   ########.fr        #
+=======
+#    Updated: 2025/06/15 17:33:14 by jpedro-f         ###   ########.fr        #
+>>>>>>> feature/parsing-main
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +45,7 @@ LIBFT_SRC_DIR	= $(LIB_DIR)libft/
 # Path to the compiled libft.a file (TARGET FILE)
 LIBFT_A			= $(LIBFT_SRC_DIR)libft.a
 # Libft Repository URL
-LIBFT_REPO_URL	= https://github.com/goncalotr/42_libft_v2.git
+LIBFT_REPO_URL	= https://github.com/jvieira96/42_libft.git
 
 # --- Source Directories ---
 #MANDATORY_DIR	= $(SRC_DIR)mandatory/
@@ -78,15 +82,15 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/parsing/ms_parsing.c\
 				  $(SRC_DIR)/parsing/ms_main_parsing.c\
 				  $(SRC_DIR)/parsing/ms_parsing_utils.c\
+				  $(SRC_DIR)/parsing/ms_special_case.c\
 				  $(SRC_DIR)/execution/ms_tree_exec.c\
 				  $(SRC_DIR)/execution/ms_tree_exec_utils.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
-				  $(SRC_DIR)/tokenization/ms_quotes_utils.c\
-				  $(SRC_DIR)/tokenization/ms_quotes_off.c\
+				  $(SRC_DIR)/tokenization/ms_quotes_cmd.c\
+				  $(SRC_DIR)/tokenization/ms_expansion_check.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils2.c\
-				  $(SRC_DIR)/tokenization/ms_tokenization_utils3.c\
 				  $(SRC_DIR)/tokenization/ms_list_utils.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\

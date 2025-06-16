@@ -6,7 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/12 17:32:33 by goteixei         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/16 13:28:50 by jpedro-f         ###   ########.fr       */
+>>>>>>> feature/parsing-main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +22,19 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	t_ast	*ast_tree;
 	
 	(void)data;
+<<<<<<< HEAD
 	//(void)ast_tree; // -> delete
 	tokens = ms_tokenization(data, input);
 	//ms_print_tokens(tokens);
 	ast_tree = ms_parse_tokens(&tokens);
 	//print_ast(ast_tree, 0);
+=======
+	(void)ast_tree; // -> delete
+	tokens = ms_tokenization(input);
+	// ms_print_tokens(tokens);
+	ast_tree = ms_parse_tokens(&tokens);
+	// print_ast(ast_tree, 0);
+>>>>>>> feature/parsing-main
 	ms_prepare_heredocs(ast_tree);
 	ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(ast_tree);

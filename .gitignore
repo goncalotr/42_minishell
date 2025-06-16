@@ -53,3 +53,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#other
+dump_code.sh
+dump_code_result.txt

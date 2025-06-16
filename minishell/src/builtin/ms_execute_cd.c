@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 17:24:10 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:10:04 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ int	ms_execute_cd(char **args)
 {
 	char	*target_dir;
 
-	if (args[1] == NULL || ft_strcmp(args[1], "~"))
+	if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
 	{
 		target_dir = getenv("HOME");
 		if (target_dir == NULL)
 			return (ms_cd_error("HOME not set", NULL));
 	}
-	else if (ft_strcmp(args[1], "-"))
+	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		target_dir = getenv("OLDPWD");
 		if (target_dir == NULL)

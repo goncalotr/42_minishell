@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/16 14:27:32 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/16 14:35:18 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ LIBFT_SRC_DIR	= $(LIB_DIR)libft/
 # Path to the compiled libft.a file (TARGET FILE)
 LIBFT_A			= $(LIBFT_SRC_DIR)libft.a
 # Libft Repository URL
-LIBFT_REPO_URL	= https://github.com/jvieira96/42_libft.git
+#LIBFT_REPO_URL	= https://github.com/jvieira96/42_libft.git
 
 # --- Source Directories ---
 #MANDATORY_DIR	= $(SRC_DIR)mandatory/

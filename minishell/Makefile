@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
+#    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/16 14:35:18 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/16 15:54:59 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,6 +81,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/parsing/ms_special_case.c\
 				  $(SRC_DIR)/execution/ms_tree_exec.c\
 				  $(SRC_DIR)/execution/ms_tree_exec_utils.c\
+				  $(SRC_DIR)/cleanup/ms_cleanup.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_cmd.c\
 				  $(SRC_DIR)/tokenization/ms_expansion_check.c\

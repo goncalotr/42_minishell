@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 17:11:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 13:21:17 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:03:41 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ int	ms_len_args(char *value)
 	int	i;
 	int	quote;
 
-	len = 0;
+	len = 1;
 	i = 0;
 	quote = 0;
 	ms_skip_whitespaces(&i, value);
 	while (value[i])
 	{
-		len++;
 		if (ms_is_quote(value[i]) && !quote)
 			quote = value[i];
 		else if (ms_is_quote(value[i]) && quote == value[i])
 			quote = 0;
 		if (ms_isspace(value[i]) && quote == 0)
 		{
+				len++;
 				i++;
 				ms_skip_whitespaces(&i, value);
 				continue;
@@ -99,7 +99,7 @@ t_token	*ms_quotes_cmd(t_token *token)
 	
 	x = 0;
 	i = 0;
-	args = malloc(ms_len_args(token->value) + 1);
+	args = malloc(sizeof(char*) * (ms_len_args(token->value) + 1));
 	if (!args)
 		return NULL;
 	while (token->value[i])

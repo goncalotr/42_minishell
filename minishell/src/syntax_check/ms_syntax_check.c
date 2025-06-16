@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/05/08 18:10:02 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:16:41 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ bool ms_syntax_check(char *input_line)
 		ft_putstr_fd("Syntax error: misplaced rediractions\n", 2);
 		return(error);
 	}
+	free(input);
 	return (false);
 }
 

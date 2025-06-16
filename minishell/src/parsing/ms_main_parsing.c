@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_main_parsing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 14:22:14 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:06:39 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	ms_prepare_heredocs(ast_tree);
 	ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(ast_tree);
+	ms_clean_ast(ast_tree);
 }
 
 void print_indent(int level)

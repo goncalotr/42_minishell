@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:43:34 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/15 17:23:38 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:31:21 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ char	*ms_remove_whitespaces(char	 *input_line)
 
 	i = 0;
 	start = 0;
-	finish = ft_strlen(input_line) - 1;
+	finish = ft_strlen(input_line);
 	while ((input_line[start] == 32) || (input_line[start] >= 7 && input_line[start] <= 13))
 		start++;
-	while ((input_line[finish] == 32) || (input_line[finish] >= 7 && input_line[finish] <= 13))
+	while ((input_line[finish - 1] == 32) || (input_line[finish - 1] >= 7 && input_line[finish - 1] <= 13))
 		finish--;
 	input = malloc((finish - start) + 1);
-	while (start <= finish)
+	while (start <= finish - 1)
 	{
 		input[i] = input_line[start];
 		start++;

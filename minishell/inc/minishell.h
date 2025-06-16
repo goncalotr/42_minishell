@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 16:29:39 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 19:09:07 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@
 # define MAGENTA "\033[0;35m"
 # define CYAN    "\033[0;36m"
 # define WHITE   "\033[0;37m"
+
+// using PATH_MAX from limits.h (4096)
+//# define PATH_MAX 1000
 
 /**************************************************************************
  * SECTION: Structs
@@ -285,7 +288,8 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info);
 t_token	*ms_expand_variables(t_minishell *data, t_token *list_head);
 
 // --- built-ins ---
-int		ms_execute_cd(char **args);
+int		ms_execute_cd(t_minishell *data, char **args);
+int		ms_setenv(t_minishell *data, const char *name, const char *value);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args);

@@ -6,11 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 16:13:32 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:49:48 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ms_exec_heredoc(t_ast *node)
 {
@@ -131,6 +131,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
+	/*
 	printf("--- DEBUG a_args ---\n");
 	int k = 0;
 	while (node->args[k])
@@ -140,11 +141,11 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 	}
 	printf("node->args[%d]: (NULL)\n", k);
 	printf("--- END DEBUG ---\n");
-
+	*/
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
 	if (strcmp(node->args[0], "cd") == 0)
-		return (ms_execute_cd(node->args));
+		return (ms_execute_cd(data, node->args));
 	if (strcmp(node->args[0], "echo") == 0)
 		return (ms_execute_echo(node->args));
 	if (strcmp(node->args[0], "env") == 0)

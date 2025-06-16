@@ -200,4 +200,3 @@ node->args[3]: (NULL)
 olamalloc_consolidate(): invalid chunk size
 [1]    67574 IOT instruction (core dumped)  ./minishell
 ```
-

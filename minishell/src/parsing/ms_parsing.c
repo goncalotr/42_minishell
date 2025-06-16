@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/10 12:49:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 14:22:27 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,12 @@
 t_ast	*ms_parse_command(t_token **token)
 {
 	t_ast	*command_node;
-	char	**args;
 
 	if (!(*token))
-		return NULL;
-	args = ft_split((*token)->value, ' ');
-	if (!args)
-		return NULL;
+		return NULL; 
 	command_node = ms_new_ast_node(TOKEN_CMD);
-	command_node->args = args;
-	free(*token);
+	command_node->args = (*token)->args;
+	// free(*token);
 	return(command_node);
 }
 

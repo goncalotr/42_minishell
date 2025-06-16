@@ -6,11 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2025/06/12 16:07:17 by goteixei         ###   ########.fr        #
-=======
-#    Updated: 2025/06/15 17:33:14 by jpedro-f         ###   ########.fr        #
->>>>>>> feature/parsing-main
+#    Updated: 2025/06/16 14:00:25 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

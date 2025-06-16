@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/15 18:18:44 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 11:52:54 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,16 +199,15 @@ void ms_print_tokens(t_token *list);
 //ms_tokenization.c
 int	ms_len_token(char *input, int i);
 char	*ms_cpy_token(char *input, int *i);
-t_token	*ms_assign_state(t_token *list);
+char	*ms_cpy_token_cmd(char *input, int *i);
 t_token *ms_start_tokenization(char *input, t_token *list);
 t_token	*ms_tokenization(char *input);
 
 //ms_tokenization_utils.c
-// t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
-// t_token	*ms_extract_file(char *input, int *i, t_token *list);
 t_token	*ms_extract_word(char *input, int *i, t_token *list);
 t_token	*ms_extract_eof(t_token *list, char * input, int *i);
 t_token *ms_extract_operator(char *input, int *i, t_token *list);
+t_token	*ms_assign_state(t_token *list);
 
 //ms_tokenization_utils2.c
 bool	ms_is_quote(char c);
@@ -225,6 +224,8 @@ t_token *ms_handle_quotes(t_token *list);
 
 //ms_quotes_cmd.c
 int	ms_len_args(char *value);
+int	ms_len_arg(char *value, int *i);
+char	 *ms_put_args(char *value,int *i);
 t_token	*ms_quotes_cmd(t_token *token);
 
 //ms_expansion_check.c

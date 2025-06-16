@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/15 18:26:43 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 11:47:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ms_cpy_token(char *input, int *i)
 			quote = input[*i];
 		else if (ms_is_quote(input[*i]) && quote == input[*i])
 			quote = 0;
-		if (ms_ismetachar(input[*i]) && quote == 0)
+		if ((ms_isspace(input[*i]) || ms_ismetachar(input[*i])) && quote == 0)
 				break ;
 		token[x] = input[*i];
 		(*i)++;
@@ -62,20 +62,32 @@ char	*ms_cpy_token(char *input, int *i)
 	return (token);
 }
 
-t_token	*ms_assign_state(t_token *list)
+char	*ms_cpy_token_cmd(char *input, int *i)
 {
-	t_token	*temp; 
-
-	temp = list;
-	while (temp)
+	char 	*token;
+	int		x;
+	int		quote;
+	
+	quote = 0;
+	x = 0;
+	ms_skip_whitespaces(i, input);
+	token = malloc(ms_len_token(input, *i) + 1);
+	if (!token)
+		return (NULL);
+	while (input[*i])
 	{
-		if (temp->value[0] == '\'')
-			temp->state = SIMPLE_QUOTES;
-		else if (temp->value[0] == '\"')
-				temp->state = DOUBLE_QUOTES;
-		temp = temp->next;
+		if (ms_is_quote(input[*i]) && !quote)
+			quote = input[*i];
+		else if (ms_is_quote(input[*i]) && quote == input[*i])
+			quote = 0;
+		if (ms_ismetachar(input[*i]) && quote == 0)
+				break ;
+		token[x] = input[*i];
+		(*i)++;
+		x++;
 	}
-	return (list);
+	token[x] = '\0';
+	return (token);
 }
 
 t_token *ms_start_tokenization(char *input, t_token *list)

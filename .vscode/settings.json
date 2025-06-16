@@ -11,6 +11,7 @@
 		"system_error": "c",
 		"array": "c",
 		"functional": "c",
-		"tuple": "c"
+		"tuple": "c",
+		"cstdlib": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 17:13:37 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:24:10 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,11 @@
  * @param details Optional details (like the directory name). Can be NULL.
  * @return Always returns 1 (failure exit status for cd).
  */
-static int	ms_cd_error(char *msg, char *details)
+static int	ms_cd_error(char *errmsg, char *details)
 {
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(msg, 2);
-	if (details)
-	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(details, 2);
-	}
-	ft_putstr_fd(details, 2);
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+	ft_putstr_fd(errmsg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 	return (1);
 }
 

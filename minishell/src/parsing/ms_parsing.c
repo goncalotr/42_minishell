@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/13 19:49:08 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 13:23:32 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,12 @@
 t_ast	*ms_parse_command(t_token **token)
 {
 	t_ast	*command_node;
-	char	**args;
 
 	if (!(*token))
 		return NULL; 
-	// if ((*token)->value[0] == '\'' || (*token)->value[0] == '\"')
-	// 	args = ms_special_case(token);
-	// else
-	args = ft_split((*token)->value, ' ');
-	if (!args)
-		return NULL;
 	command_node = ms_new_ast_node(TOKEN_CMD);
-	command_node->args = args;
-	free(*token);
+	command_node->args = (*token)->args;
+	// free(*token);
 	return(command_node);
 }
 

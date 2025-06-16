@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 17:11:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 11:56:05 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/16 13:21:17 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,19 @@ t_token	*ms_quotes_cmd(t_token *token)
 		x++;
 	}
 	args[x] = NULL;
-	token->args = args;
-	i = 0;
-	while (token->args[i])
+	x = 0;
+	while (args[x])
 	{
-		printf("arg[%d]: %s\n", i, token->args[i]);
-		i++;
+		args[x] = ms_quotes_off(args[x]);
+		x++;
 	}
+	token->args = args;
 	return (token);
 }
+
+	// i = 0;
+	// while (token->args[i])
+	// {
+	// 	printf("arg[%d]: %s\n", i, token->args[i]);
+	// 	i++;
+	// }

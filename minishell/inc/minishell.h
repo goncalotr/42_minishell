@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 14:33:27 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:29:39 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,47 +175,29 @@ char	*ms_remove_whitespaces(char *input_line);
 void	ms_skip_inside_quotes(int *i, char *input);
 void	ms_skip_whitespaces(int *i, char *input);
 
-//ms_tokenization.c
-t_token	*ms_extract_quotes(char *input, int *i, t_token *list);
-t_token	*ms_extract_cmd(char *input, int *i, t_token *list);
-t_token	*ms_extract_file(char *input, int *i, t_token *list);
-t_token	*ms_start_tokenization(char *input, t_token *list);
-//t_token	*ms_tokenization(char *input);
-t_token	*ms_tokenization(t_minishell *data, char *input);
-
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);
 t_token	*ms_append_node(t_token *list, char *input, t_token_type type);
 void	ms_print_tokens(t_token *list);
 
 //ms_tokenization.c
-int	ms_len_token(char *input, int i);
+int		ms_len_token(char *input, int i);
 char	*ms_cpy_token(char *input, int *i);
 char	*ms_cpy_token_cmd(char *input, int *i);
 t_token *ms_start_tokenization(char *input, t_token *list);
+t_token	*ms_tokenization(t_minishell *data, char *input);
 
 //ms_tokenization_utils.c
 t_token	*ms_extract_word(char *input, int *i, t_token *list);
 t_token	*ms_extract_eof(t_token *list, char * input, int *i);
 t_token *ms_extract_operator(char *input, int *i, t_token *list);
 t_token	*ms_assign_state(t_token *list);
-int		ms_len_file(char *input, int i);
-int		ms_len_cmd(char *input, int i);
-int	ms_quote_len(char *input, int i);
-t_token	*ms_extract_operator(char *input, int *i, t_token *list);
 
 //ms_tokenization_utils2.c
 bool	ms_is_quote(char c);
-bool	ms_is_infile(t_token *list);
-t_token	*ms_assign_state(t_token *list);
-char	*ms_parse_quotes(char *input, int *i);
-
-//ms_tokenization_utils3.c
-char	*ms_append_char(char *str, char c);
-char	*ms_str_append(char *str1, char *str2);
-char	*ms_strndup(char *str, size_t n);
 bool	ms_ismetachar(char c);
 bool	ms_isspace(char c);
+bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
 
 //ms_quotes.c
@@ -241,13 +223,6 @@ void	ms_main_parsing(char *input, t_minishell *data);
 void print_indent(int level);
 const char *get_token_type_name(t_token_type type);
 void print_ast(t_ast *node, int level);
-
-// ms_special_case.c
-char	**ms_special_case(t_token **token);
-void	ms_free_array(char **array);
-int		ms_len_array_strs(char **strs);
-char	*ms_cpy_array(char *str, char **strs);
-int	ms_array_len(char **array);
 
 // ms_parsing.c
 t_ast	*ms_parse_command(t_token **token);

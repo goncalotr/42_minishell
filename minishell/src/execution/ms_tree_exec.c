@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/15 15:52:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:13:32 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,16 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
+	printf("--- DEBUG a_args ---\n");
+	int k = 0;
+	while (node->args[k])
+	{
+		printf("node->args[%d]: \"%s\"\n", k, node->args[k]);
+		k++;
+	}
+	printf("node->args[%d]: (NULL)\n", k);
+	printf("--- END DEBUG ---\n");
+
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
 	if (strcmp(node->args[0], "cd") == 0)

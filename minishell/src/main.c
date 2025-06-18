@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:49 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:09:10 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ volatile sig_atomic_t g_signal;
  * 7. Free input line
  * 
  * SIGINT = 130
+ * isatty checks if the shell is runningin an interactive terminal
  */
-static void	ms_core_loop(t_minishell *data)
+static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 {
 	char	*input_line;
 	//char	**args;
@@ -62,11 +63,19 @@ static void	ms_core_loop(t_minishell *data)
 		// 2. Handle readline's return value
 		if (input_line == NULL)
 		{
+			ms_exit_shell(data, data->last_exit_status);
+			/*
 			if (g_signal == SIGINT)
 				continue;
 
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			if (isatty(STDIN_FILENO))
+			{
+				ft_putstr_fd("exit\n", STDOUT_FILENO);
+				fflush(stdout); // Try to force the buffer to flush
+				usleep(10000); 
+			}
 			break;
+			*/
 		}
 
 		// 3. Handle empty input line (user pressed Enter)
@@ -91,6 +100,9 @@ static void	ms_core_loop(t_minishell *data)
 		
 		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
+
+		// restore shell original settings
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, original_termios);
 		free(input_line);
 	}
 	rl_clear_history();
@@ -103,6 +115,7 @@ static void	ms_core_loop(t_minishell *data)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell_data;
+	struct termios	original_termios;
 
 	(void) argc;
 	(void) argv;
@@ -112,8 +125,8 @@ int	main(int argc, char **argv, char **envp)
 	//ms_signal_handlers_init();
 	//ms_signal_handlers_set_interactive();
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
-	ms_core_loop(&shell_data);
-
+	tcgetattr(STDIN_FILENO, &original_termios); 
+	ms_core_loop(&shell_data, &original_termios);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
 	//return (g_signal);

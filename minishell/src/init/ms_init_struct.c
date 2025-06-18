@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/17 15:02:55 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:13:49 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,5 +166,7 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 		close(data->stderr_fd);
 		return (1);
 	}
+	//data->envp = envp_main;
+	// results in invalid free, already usign the duplicated envp
 	return (0);
 }

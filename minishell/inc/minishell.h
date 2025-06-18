@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/17 17:16:45 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:14:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 // readline, add_history
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <termios.h>
 
 // non-standard librarys
 # include "../lib/libft/libft.h"
@@ -56,6 +57,9 @@
 # define MAGENTA "\033[0;35m"
 # define CYAN    "\033[0;36m"
 # define WHITE   "\033[0;37m"
+
+// using PATH_MAX from limits.h (4096)
+//# define PATH_MAX 1000
 
 /**************************************************************************
  * SECTION: Structs
@@ -183,11 +187,11 @@ t_token	*ms_append_node(t_token *list, char *input, t_token_type type);
 void	ms_print_tokens(t_token *list);
 
 //ms_tokenization.c
-int	ms_len_token(char *input, int i);
+int		ms_len_token(char *input, int i);
 char	*ms_cpy_token(char *input, int *i);
 char	*ms_cpy_token_cmd(char *input, int *i);
 t_token *ms_start_tokenization(char *input, t_token *list);
-t_token	*ms_tokenization(t_minishell *data, char *input);;
+t_token	*ms_tokenization(t_minishell *data, char *input);
 
 //ms_tokenization_utils.c
 t_token	*ms_extract_word(char *input, int *i, t_token *list);
@@ -198,7 +202,7 @@ t_token	*ms_assign_state(t_token *list);
 //ms_tokenization_utils2.c
 bool	ms_is_quote(char c);
 bool	ms_ismetachar(char c);
-bool	ms_isspace(char c);;
+bool	ms_isspace(char c);
 bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
 
@@ -234,13 +238,6 @@ void	ms_main_parsing(char *input, t_minishell *data);
 void print_indent(int level);
 const char *get_token_type_name(t_token_type type);
 void print_ast(t_ast *node, int level);
-
-// ms_special_case.c
-char	**ms_special_case(t_token **token);
-void	ms_free_array(char **array);
-int		ms_len_array_strs(char **strs);
-char	*ms_cpy_array(char *str, char **strs);
-int	ms_array_len(char **array);
 
 // ms_parsing.c
 t_ast	*ms_parse_command(t_token **token);
@@ -303,17 +300,19 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info);
 t_token	*ms_expand_variables(t_minishell *data, t_token *list_head);
 
 // --- built-ins ---
-int		ms_execute_cd(char **args);
+int		ms_execute_cd(t_minishell *data, char **args);
+int		ms_setenv(t_minishell *data, const char *name, const char *value);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args, t_minishell *data);
+void	ms_exit_shell(t_minishell *data, int exit_code);
 int		ms_execute_export(char **args, t_minishell *data);
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_minishell *data);
 
 // --- exec ---
 char	*ms_find_command_path(const char *cmd, char **envp);
-int		ms_execute_external_command(char **args, char **envp);
+int		ms_execute_external_command(char **envp, char **args);
 
 // --- utils ---
 int		ms_exit_with_code(t_minishell *data, int status);

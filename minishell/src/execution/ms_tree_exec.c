@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tree_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 11:58:35 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:13:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ms_exec_heredoc(t_ast *node)
 {
@@ -133,10 +133,21 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
+	/*
+	printf("--- DEBUG a_args ---\n");
+	int k = 0;
+	while (node->args[k])
+	{
+		printf("node->args[%d]: \"%s\"\n", k, node->args[k]);
+		k++;
+	}
+	printf("node->args[%d]: (NULL)\n", k);
+	printf("--- END DEBUG ---\n");
+	*/
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
 	if (strcmp(node->args[0], "cd") == 0)
-		return (ms_execute_cd(node->args));
+		return (ms_execute_cd(data, node->args));
 	if (strcmp(node->args[0], "echo") == 0)
 		return (ms_execute_echo(node->args));
 	if (strcmp(node->args[0], "env") == 0)
@@ -163,14 +174,24 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	int		status;
 	int 	builtin_status;
 
+	//int i2=0;
+	//while (node->args[i2])
+	//{
+	//	printf("args: %s\n", node->args[i2]);
+	//	i2++;
+	//}
+
 	// builtins
 	builtin_status = ms_exec_cmd_builtins(data, node);
 	if (builtin_status != -1)
 	{
 		return (builtin_status);
 	}
-
+	
 	// external commands
+	//return (ms_execute_external_command(data->envp, node->args));
+
+	
 	pid = fork();
 	if ((pid) == 0)
 	{
@@ -203,6 +224,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
+	
 	//printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
 
 	return (WEXITSTATUS(status));

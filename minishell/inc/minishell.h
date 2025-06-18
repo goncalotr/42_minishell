@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 13:14:12 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:10:13 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@
  **************************************************************************/
 
 // --- ANSI Color Codes ---
-# define RESET   "\033[0m"
-# define BLACK   "\033[0;30m"
-# define RED     "\033[0;31m"
-# define GREEN   "\033[0;32m"
-# define YELLOW  "\033[0;33m"
-# define BLUE    "\033[0;34m"
-# define MAGENTA "\033[0;35m"
-# define CYAN    "\033[0;36m"
-# define WHITE   "\033[0;37m"
+# define RESET   "\001\033[0m\002"
+# define BLACK   "\001\033[0;30m\002"
+# define RED     "\001\033[0;31m\002"
+# define GREEN   "\001\033[0;32m\002"
+# define YELLOW  "\001\033[0;33m\002"
+# define BLUE    "\001\033[0;34m\002"
+# define MAGENTA "\001\033[0;35m\002"
+# define CYAN    "\001\033[0;36m\002"
+# define WHITE   "\001\033[0;37m\002"
 
 // using PATH_MAX from limits.h (4096)
 //# define PATH_MAX 1000

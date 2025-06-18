@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/03 14:30:05 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:02:55 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ char **get_path(char **envp)
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
 			paths = ft_split(envp[i] + 5, ':');
+			if (!paths)
+			{
+				ft_putstr_fd("Error: Failed to split PATH\n", 2);
+				exit(EXIT_FAILURE);
+			}
 			return (paths);
 		}
 		i++;
@@ -114,38 +119,40 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 		return (1);
 	data->envp = NULL;
 	data->shell_name = NULL;
+	data->tree = NULL;
+	data->token_list = NULL;
 	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
 	data->envp = duplicate_envp(envp_main);
 	if (!data->envp && envp_main)
 		return (1);
-	data->paths = get_path(data->envp ? data->envp : envp_main);
+	data->paths = get_path(data->envp);
 	data->last_exit_status = 0;
-	data->stdin_fd = dup(STDIN_FILENO);
-	if (data->stdin_fd == -1)
-	{
-		perror("minishell: dup(STDIN_FILENO)");
-		free_envp_copy(data->envp);
-		return (1);
-	}
-	data->stdout_fd = dup(STDOUT_FILENO);
-	if (data->stdout_fd == -1)
-	{
-		perror("minishell: dup(STDOUT_FILENO)");
-		free_envp_copy(data->envp);
-		close(data->stdin_fd);
-		return (1);
-	}
-	data->stderr_fd = dup(STDERR_FILENO);
-	if (data->stderr_fd == -1)
-	{
-		perror("minishell: dup(STDERR_FILENO)");
-		free_envp_copy(data->envp);
-		close(data->stdin_fd);
-		close(data->stdout_fd);
-		return (1);
-	}
+	// data->stdin_fd = dup(STDIN_FILENO);
+	// if (data->stdin_fd == -1)
+	// {
+	// 	perror("minishell: dup(STDIN_FILENO)");
+	// 	free_envp_copy(data->envp);
+	// 	return (1);
+	// }
+	// data->stdout_fd = dup(STDOUT_FILENO);
+	// if (data->stdout_fd == -1)
+	// {
+	// 	perror("minishell: dup(STDOUT_FILENO)");
+	// 	free_envp_copy(data->envp);
+	// 	close(data->stdin_fd);
+	// 	return (1);
+	// }
+	// data->stderr_fd = dup(STDERR_FILENO);
+	// if (data->stderr_fd == -1)
+	// {
+	// 	perror("minishell: dup(STDERR_FILENO)");
+	// 	free_envp_copy(data->envp);
+	// 	close(data->stdin_fd);
+	// 	close(data->stdout_fd);
+	// 	return (1);
+	// }
 	if (argv[0])
 		data->shell_name = ft_strdup(argv[0]);
 	else
@@ -159,6 +166,5 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 		close(data->stderr_fd);
 		return (1);
 	}
-	data->envp = envp_main;
 	return (0);
 }

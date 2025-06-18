@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 17:10:57 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:29:11 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ void	ms_clean_token_list(t_token *token)
 {
 	t_token	*temp;
 	
+	if (!token)
+		return ;
 	while (token)
 	{
 		temp = token->next;
-		ms_free_token(token);
+		free(token);
 		token = temp;
 	}
 }
@@ -66,4 +68,56 @@ void ms_clean_ast(t_ast *node)
 	if (node->file_name)
 		free(node->file_name);
 	free(node);
+}
+
+void	ms_cleanup_shell(t_minishell *data)
+{
+	if (data->stdin_fd != -1)
+		close(data->stdin_fd);
+	if (data->stdout_fd != -1)
+		close(data->stdout_fd);
+	if (data->stderr_fd != -1)
+		close(data->stderr_fd);
+	free(data->shell_name);
+	ms_free_envp_copy(data->envp);
+	ms_free_data_paths(data->paths);
+}
+
+void	ms_free_envp_copy(char **envp)
+{
+	int	i;
+
+	if (!envp)
+		return;
+	i = 0;
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
+	free(envp);
+}
+
+void	ms_free_data_paths(char **paths)
+{
+	int	i;
+
+	if (!paths)
+		return;
+	i = 0;
+	while (paths[i])
+	{
+		free(paths[i]);
+		i++;
+	}
+	free(paths);
+}
+
+void	ms_clean_all(t_minishell *data)
+{
+	ms_clean_heredocs(data->tree);
+	ms_clean_ast(data->tree);
+	ms_clean_token_list(data->token_list);
+	ms_cleanup_shell(data);
+	clear_history();
 }

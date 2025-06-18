@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 17:13:07 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:16:45 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ typedef struct s_minishell
 	char	**envp;
 	char	**paths;
 	int		last_exit_status;
+	t_token	*token_list;
+	t_ast	*tree;
 	int		stdin_fd;
 	int		stdout_fd;
 	int		stderr_fd;
@@ -204,6 +206,10 @@ bool	ms_is_file(t_token	*list);
 void	ms_free_token(t_token *token);
 void	ms_clean_token_list(t_token *token);
 void ms_clean_ast(t_ast *node);
+void	ms_cleanup_shell(t_minishell *data);
+void	ms_free_envp_copy(char **envp);
+void	ms_free_data_paths(char **paths);
+void	ms_clean_all(t_minishell *data);
 
 //ms_quotes.c
 int	ms_new_value_len(char *value);
@@ -300,7 +306,7 @@ t_token	*ms_expand_variables(t_minishell *data, t_token *list_head);
 int		ms_execute_cd(char **args);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
-int		ms_execute_exit(char **args);
+int		ms_execute_exit(char **args, t_minishell *data);
 int		ms_execute_export(char **args, t_minishell *data);
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_minishell *data);

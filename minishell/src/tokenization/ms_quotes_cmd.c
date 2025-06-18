@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 17:11:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 18:03:41 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 11:52:13 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ char	 *ms_put_args(char *value,int *i)
 	arg = malloc(ms_len_arg(value, i) + 1);
 	if (!arg)
 		return NULL;
-	ms_skip_whitespaces(i, value);
 	while (value[*i])
 	{
 		if (ms_is_quote(value[*i]) && !quote)
@@ -106,6 +105,7 @@ t_token	*ms_quotes_cmd(t_token *token)
 	{
 		args[x] = ms_put_args(token->value, &i);
 		x++;
+		ms_skip_whitespaces(&i, token->value);
 	}
 	args[x] = NULL;
 	x = 0;
@@ -115,6 +115,7 @@ t_token	*ms_quotes_cmd(t_token *token)
 		x++;
 	}
 	token->args = args;
+	free(token->value);
 	return (token);
 }
 

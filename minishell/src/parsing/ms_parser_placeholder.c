@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_parser_placeholder.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:04:12 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 11:28:22 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:30:33 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	ms_execute_command_placeholder(char **args, t_minishell *data)
 	if (strcmp(args[0], "env") == 0)
 		return (ms_execute_env(args, data->envp));
 	if (strcmp(args[0], "exit") == 0)
-		return (ms_execute_exit(args));
+		return (ms_execute_exit(args, data));
 	if (strcmp(args[0], "export") == 0)
 		return ms_execute_export(args, data);
 	else if (strcmp(args[0], "pwd") == 0)

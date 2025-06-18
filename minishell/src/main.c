@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/10 19:32:17 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:00:49 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,13 @@ static void	ms_core_loop(t_minishell *data)
 			free(input_line);
 			continue ;
 		}
-	
+		
 		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
-
 		free(input_line);
 	}
 	rl_clear_history();
-	// free shell data
+	ms_cleanup_shell(data);
 }
 
 /**
@@ -114,6 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	//ms_signal_handlers_set_interactive();
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
 	ms_core_loop(&shell_data);
+
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
 	//return (g_signal);

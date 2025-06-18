@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 11:50:16 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:56:28 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_token	*ms_extract_word(char *input, int *i, t_token *list)
 		word = ms_cpy_token_cmd(input, i);
 		if (!word)
 			return list;
-		list = ms_append_node(list, word, TOKEN_CMD);		
+		list = ms_append_node(list, word, TOKEN_CMD);	
 	}
 	free(word);
 	return (list);

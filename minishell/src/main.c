@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 13:09:10 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:43:42 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{
+			tcsetattr(STDIN_FILENO, TCSAFLUSH, original_termios); 
 			data->last_exit_status = 0;
 			free(input_line);
 			continue ;
@@ -101,8 +102,6 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
 
-		// restore shell original settings
-		tcsetattr(STDIN_FILENO, TCSAFLUSH, original_termios);
 		free(input_line);
 	}
 	rl_clear_history();

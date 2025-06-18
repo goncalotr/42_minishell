@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 12:14:08 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:36:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	data->tree = ast_tree;
 	//print_ast(ast_tree, 0);
 	ms_prepare_heredocs(ast_tree); 
-	ms_exec_tree(ast_tree, data);
+	data->last_exit_status = ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
 	ms_clean_token_list(data->token_list);

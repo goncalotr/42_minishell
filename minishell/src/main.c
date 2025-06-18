@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 15:43:42 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 19:11:01 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ volatile sig_atomic_t g_signal;
  * SIGINT = 130
  * isatty checks if the shell is runningin an interactive terminal
  */
-static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
+static void	ms_core_loop(t_minishell *data)
 {
 	char	*input_line;
 	//char	**args;
@@ -81,7 +81,7 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{
-			tcsetattr(STDIN_FILENO, TCSAFLUSH, original_termios); 
+			//tcsetattr(STDIN_FILENO, TCSAFLUSH, original_termios); 
 			data->last_exit_status = 0;
 			free(input_line);
 			continue ;
@@ -114,7 +114,7 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell_data;
-	struct termios	original_termios;
+	//struct termios	original_termios;
 
 	(void) argc;
 	(void) argv;
@@ -124,8 +124,8 @@ int	main(int argc, char **argv, char **envp)
 	//ms_signal_handlers_init();
 	//ms_signal_handlers_set_interactive();
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
-	tcgetattr(STDIN_FILENO, &original_termios); 
-	ms_core_loop(&shell_data, &original_termios);
+	//tcgetattr(STDIN_FILENO, &original_termios); 
+	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
 	//return (g_signal);

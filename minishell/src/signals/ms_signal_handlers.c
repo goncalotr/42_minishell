@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/17 17:12:55 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:30:37 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	ms_signal_handlers_set_interactive(void)
 	struct sigaction sa_int;
 	struct sigaction sa_quit;
 
-
+	ft_bzero(&sa_int, sizeof(sa_int));
+	ft_bzero(&sa_quit, sizeof(sa_quit));
 	sa_int.sa_handler = ms_handle_sigint_interactive;
 	sigemptyset(&sa_int.sa_mask);
 	//sa_int.sa_flags = SA_RESTART;

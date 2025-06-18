@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/17 17:29:11 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:33:51 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void ms_clean_ast(t_ast *node)
 			free(node->args[i]);
 			i++;
 		}
-		free(node->args);		
+		free(node->args);
+		node->args = NULL;
 	}
 	if (node->file_name)
 		free(node->file_name);

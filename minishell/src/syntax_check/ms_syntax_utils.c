@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_syntax_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:43:34 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/15 17:23:38 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:33:13 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ms_remove_whitespaces(char	 *input_line)
 		start++;
 	while ((input_line[finish] == 32) || (input_line[finish] >= 7 && input_line[finish] <= 13))
 		finish--;
-	input = malloc((finish - start) + 1);
+	input = malloc((finish - start + 1) + 1);
 	while (start <= finish)
 	{
 		input[i] = input_line[start];

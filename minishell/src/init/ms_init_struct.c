@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/03 14:30:05 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:36:24 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 		close(data->stderr_fd);
 		return (1);
 	}
-	data->envp = envp_main;
+	//data->envp = envp_main;
+	// results in invalid free, already usign the duplicated envp
 	return (0);
 }

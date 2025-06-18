@@ -6,11 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 15:36:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:13:10 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ms_main_parsing(char *input, t_minishell *data)
 {

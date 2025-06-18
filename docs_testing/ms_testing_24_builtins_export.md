@@ -26,7 +26,7 @@ export | grep "TEST_VAR="
 ### Test 3
 
 ```bash
-LOCAL_VAR="is now exported"
+LOCAL_VAR="is now exported" #! how should this work????
 env | grep "LOCAL_VAR"
 export LOCAL_VAR
 env | grep "LOCAL_VAR="
@@ -112,8 +112,12 @@ env | grep "WONT_BE_SET" #should be set
 echo $?
 ```
 
+CHECK WONT_BE_SET -> SHOULD BE SET
+
 ## Cleanup
 
 ```bash
 unset TEST_VAR LOCAL_VAR EMPTY_VAR NO_VALUE_VAR VAR1 VAR2 GOOD_VAR
 ```
+
+>NEEDS REVIEW

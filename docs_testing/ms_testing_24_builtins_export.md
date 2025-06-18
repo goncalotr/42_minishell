@@ -106,8 +106,8 @@ export GOOD_VAR=1 "BAD-VAR"=2 WONT_BE_SET=3
 # Verification
 # 1. Check that GOOD_VAR was set
 env | grep "GOOD_VAR="
-# 2. Check that WONT_BE_SET was NOT set
-env | grep "WONT_BE_SET" # Expected: No output
+# 2. Check 
+env | grep "WONT_BE_SET" #should be set
 # 3. Check the exit code
 echo $?
 ```

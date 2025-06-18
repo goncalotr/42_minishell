@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_execute_exit.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/17 17:17:02 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:55:02 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 	long long	result;
 	int			sign;
 	int			i;
+	int			digit;
 
 	result = 0;
 	sign = 1;
@@ -55,13 +56,12 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 		return (false);
 	while (ft_isdigit(str[i]))
 	{
-		if (sign == 1 && (result > LLONG_MAX / 10 || \
-			(result == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10)))
+		digit = str[i] - '0';
+		if (sign == 1 && (result > (LLONG_MAX - digit) / 10))
 			return (false);
-		if (sign == -1 && (result > LLONG_MAX / 10 || \
-			(result == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10 + 1)))
+		if (sign == -1 && (result > (-(LLONG_MIN + digit)) / 10))
 			return (false);
-		result = result * 10 + (str[i] - '0');
+		result = result * 10 + digit;
 		i++;
 	}
 	while (ft_isspace(str[i]))

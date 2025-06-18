@@ -3,98 +3,117 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/30 14:12:09 by goteixei          #+#    #+#             */
-/*   Updated: 2025/02/09 12:07:56 by goteixei         ###   ########.fr       */
+/*   Created: 2024/11/15 17:12:37 by jpedro-f          #+#    #+#             */
+/*   Updated: 2024/11/15 17:12:39 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/*
-void	*ft_bzero(void *s, size_t len)
-{
-	char	*p;
-
-	p = (char *)s;
-	while (len > 0)
-	{
-		p[len - 1] = '\0';
-		len--;
-	}
-	return (s);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*ptr;
-
-	ptr = (void *)malloc(nmemb * size);
-	if (!ptr)
-		return (NULL);
-	ft_bzero(ptr, nmemb * size);
-	return (ptr);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	size_t	i;
-	char	cc;
-
-	cc = (char) c;
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == cc)
-		{
-			return ((char *)&s[i]);
-		}
-		i++;
-	}
-	if (s[i] == cc)
-	{
-		return ((char *)&s[i]);
-	}
-	return (NULL);
-}
-
-char	*ft_strjoin(char *s1, const char *s2)
-{
-	size_t	len_str1;
-	size_t	len_str2;
-	size_t	i;
-	char	*joined_str;
-
-	i = 0;
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len_str1 = ft_strlen(s1);
-	len_str2 = ft_strlen(s2);
-	joined_str = (char *)malloc((len_str1 + len_str2 + 1) * sizeof(char));
-	if (joined_str == NULL)
-		return (free(s1), NULL);
-	while (i < len_str1)
-	{
-		joined_str[i] = s1[i];
-		i++;
-	}
-	while (i < (len_str1 + len_str2))
-	{
-		joined_str[i] = s2[i - len_str1];
-		i++;
-	}
-	joined_str[i] = '\0';
-	return (free(s1), joined_str);
-}
-
-size_t	ft_strlen(const char *str)
+int	ft_found_newline(t_list_gnl *list)
 {
 	int	i;
 
-	i = 0;
-	while (str && str[i])
-		i++;
-	return (i);
+	if (list == NULL)
+		return (0);
+	while (list)
+	{
+		i = 0;
+		while (list->str[i] && i < BUFFER_SIZE)
+		{
+			if (list->str[i] == '\n')
+				return (1);
+			++i;
+		}
+		list = list->next;
+	}
+	return (0);
 }
-*/
+
+t_list_gnl	*ft_find_last_node(t_list_gnl *list)
+{
+	if (list == NULL)
+		return (NULL);
+	while (list->next)
+		list = list->next;
+	return (list);
+}
+
+void	ft_copy_str(t_list_gnl *list, char *new_str)
+{
+	int	i;
+	int	x;
+
+	if (list == NULL)
+		return ;
+	x = 0;
+	while (list)
+	{
+		i = 0;
+		while (list->str[i])
+		{
+			if (list->str[i] == '\n')
+			{
+				new_str[x++] = '\n';
+				new_str[x] = '\0';
+				return ;
+			}
+			new_str[x++] = list->str[i++];
+		}
+		list = list->next;
+	}
+	new_str[x] = '\0';
+}
+
+int	ft_len_list(t_list_gnl *list)
+{
+	int	len;
+	int	i;
+
+	if (list == NULL)
+		return (0);
+	len = 0;
+	while (list)
+	{
+		i = 0;
+		while (list->str[i])
+		{
+			if (list->str[i] == '\n')
+			{
+				++len;
+				return (len);
+			}
+			++len;
+			++i;
+		}
+		list = list->next;
+	}
+	return (len);
+}
+
+void	ft_dealloc(t_list_gnl **list, t_list_gnl *clean_node, char *buf)
+{
+	t_list_gnl	*temp;
+
+	if (*list == NULL)
+		return ;
+	while (*list)
+	{
+		temp = (*list)->next;
+		free((*list)->str);
+		free(*list);
+		*list = temp;
+	}
+	*list = NULL;
+	if (!clean_node || !buf)
+		return ;
+	if (clean_node->str[0])
+		*list = clean_node;
+	else
+	{
+		free(clean_node);
+		free(buf);
+	}
+}

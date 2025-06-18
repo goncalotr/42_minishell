@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/02 13:18:44 by goteixei          #+#    #+#             */
-/*   Updated: 2025/02/09 12:08:27 by goteixei         ###   ########.fr       */
+/*   Created: 2024/11/15 17:03:15 by jpedro-f          #+#    #+#             */
+/*   Updated: 2024/11/15 17:03:17 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,31 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-//#  define BUFFER_SIZE 42
-//#  define BUFFER_SIZE 1
-//#  define BUFFER_SIZE 10
-#  define BUFFER_SIZE 1000000
+#  define BUFFER_SIZE 10
 # endif
 
-// *malloc() free() read()
-# include <stdlib.h>
+# define MAX_FD 1024
+
 # include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <stdio.h>
 
-# include "../libft.h"
+typedef struct s_list_gnl
+{
+	char				*str;
+	struct s_list_gnl	*next;
+}	t_list_gnl;
 
-char	*get_next_line(int fd);
-
-/*
-void	*ft_bzero(void *s, size_t len);
-void	*ft_calloc(size_t nmemb, size_t size);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char *s1, char const *s2);
-size_t	ft_strlen(const char *str);
-*/
+void		ft_list_prep(t_list_gnl **list);
+char		*ft_get_line(t_list_gnl *list);
+void		ft_append_list(t_list_gnl **list, char *buf);
+void		ft_list_add(t_list_gnl **list, int fd);
+char		*get_next_line(int fd);
+void		ft_dealloc(t_list_gnl **list, t_list_gnl *clean_node, char *buf);
+int			ft_len_list(t_list_gnl *list);
+void		ft_copy_str(t_list_gnl *list, char *new_str);
+t_list_gnl	*ft_find_last_node(t_list_gnl *list);
+int			ft_found_newline(t_list_gnl *list);
 
 #endif

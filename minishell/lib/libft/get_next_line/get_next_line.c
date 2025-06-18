@@ -3,164 +3,132 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/20 19:21:16 by goteixei          #+#    #+#             */
-/*   Updated: 2024/12/22 19:17:21 by goteixei         ###   ########.fr       */
+/*   Created: 2024/11/15 17:00:34 by jpedro-f          #+#    #+#             */
+/*   Updated: 2024/11/15 17:00:35 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_next(char *buffer)
+void	ft_list_prep(t_list_gnl **list)
 {
-	int		buffer_i;
-	int		line_i;
-	char	*line;
+	int			i;
+	int			x;
+	t_list_gnl	*last_node;
+	t_list_gnl	*clean_node;
+	char		*buf;
 
-	buffer_i = 0;
-	line_i = 0;
-	if (!buffer)
-		return (free(buffer), NULL);
-	while (buffer[buffer_i] && buffer[buffer_i] != '\n')
-		buffer_i++;
-	if (!buffer[buffer_i])
-	{
-		free(buffer);
-		return (NULL);
-	}
-	line = (char *)malloc((ft_strlen(buffer) - buffer_i + 1) * sizeof(char));
-	if (!line)
-		return (free(buffer), NULL);
-	buffer_i++;
-	while (buffer[buffer_i])
-	{
-		line[line_i++] = buffer[buffer_i++];
-	}
-	line[line_i] = '\0';
-	return (free(buffer), line);
+	buf = malloc(BUFFER_SIZE + 1);
+	clean_node = malloc(sizeof(t_list_gnl));
+	if (buf == NULL || clean_node == NULL)
+		return ;
+	last_node = ft_find_last_node(*list);
+	x = 0;
+	i = 0;
+	while (last_node->str[i] && last_node->str[i] != '\n')
+		++i;
+	while (last_node->str[i] && last_node->str[++i])
+		buf[x++] = last_node->str[i];
+	buf[x] = '\0';
+	clean_node->str = buf;
+	clean_node->next = NULL;
+	ft_dealloc(list, clean_node, buf);
 }
 
-static char	*ft_line(char *buffer)
+char	*ft_get_line(t_list_gnl *list)
 {
-	char	*line;
-	int		i;
+	int		str_len;
+	char	*next_str;
 
-	i = 0;
-	if (!buffer[i])
-		return (free(buffer), NULL);
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	line = (char *)malloc(i + 2 * sizeof(char));
-	if (!line)
-		return (free(buffer), NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-	{
-		line[i] = buffer[i];
-		i++;
-	}
-	if (buffer[i] && buffer[i] == '\n')
-	{
-		line[i] = '\n';
-		i++;
-	}
-	line[i] = '\0';
-	return (line);
+	if (list == NULL)
+		return (NULL);
+	str_len = ft_len_list(list);
+	next_str = malloc(str_len + 1);
+	if (next_str == NULL)
+		return (NULL);
+	ft_copy_str(list, next_str);
+	return (next_str);
 }
 
-static char	*read_file(int fd, char *res)
+void	ft_append_list(t_list_gnl **list, char *buf)
 {
-	char	*buffer;
-	int		byte_read;
+	t_list_gnl	*newnode;
+	t_list_gnl	*last_node;
 
-	if (!res)
-		res = ft_calloc (1, 1);
-	if (!res)
-		return (NULL);
-	buffer = (char *)malloc(BUFFER_SIZE + 1 * sizeof(char));
-	if (!buffer)
-		return (free(buffer), NULL);
-	byte_read = 1;
-	while (!ft_strchr(res, '\n') && byte_read > 0)
+	last_node = ft_find_last_node(*list);
+	newnode = malloc(sizeof(t_list_gnl));
+	if (newnode == NULL)
+		return ;
+	if (last_node == NULL)
+		*list = newnode;
+	else
+		last_node->next = newnode;
+	newnode->str = buf;
+	newnode->next = NULL;
+}
+
+void	ft_list_add(t_list_gnl **list, int fd)
+{
+	int		char_read;
+	char	*buf;
+
+	while (!ft_found_newline(*list))
 	{
-		byte_read = read(fd, buffer, BUFFER_SIZE);
-		if (byte_read == -1)
-			return (free(buffer), free(res), NULL);
-		buffer[byte_read] = '\0';
-		res = ft_strjoin(res, buffer);
-		if (!res)
-			return (free(buffer), NULL);
+		buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
+		if (buf == NULL)
+			return ;
+		char_read = read(fd, buf, BUFFER_SIZE);
+		if (char_read == -1)
+		{
+			free(buf);
+			ft_dealloc(list, NULL, NULL);
+			*list = NULL;
+			return ;
+		}
+		if (!char_read)
+		{
+			free(buf);
+			return ;
+		}
+		buf[char_read] = '\0';
+		ft_append_list(list, buf);
 	}
-	free (buffer);
-	return (res);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
-	char		*line;
+	static t_list_gnl	*list[MAX_FD];
+	char				*next_line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_file(fd, buffer);
-	if (!buffer)
+	ft_list_add(&list[fd], fd);
+	if (list[fd] == NULL)
 		return (NULL);
-	if (buffer[0] == '\0')
-	{
-		free(buffer);
-		buffer = NULL;
-		return (NULL);
-	}
-	line = ft_line(buffer);
-	if (!line)
-		return (free(buffer), buffer = NULL, NULL);
-	buffer = ft_next(buffer);
-	return (line);
+	next_line = ft_get_line(list[fd]);
+	ft_list_prep(&list[fd]);
+	return (next_line);
 }
 
-/* 
-# include <stdlib.h>
-# include <unistd.h>
-#include <fcntl.h>
-# include <stdio.h>
+// int	main(void)
+// {
+// 	int	fd1;
+// 	int	fd2;
+// 	int	fd3;
 
-int	main(void)
-{
-	int		fd;
-	int		count;
-	char	*line;
-
-	count = 0;
-	fd = open("test.txt", O_RDONLY);
-	//fd = 0;
-	//fd = -1;
-	if (fd == -1)
-	{
-		printf("Error opening file.");
-		return (1);
-	}
-
-	printf("------------------------------------------");
-	printf("\nStart of file reached or error occurred.\n\n");
-
-	while (1)
-	//while (count < 4)
-	//while (line != NULL) //does this make the program not work
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-		{
-			printf("\nEnd of file reached or error occurred.\n");
-			printf("------------------------------------------");
-			break ;
-		}
-		count++;
-		printf("[%d]: %s\n", count, line);
-		free(line);
-		line = NULL;
-		
-	}
-	close (fd);
-	return (0);
-} */
+// 	fd1 = open("file1.txt", O_RDONLY | O_CREAT);
+// 	fd2 = open("file2.txt", O_RDONLY | O_CREAT);
+// 	fd3 = open("file3.txt", O_RDONLY | O_CREAT);
+// 	printf("fd1 - %s", get_next_line(fd1));
+// 	printf("fd2 - %s", get_next_line(fd2));
+// 	printf("fd3 - %s\n", get_next_line(fd3));
+// 	printf("fd1 - %s", get_next_line(fd1));
+// 	printf("fd2 - %s", get_next_line(fd2));
+// 	printf("fd3 - %s\n", get_next_line(fd3));
+// 	printf("fd1 - %s", get_next_line(fd1));
+// 	printf("fd2 - %s", get_next_line(fd2));
+// 	printf("fd3 - %s\n", get_next_line(fd3));
+// 	return (0);
+// }

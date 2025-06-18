@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 12:15:15 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:09:10 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ volatile sig_atomic_t g_signal;
  * 7. Free input line
  * 
  * SIGINT = 130
+ * isatty checks if the shell is runningin an interactive terminal
  */
 static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 {
@@ -62,11 +63,19 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 		// 2. Handle readline's return value
 		if (input_line == NULL)
 		{
+			ms_exit_shell(data, data->last_exit_status);
+			/*
 			if (g_signal == SIGINT)
 				continue;
 
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			if (isatty(STDIN_FILENO))
+			{
+				ft_putstr_fd("exit\n", STDOUT_FILENO);
+				fflush(stdout); // Try to force the buffer to flush
+				usleep(10000); 
+			}
 			break;
+			*/
 		}
 
 		// 3. Handle empty input line (user pressed Enter)

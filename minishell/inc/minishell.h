@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 12:13:05 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:14:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,6 +305,7 @@ int		ms_setenv(t_minishell *data, const char *name, const char *value);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
 int		ms_execute_exit(char **args, t_minishell *data);
+void	ms_exit_shell(t_minishell *data, int exit_code);
 int		ms_execute_export(char **args, t_minishell *data);
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_minishell *data);

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 12:55:02 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:13:52 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 	return (true);
 }
 
+void	ms_exit_shell(t_minishell *data, int exit_code)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+	}
+		ms_clean_all(data);
+	exit(exit_code);
+}
+
 /**
  * @brief Executes the exit builtin command.
  *
@@ -97,24 +107,27 @@ int	ms_execute_exit(char **args, t_minishell *data)
 	argc = 0;
 	while (args[argc] != NULL)
 		argc++;
-	ft_putstr_fd("exit\n", STDERR_FILENO);
+	//ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (argc == 1)
 	{	
-		ms_clean_all(data);
-		exit(g_signal);
+		ms_exit_shell(data, data->last_exit_status);
+		//ms_clean_all(data);
+		//exit(g_signal);
 	}
 	else if (argc == 2)
 	{
 		if (ft_atol_validate(args[1], &exit_code_ll))
 		{
-			exit((unsigned char)exit_code_ll);
+			ms_exit_shell(data, (unsigned char)exit_code_ll);
+			//exit((unsigned char)exit_code_ll);
 		}
 		else
 		{
 			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 			ft_putstr_fd(args[1], STDERR_FILENO);
 			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-			exit(255);
+			ms_exit_shell(data, 255);
+			//exit(255);
 		}
 	}
 	else

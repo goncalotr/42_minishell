@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 19:37:11 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:16:54 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,7 +303,7 @@ int	ms_execute_export(char **args, t_minishell *data)
 
 	exit_status = 0;
 	i = 1;
-	if (args[i] == NULL) // no args, print sorted env
+	if (args[i] == NULL)
 		return (ms_print_exported_vars(data));
 	while (args[i])
 	{
@@ -312,6 +312,8 @@ int	ms_execute_export(char **args, t_minishell *data)
 		{
 			ms_print_export_invalid_identifier_err(args[i]);
 			exit_status = 1;
+			if (var_name)
+				free(var_name);
 			i++;
 			continue;
 		}

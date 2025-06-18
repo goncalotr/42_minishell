@@ -62,7 +62,7 @@ export | grep "EMPTY_VAR="
 ### Test 2
 
 ```bash
-export PATH+=":/new/path"
+export PATH+=":/new/path" # !TODO ???????
 echo $PATH | grep ":/new/path"
 ```
 

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 11:53:00 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 11:59:20 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ int	main(int argc, char **argv, char **envp)
 	//ms_signal_handlers_init();
 	//ms_signal_handlers_set_interactive();
 	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
-	rl_variable_bind("enable-bracketed-paste", "off");
 	tcgetattr(STDIN_FILENO, &original_termios); 
 	ms_core_loop(&shell_data, &original_termios);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \

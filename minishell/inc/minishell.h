@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 19:09:07 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:57:11 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,7 @@ int		ms_execute_unset(char **args, t_minishell *data);
 
 // --- exec ---
 char	*ms_find_command_path(const char *cmd, char **envp);
-int		ms_execute_external_command(char **args, char **envp);
+int		ms_execute_external_command(char **envp, char **args);
 
 // --- utils ---
 int		ms_exit_with_code(t_minishell *data, int status);

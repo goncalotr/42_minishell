@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 02:05:03 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:00:58 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:56:57 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ static void	ms_child_exec_help(char **args, char **envp, char *path)
  * 5 if child
  * 6 if parent
  */
-int	ms_execute_external_command(char **args, char **envp)
+int	ms_execute_external_command(char **envp, char **args)
 {
 	char	*path;
 	pid_t	pid;

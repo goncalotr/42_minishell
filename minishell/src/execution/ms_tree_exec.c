@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 18:49:48 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:49:13 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,9 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 
 int	ms_exec_cmd(t_ast *node, t_minishell *data)
 {
-	int		i;
-	char 	full_path[1024];
-	pid_t	pid;
+	//int		i;
+	//char 	full_path[1024];
+	//pid_t	pid;
 	int		status;
 	int 	builtin_status;
 
@@ -178,6 +178,9 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	}
 
 	// external commands
+	return (ms_execute_external_command(data->envp, node->args));
+
+	/*
 	pid = fork();
 	if ((pid) == 0)
 	{
@@ -212,6 +215,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
+	*/
 	//printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
 
 	return (WEXITSTATUS(status));

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 11:19:26 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:13:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,14 +113,16 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
-		exit(ms_exec_tree(node->left, data));
+		ms_exec_tree(node->left, data);
+		exit(0);
 	}
 	if ((pid_2 = fork()) == 0)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		close(pipefd[1]);
-		exit(ms_exec_tree(node->right, data));
+		ms_exec_tree(node->right, data);
+		exit(0);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
@@ -151,7 +153,9 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 	if (strcmp(node->args[0], "env") == 0)
 		return (ms_execute_env(node->args, data->envp));
 	if (strcmp(node->args[0], "exit") == 0)
-		return (ms_execute_exit(node->args));
+	{
+		return (ms_execute_exit(node->args, data));
+	}
 	if (strcmp(node->args[0], "export") == 0)
 		return ms_execute_export(node->args, data);
 	else if (strcmp(node->args[0], "pwd") == 0)
@@ -195,24 +199,22 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		if (ft_strchr(node->args[0], '/'))
 		{
 			if (access(node->args[0], X_OK) == 0)
-			{
 				execve(node->args[0], node->args, data->envp);
-				data->last_exit_status = 127;
-				perror(node->args[0]);
-				exit(127);
-			}
 			data->last_exit_status = 127;
 			perror(node->args[0]);
 			exit(127);
 		}
 		i = 0;
-		while (data->paths[i])
+		while (data->paths && data->paths[i])
 		{
 			ft_strlcpy(full_path, data->paths[i], sizeof(full_path));
 			ft_strlcat(full_path, "/", sizeof(full_path));
 			ft_strlcat(full_path, node->args[0], sizeof(full_path));
 			if (access(full_path, X_OK) == 0)
+			{
 				execve(full_path, node->args, data->envp);
+				break ;
+			}
 			i++;
 		}
 		data->last_exit_status = 127;

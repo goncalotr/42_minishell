@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_execute_exit.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/05/26 14:25:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:17:02 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ bool	ft_atol_validate(const char *str, long long *n_out)
  * 4 2 aarguments, either valid or non numeric
  * 5 Too many arguments
  */
-int	ms_execute_exit(char **args)
+int	ms_execute_exit(char **args, t_minishell *data)
 {
 	int			argc;
 	long long	exit_code_ll;
@@ -99,7 +99,8 @@ int	ms_execute_exit(char **args)
 		argc++;
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (argc == 1)
-	{
+	{	
+		ms_clean_all(data);
 		exit(g_signal);
 	}
 	else if (argc == 2)

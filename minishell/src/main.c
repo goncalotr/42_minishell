@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 11:59:20 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:15:15 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 			free(input_line);
 			continue ;
 		}
-	
+		
 		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
 
@@ -97,7 +97,7 @@ static void	ms_core_loop(t_minishell *data, struct termios *original_termios)
 		free(input_line);
 	}
 	rl_clear_history();
-	// free shell data
+	ms_cleanup_shell(data);
 }
 
 /**

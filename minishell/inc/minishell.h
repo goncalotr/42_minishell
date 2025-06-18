@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 11:42:34 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:13:05 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ typedef struct s_minishell
 	char	**envp;
 	char	**paths;
 	int		last_exit_status;
+	t_token	*token_list;
+	t_ast	*tree;
 	int		stdin_fd;
 	int		stdout_fd;
 	int		stderr_fd;
@@ -203,6 +205,15 @@ bool	ms_ismetachar(char c);
 bool	ms_isspace(char c);
 bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
+
+//ms_cleanup.c
+void	ms_free_token(t_token *token);
+void	ms_clean_token_list(t_token *token);
+void ms_clean_ast(t_ast *node);
+void	ms_cleanup_shell(t_minishell *data);
+void	ms_free_envp_copy(char **envp);
+void	ms_free_data_paths(char **paths);
+void	ms_clean_all(t_minishell *data);
 
 //ms_quotes.c
 int	ms_new_value_len(char *value);
@@ -293,7 +304,7 @@ int		ms_execute_cd(t_minishell *data, char **args);
 int		ms_setenv(t_minishell *data, const char *name, const char *value);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
-int		ms_execute_exit(char **args);
+int		ms_execute_exit(char **args, t_minishell *data);
 int		ms_execute_export(char **args, t_minishell *data);
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_minishell *data);

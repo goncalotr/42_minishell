@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tree_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 12:13:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:46:53 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ void	ms_exec_heredoc(t_ast *node)
 			&& line[ft_strlen(limiter)] == '\n')
 		{
 			free(line);
+			line = NULL;
 			break ;
 		}
 		write(fd, line, ft_strlen(line));
 		free(line);
+		line = NULL;
 	}
 	close(fd);
 }
@@ -114,6 +116,9 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		close(pipefd[1]);
 		close(pipefd[0]);
 		ms_exec_tree(node->left, data);
+		ms_clean_heredocs(data->tree);
+		ms_clean_ast(data->tree);
+		ms_cleanup_shell(data);
 		exit(0);
 	}
 	if ((pid_2 = fork()) == 0)
@@ -122,6 +127,9 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		close(pipefd[0]);
 		close(pipefd[1]);
 		ms_exec_tree(node->right, data);
+		ms_clean_heredocs(data->tree);
+		ms_clean_ast(data->tree);
+		ms_cleanup_shell(data);
 		exit(0);
 	}
 	close(pipefd[0]);
@@ -219,6 +227,9 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		}
 		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
+		ms_clean_heredocs(data->tree);
+		ms_clean_ast(data->tree);
+		ms_cleanup_shell(data);
 		exit(127);
 	}
 	waitpid(pid, &status, 0);

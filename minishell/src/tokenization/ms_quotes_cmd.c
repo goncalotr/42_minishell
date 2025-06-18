@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 17:11:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 11:52:13 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:01:04 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ t_token	*ms_quotes_cmd(t_token *token)
 	}
 	token->args = args;
 	free(token->value);
+	token->value = NULL;
 	return (token);
 }
 

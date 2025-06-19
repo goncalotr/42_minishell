@@ -122,3 +122,35 @@ echo $?
 ```
 
 No cleanup needed.
+
+```bash
+    ~        0.91   94%   7.66G   0B   x86_64   at 20:02:19  
+❯ bash
+goteixei@c2r6s3:~$ unset GOOD_VAR WONT_BE_SET
+goteixei@c2r6s3:~$ export GOOD_VAR=1 "BAD-VAR"=2 WONT_BE_SET=3
+bash: export: `BAD-VAR=2': not a valid identifier
+goteixei@c2r6s3:~$ env | grep GOOD_VAR
+GOOD_VAR=1
+goteixei@c2r6s3:~$ env | grep WONT_BE_SET
+WONT_BE_SET=3
+goteixei@c2r6s3:~$ echo $?
+0
+goteixei@c2r6s3:~$ 
+```
+
+```bash
+    ~/42/p/42_minishell/minishell  on   feature/builtins-base ⇡3 !2 
+❯ ./minishell
+DEBUG Minishell Start!
+
+goteixei@minishell> unset GOOD_VAR WONT_BE_SET
+goteixei@minishell> export GOOD_VAR=1 "BAD-VAR"=2 WONT_BE_SET=3
+minishell: export: `BAD-VAR=2': not a valid identifier
+goteixei@minishell> env | grep GOOD_VAR
+GOOD_VAR=1
+goteixei@minishell> env | grep WONT_BE_SET
+WONT_BE_SET=3
+goteixei@minishell> echo $?
+0
+goteixei@minishell>
+```

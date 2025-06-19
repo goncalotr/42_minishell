@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_quotes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:58:29 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 14:23:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:36:26 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ int	ms_new_value_len(char *value)
 		{
 			quote = value[i];
 			i++;
-			continue;
+			continue ;
 		}
 		else if (ms_is_quote(value[i]) && quote == value[i])
 		{
 			quote = 0;
 			i++;
-			continue;
+			continue ;
 		}
 		len++;
 		i++;
@@ -56,13 +56,13 @@ char	*ms_put_new_value(char *value, char *new_value)
 		{
 			quote = value[i];
 			i++;
-			continue;
+			continue ;
 		}
 		else if (ms_is_quote(value[i]) && quote == value[i])
 		{
 			quote = 0;
 			i++;
-			continue;
+			continue ;
 		}
 		new_value[k++] = value[i++];
 	}
@@ -78,15 +78,15 @@ char	*ms_quotes_off(char *value)
 	new_value_len = ms_new_value_len(value);
 	new_value = malloc(new_value_len + 1);
 	if (!new_value)
-		return NULL;
+		return (NULL);
 	new_value = ms_put_new_value(value, new_value);
 	free(value);
 	return (new_value);
 }
 
-t_token *ms_handle_quotes(t_token *list)
+t_token	*ms_handle_quotes(t_token *list)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = list;
 	while (temp)
@@ -94,16 +94,16 @@ t_token *ms_handle_quotes(t_token *list)
 		if (temp->type >= 3 && temp->type <= 7)
 		{
 			temp = temp->next;
-			continue;
+			continue ;
 		}
 		if (temp->type == TOKEN_CMD)
 		{
-			temp = ms_quotes_cmd(temp);
+			temp = ms_quotes_cmd(temp, 0);
 			temp = temp->next;
-			continue;
+			continue ;
 		}
 		temp->value = ms_quotes_off(temp->value);
 		temp = temp->next;
 	}
-	return (list);	
+	return (list);
 }

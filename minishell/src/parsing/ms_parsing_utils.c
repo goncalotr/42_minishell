@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:12:32 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 16:24:32 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:33:16 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ t_ast	*ms_new_ast_node(t_token_type type)
 	return (node);
 }
 
-t_ast *ms_create_and_link_redir(t_token **token_list)
+t_ast	*ms_create_and_link_redir(t_token **token_list)
 {
-	t_ast *redirect_node;
-	t_token *file_token;
+	t_ast	*redirect_node;
+	t_token	*file_token;
 	t_token	*redir_token;
-	
+
 	redir_token = (*token_list);
 	file_token = redir_token->next;
 	(*token_list) = file_token->next;
@@ -43,12 +43,12 @@ t_ast *ms_create_and_link_redir(t_token **token_list)
 	redirect_node->left = ms_parse_redirection(token_list);
 	free(redir_token->value);
 	free(redir_token);
-	return redirect_node;
+	return (redirect_node);
 }
 
 char	**ms_cpy_array(char **src)
 {
-	int 	len;
+	int		len;
 	char	**dest;
 	int		i;
 
@@ -58,7 +58,7 @@ char	**ms_cpy_array(char **src)
 		len++;
 	dest = malloc(sizeof(char *) * (len + 1));
 	if (!dest)
-		return NULL;
+		return (NULL);
 	while (src[i])
 	{
 		dest[i] = ft_strdup(src[i]);

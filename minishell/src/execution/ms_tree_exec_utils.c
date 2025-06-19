@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:27:10 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/09 18:04:49 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:29:46 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ms_prepare_heredocs(t_ast *node)
 {
 	char	*node_nbr;
-	
+
 	if (!node)
 		return ;
 	if (node->type == TOKEN_HEREDOC)
@@ -28,7 +28,7 @@ void	ms_prepare_heredocs(t_ast *node)
 		node->file_name = ft_strjoin("/tmp/heredoc_", node_nbr);
 		free(node_nbr);
 		if (!node->file_name)
-			return ; 
+			return ;
 		ms_exec_heredoc(node);
 	}
 	ms_prepare_heredocs(node->left);

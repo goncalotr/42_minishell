@@ -6,48 +6,13 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 16:34:45 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:28:41 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	ms_free_token(t_token *token)
-{
-	int	i;
-
-	i = 0;
-	if (!token)
-		return;
-	free(token->value);
-	if (token->args)
-	{
-		while (token->args[i])
-		{
-			free(token->args[i]);
-			i++;
-		}
-		free(token->args);
-	}
-	free(token->expand_index);
-	free(token);
-}
-
-void	ms_clean_token_list(t_token *token)
-{
-	t_token	*temp;
-	
-	if (!token)
-		return ;
-	while (token)
-	{
-		temp = token->next;
-		free(token);
-		token = temp;
-	}
-}
-
-void ms_clean_ast(t_ast *node)
+void	ms_clean_ast(t_ast *node)
 {
 	int	i;
 
@@ -89,7 +54,7 @@ void	ms_free_envp_copy(char **envp)
 	int	i;
 
 	if (!envp)
-		return;
+		return ;
 	i = 0;
 	while (envp[i])
 	{
@@ -104,7 +69,7 @@ void	ms_free_data_paths(char **paths)
 	int	i;
 
 	if (!paths)
-		return;
+		return ;
 	i = 0;
 	while (paths[i])
 	{

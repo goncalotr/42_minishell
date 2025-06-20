@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:31:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 20:12:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:47:04 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,7 @@ int	ms_execute_unset(char **args, t_minishell *data)
 		{
 			var_index = ms_find_env_var_index(var_name, data->envp);
 			if (var_index != -1)
-			{
 				ms_remove_env_var_at_index(var_index, data);
-			}
 		}
 		i++;
 	}

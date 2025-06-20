@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 19:10:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:49:48 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,19 @@ static int	ms_cd_error(const char *arg, const char *msg)
 /**
  * get's var from the project custom list
  */
-static char *ms_getenv(t_minishell *data, const char *name)
+static char	*ms_getenv(t_minishell *data, const char *name)
 {
-	int i;
+	int		i;
+	size_t	name_len;
 
 	i = 0;
-	size_t name_len = ft_strlen(name);
+	name_len = ft_strlen(name);
 	if (!data || !data->envp || !name)
-		return NULL;
-	while(data->envp[i])
+		return (NULL);
+	while (data->envp[i])
 	{
-		if (ft_strncmp(data->envp[i], name, name_len) == 0 && data->envp[i][name_len] == '=')
+		if (ft_strncmp(data->envp[i], name, name_len) == 0 \
+		&& data->envp[i][name_len] == '=')
 		{
 			return (data->envp[i] + name_len + 1);
 		}
@@ -47,7 +49,7 @@ static char *ms_getenv(t_minishell *data, const char *name)
 	return (NULL);
 }
 
-static int update_pwd_vars(t_minishell *data)
+static int	update_pwd_vars(t_minishell *data)
 {
 	char	cwd_buffer[PATH_MAX];
 	char	*old_pwd_val;

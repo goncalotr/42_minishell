@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 19:05:23 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 19:11:08 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:47:51 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ int	ms_setenv(t_minishell *data, const char *name, const char *value)
 			free(new_entry_str);
 			return (1);
 		}
-
 		free(new_entry_str);
 	}
 	return (0);

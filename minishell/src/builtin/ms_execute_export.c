@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 20:16:54 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:55:01 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,18 @@ static void	ms_print_export_invalid_identifier_err(const char *arg)
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
-// Extracts the variable name part from an export argument (e.g., "VAR=" -> "VAR").
-// Returns an allocated string for the name, or NULL on allocation failure or if arg is NULL.
+// Extracts the variable name part from an export argument
+// (e.g., "VAR=" -> "VAR").
+// Returns an allocated string for the name, or NULL on allocation
+// failure or if arg is NULL.
 // Also sets name_len via the pointer.
 static char	*ms_extract_var_name(const char *arg, size_t *len_name)
 {
-	char *equal_sign;
-	char *name;
+	char	*equal_sign;
+	char	*name;
 
-	if (!arg) return (NULL);
-
+	if (!arg)
+		return (NULL);
 	equal_sign = ft_strchr(arg, '=');
 	if (equal_sign)
 		*len_name = equal_sign - arg;
@@ -90,17 +92,20 @@ static char	*ms_extract_var_name(const char *arg, size_t *len_name)
 // Needed by add_or_update_env_var
 static int	ms_add_new_env_var(t_minishell *data, const char *new_var_str)
 {
-	int		count = 0;
+	int		count;
 	char	**new_environ;
 	char	*var_copy;
 	int		i;
 
-	if (data->envp) {
+	count = 0;
+	if (data->envp)
+	{
 		while (data->envp[count])
 			count++;
 	}
 	new_environ = (char **)malloc(sizeof(char *) * (count + 2));
-	if (!new_environ) {
+	if (!new_environ)
+	{
 		perror("minishell: export: malloc error for new env list");
 		return (1);
 	}
@@ -111,16 +116,16 @@ static int	ms_add_new_env_var(t_minishell *data, const char *new_var_str)
 		i++;
 	}
 	var_copy = ft_strdup(new_var_str);
-	if (!var_copy) {
+	if (!var_copy)
+	{
 		perror("minishell: export: ft_strdup error for new var");
 		free(new_environ);
 		return (1);
 	}
 	new_environ[count] = var_copy;
 	new_environ[count + 1] = NULL;
-	if (data->envp) {
+	if (data->envp)
 		free(data->envp);
-	}
 	data->envp = new_environ;
 	return (0);
 }
@@ -128,10 +133,11 @@ static int	ms_add_new_env_var(t_minishell *data, const char *new_var_str)
 // Needed by add_or_update_env_var
 static int	ms_update_existing_env_var(t_minishell *data, int index, const char *new_var_str)
 {
-	char *var_copy;
+	char	*var_copy;
 
 	var_copy = ft_strdup(new_var_str);
-	if (!var_copy) {
+	if (!var_copy)
+	{
 		perror("minishell: export: ft_strdup error updating var");
 		return (1);
 	}
@@ -156,6 +162,7 @@ static int	ms_add_or_update_env_var(t_minishell *data, const char *arg)
 	size_t	name_len;
 	int		index;
 	int		status;
+	char	*name_with_equals;
 
 	name = ms_extract_var_name(arg, &name_len);
 	if (!name)
@@ -167,7 +174,8 @@ static int	ms_add_or_update_env_var(t_minishell *data, const char *arg)
 		return (1);
 	}
 	index = ms_find_env_var_index(name, name_len, data->envp);
-	if (index != -1) {
+	if (index != -1)
+	{
 		if (ft_strchr(arg, '='))
 			status = ms_update_existing_env_var(data, index, arg);
 		else
@@ -178,8 +186,8 @@ static int	ms_add_or_update_env_var(t_minishell *data, const char *arg)
 		if (ft_strchr(arg, '='))
 			status = ms_add_new_env_var(data, arg);
 		else
-		{ 
-			char *name_with_equals = ft_strjoin(name, "=");
+		{
+			name_with_equals = ft_strjoin(name, "=");
 			if (!name_with_equals)
 			{
 				perror("minishell: export: ft_strjoin");
@@ -202,13 +210,15 @@ static int	ms_print_exported_vars(t_minishell *data)
 	int		i;
 	int		j;
 	int		count;
-	char	**env_copy = NULL;
+	char	**env_copy;
 	char	*temp;
 	char	*value_ptr;
+	char	*val;
 
 	i = 0;
 	j = 0;
 	count = 0;
+	env_copy = NULL;
 	if (data->envp)
 	{
 		while (data->envp[count])
@@ -229,7 +239,8 @@ static int	ms_print_exported_vars(t_minishell *data)
 		if (!env_copy[i])
 		{
 			perror("minishell: export: ft_strdup error for env copy entry");
-			while (--i >= 0) free(env_copy[i]);
+			while (--i >= 0)
+				free(env_copy[i]);
 			free(env_copy);
 			return (1);
 		}
@@ -261,15 +272,17 @@ static int	ms_print_exported_vars(t_minishell *data)
 		{
 			write(STDOUT_FILENO, env_copy[i], value_ptr - env_copy[i]);
 			ft_putstr_fd("=\"", STDOUT_FILENO);
-			char *val = value_ptr + 1;
-			while(*val) {
+			val = value_ptr + 1;
+			while (*val)
+			{
 				if (*val == '"' || *val == '$' || *val == '\\')
 					ft_putchar_fd('\\', STDOUT_FILENO);
 				ft_putchar_fd(*val, STDOUT_FILENO);
 				val++;
 			}
 			ft_putstr_fd("\"", STDOUT_FILENO);
-		} else
+		}
+		else
 			ft_putstr_fd(env_copy[i], STDOUT_FILENO);
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		i++;
@@ -315,7 +328,7 @@ int	ms_execute_export(char **args, t_minishell *data)
 			if (var_name)
 				free(var_name);
 			i++;
-			continue;
+			continue ;
 		}
 		if (!ms_is_valid_identifier(var_name))
 		{
@@ -333,4 +346,3 @@ int	ms_execute_export(char **args, t_minishell *data)
 	}
 	return (exit_status);
 }
-

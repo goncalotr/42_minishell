@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 13:13:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:47:28 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,15 @@ int	ms_execute_exit(char **args, t_minishell *data)
 	argc = 0;
 	while (args[argc] != NULL)
 		argc++;
-	//ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (argc == 1)
 	{	
 		ms_exit_shell(data, data->last_exit_status);
-		//ms_clean_all(data);
-		//exit(g_signal);
 	}
 	else if (argc == 2)
 	{
 		if (ft_atol_validate(args[1], &exit_code_ll))
 		{
 			ms_exit_shell(data, (unsigned char)exit_code_ll);
-			//exit((unsigned char)exit_code_ll);
 		}
 		else
 		{
@@ -127,7 +123,6 @@ int	ms_execute_exit(char **args, t_minishell *data)
 			ft_putstr_fd(args[1], STDERR_FILENO);
 			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 			ms_exit_shell(data, 255);
-			//exit(255);
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 10:44:54 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 12:35:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	pid_t	pid;
 	int		status;
 	int		builtin_status;
+	int		final_exit_status;
 
 	builtin_status = ms_exec_cmd_builtins(data, node);
 	if (builtin_status != -1)
@@ -213,7 +214,17 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
-	return (WEXITSTATUS(status));
+	if (WIFEXITED(status))
+		final_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		final_exit_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	}
+	else
+		final_exit_status = 1; 
+	return (final_exit_status);
 }
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)

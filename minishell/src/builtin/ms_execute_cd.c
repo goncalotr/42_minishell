@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 13:22:43 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:26:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int	ms_execute_cd(t_minishell *data, char **args)
 	}
 	else
 	{
+		if (args[1][0] == '\0')
+			return (0);
 		target_dir = args[1];
 	}
 	if (chdir(target_dir) == -1)

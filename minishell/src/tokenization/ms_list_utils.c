@@ -6,26 +6,26 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/17 17:55:31 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:20:03 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-t_token *ms_last_node(t_token *list)
+t_token	*ms_last_node(t_token *list)
 {
 	if (!list)
 		return (NULL);
 	while (list->next)
-		 list = list->next;
+		list = list->next;
 	return (list);
 }
 
-t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
+t_token	*ms_append_node(t_token *list, char *input, t_token_type type)
 {
 	t_token	*last_node;
 	t_token	*new_node;
-	
+
 	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
@@ -37,7 +37,7 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 	new_node->expand_index = NULL;
 	new_node->previous = NULL;
 	new_node->next = NULL;
-	if  (list == NULL)
+	if (list == NULL)
 		list = new_node;
 	else
 	{
@@ -48,10 +48,16 @@ t_token *ms_append_node(t_token *list, char  *input, t_token_type type)
 	return (list);
 }
 
-void ms_print_tokens(t_token *list)
+/* void	ms_print_tokens(t_token *list)
 {
-	char	*type[] = {"INFILE", "OUTFILE", "CMD", "PIPE", "IN", "OUT", "APPEND", "HEREDOC", "EOF"};
-	char	*state[] = {"GENERAL", "DOUBLE_QUOTES", "SIMPLE_QUOTES"};
+	char	*type[] = {
+		"INFILE", "OUTFILE", "CMD", "PIPE",
+		"IN", "OUT", "APPEND", "HEREDOC", "EOF"
+	};
+
+	char	*state[] = {
+		"GENERAL", "DOUBLE_QUOTES", "SIMPLE_QUOTES"
+	};
 	int i;
 
 	i = 0;
@@ -75,3 +81,4 @@ void ms_print_tokens(t_token *list)
 		list = list->next;
 	}
 }
+ */

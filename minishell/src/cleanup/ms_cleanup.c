@@ -6,11 +6,36 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 10:17:10 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:15:24 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include "../inc/minishell.h"
+
+void	ms_clean_ast(t_ast *node)
+{
+	int	i;
+
+	i = 0;
+	if (!node)
+		return ;
+	ms_clean_ast(node->left);
+	ms_clean_ast(node->right);
+	if (node->args)
+	{
+		while (node->args[i])
+		{
+			free(node->args[i]);
+			i++;
+		}
+		free(node->args);
+		node->args = NULL;
+	}
+	if (node->file_name)
+		free(node->file_name);
+	free(node);
+}
 
 void	ms_cleanup_shell(t_minishell *data)
 {

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 16:50:31 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:14:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_ast
 	char			**args;
 	int				node_nbr;
 	char			*file_name;
+	int				original_stdin;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -172,14 +173,17 @@ void	ms_signal_handlers_set_interactive(void);
 // ms_syntax_check.c
 bool	ms_unclosed_quotes(char *input);
 bool	ms_syntax_check(char *input);
+bool 	ms_syntax_check2(char *input_line);
 bool	ms_pipes_placement(char *input);
-bool	ms_rediractions_placement(char *input);
-bool	ms_not_required(char *input);
+bool	ms_rediractions_placement(char *input, int i);
+
 
 //ms_syntax_utils.c
 char	*ms_remove_whitespaces(char *input_line);
 void	ms_skip_inside_quotes(int *i, char *input);
 void	ms_skip_whitespaces(int *i, char *input);
+bool 	ms_not_required (char *input);
+bool	ms_redir_pipe(char *input, int i);
 
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);
@@ -207,9 +211,7 @@ bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
 
 //ms_cleanup.c
-void	ms_free_token(t_token *token);
-void	ms_clean_token_list(t_token *token);
-void ms_clean_ast(t_ast *node);
+void 	ms_clean_ast(t_ast *node);
 void	ms_cleanup_shell(t_minishell *data);
 void	ms_free_envp_copy(char **envp);
 void	ms_free_data_paths(char **paths);
@@ -225,7 +227,7 @@ t_token *ms_handle_quotes(t_token *list);
 int	ms_len_args(char *value);
 int	ms_len_arg(char *value, int *i);
 char	 *ms_put_args(char *value,int *i);
-t_token	*ms_quotes_cmd(t_token *token);
+t_token	*ms_quotes_cmd(t_token *token, int x);
 
 //ms_expansion_check.c
 int	*ms_expansion_index(char *value, int *index);

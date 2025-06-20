@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 13:12:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:22:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,6 @@ static int	ms_cd_error(const char *arg, const char *msg)
 	ft_putstr_fd("\n", STDERR_FILENO);
 	return (1);
 }
-
-/**
- * get's var from the project custom list
- */
-/*
-static char	*ms_getenv(t_minishell *data, const char *name)
-{
-	int		i;
-	size_t	name_len;
-
-	i = 0;
-	name_len = ft_strlen(name);
-	if (!data || !data->envp || !name)
-		return (NULL);
-	while (data->envp[i])
-	{
-		if (ft_strncmp(data->envp[i], name, name_len) == 0 \
-		&& data->envp[i][name_len] == '=')
-		{
-			return (data->envp[i] + name_len + 1);
-		}
-		i++;
-	}
-	return (NULL);
-}
-*/
 
 static int	update_pwd_vars(t_minishell *data)
 {
@@ -98,13 +72,13 @@ int	ms_execute_cd(t_minishell *data, char **args)
 		return (ms_cd_error(NULL, "too many arguments"));
 	if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
 	{
-		target_dir = getenv("HOME");
+		target_dir = ms_getenv(data, "HOME");
 		if (target_dir == NULL)
 			return (ms_cd_error("HOME not set", NULL));
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
-		target_dir = getenv("OLDPWD");
+		target_dir = ms_getenv(data, "OLDPWD");
 		if (target_dir == NULL)
 			return (ms_cd_error("OLDPWD not set", NULL));
 		ft_putendl_fd(target_dir, STDOUT_FILENO);

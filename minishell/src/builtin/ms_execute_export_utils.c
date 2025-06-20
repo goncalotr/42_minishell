@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:53:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 16:52:20 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:54:36 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int	ms_add_var_logic(t_minishell *data, const char *arg, const char *name
 	char	*name_with_equals;
 
 	if (ft_strchr(arg, '='))
-		return (add_new_var(data, arg));
+		return (ms_add_new_var(data, arg));
 	else
 	{
 		name_with_equals = ft_strjoin(name, "=");
@@ -122,7 +122,7 @@ static int	ms_add_var_logic(t_minishell *data, const char *arg, const char *name
 			perror("minishell: export (strjoin)");
 			return (1);
 		}
-		if (add_new_var(data, name_with_equals) != 0)
+		if (ms_add_new_var(data, name_with_equals) != 0)
 		{
 			free(name_with_equals);
 			return (1);
@@ -142,15 +142,15 @@ int	ms_add_or_update_env_var(t_minishell *data, const char *arg)
 	name = ms_extract_var_name(arg, &name_len);
 	if (!name)
 		return (1);
-	index = find_var_index(name, name_len, data->envp);
+	index = ms_find_var_index(name, name_len, data->envp);
 	if (index != -1)
 	{
 		status = 0;
 		if (ft_strchr(arg, '='))
-			status = update_var(data, index, arg);
+			status = ms_update_var(data, index, arg);
 	}
 	else
-		status = add_var_logic(data, arg, name);
+		status = ms_add_var_logic(data, arg, name);
 	free(name);
 	return (status);
 }

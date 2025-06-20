@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 17:10:13 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:05:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,8 @@ t_ast 	*ms_parse_tokens(t_token	**token_list);
 // ms_parsing_utils.c
 t_ast	*ms_new_ast_node(t_token_type type);
 t_ast	*ms_create_and_link_redir(t_token **token_list);
+char	**ms_cpy_array(char **src);
+void	ms_free_array(char **array);
 
 // ms_tree_exec.c
 int	ms_exec_tree(t_ast *node, t_minishell *data);

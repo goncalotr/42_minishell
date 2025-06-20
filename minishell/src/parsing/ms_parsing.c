@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 17:10:18 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:36:40 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ t_ast	*ms_parse_command(t_token **token)
 	if (!(*token))
 		return NULL; 
 	command_node = ms_new_ast_node(TOKEN_CMD);
-	command_node->args = (*token)->args;
+	command_node->args = ms_cpy_array((*token)->args);
+	ms_free_array((*token)->args);
+	free((*token));
 	return(command_node);
 }
 
@@ -39,8 +41,10 @@ t_ast	*ms_create_file_node(t_token *token)
 		free(file_node);
 		return (NULL);
 	}
-	file_node->args[0] = token->value;
+	file_node->args[0] = ft_strdup(token->value);
 	file_node->args[1] = NULL;
+	free(token->value);
+	free(token);
 	return (file_node);
 }
 

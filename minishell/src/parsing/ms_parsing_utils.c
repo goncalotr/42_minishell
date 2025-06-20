@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:12:32 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/16 16:54:14 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:24:32 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,41 @@ t_ast *ms_create_and_link_redir(t_token **token_list)
 	free(redir_token->value);
 	free(redir_token);
 	return redirect_node;
+}
+
+char	**ms_cpy_array(char **src)
+{
+	int 	len;
+	char	**dest;
+	int		i;
+
+	i = 0;
+	len = 0;
+	while (src[len])
+		len++;
+	dest = malloc(sizeof(char *) * (len + 1));
+	if (!dest)
+		return NULL;
+	while (src[i])
+	{
+		dest[i] = ft_strdup(src[i]);
+		i++;
+	}
+	dest[i] = NULL;
+	return (dest);
+}
+
+void	ms_free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }

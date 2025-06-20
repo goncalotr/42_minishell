@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_signal_handlers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 13:49:54 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:25:07 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,13 @@
  */
 static void	ms_handle_sigint_interactive(int signum)
 {
-	(void)signum;
-
+	(void) signum; //! check
 	g_signal = SIGINT;
-	//ft_putstr_fd("HANDLER CALLED!\n", 2);
-	//rl_cleanup_after_signal();
 	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-
-	//rl_set_prompt(prompt_str); //optional
-
 	rl_redisplay();
 }
-
 
 /**
  * SIGINT
@@ -50,14 +43,13 @@ static void	ms_handle_sigint_interactive(int signum)
  */
 void	ms_signal_handlers_set_interactive(void)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	ft_bzero(&sa_int, sizeof(sa_int));
 	ft_bzero(&sa_quit, sizeof(sa_quit));
 	sa_int.sa_handler = ms_handle_sigint_interactive;
 	sigemptyset(&sa_int.sa_mask);
-	//sa_int.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
 		perror("Minishell: Error setting SIGINT handler");

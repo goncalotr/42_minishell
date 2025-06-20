@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 16:22:58 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:49:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	ms_print_export_invalid_identifier_err(const char *arg)
 ** @brief Validates an argument, extracts its name, and checks if it's empty.
 ** @return Returns the extracted variable name, or NULL if validation fails.
 */
-static char	*ms_validate_and_extract_arg(char *arg, size_t *name_len)
+char	*ms_validate_and_extract_arg(char *arg, size_t *name_len)
 {
 	char	*var_name;
 

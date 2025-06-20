@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:53:49 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 16:13:38 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:25:18 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	**ms_create_sorted_env_copy(t_minishell *data, int count)
 /**
  * @brief Prints a single environment variable in the `declare -x` format.
  */
-static void	ms_print_one_var(const char *env_entry)
+static void	ms_print_one_var(char *env_entry)
 {
 	const char	*value_ptr;
 

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 19:05:23 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 15:49:40 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:47:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	ms_find_env_var_index(t_minishell *data, const char *name)
  * Free the OLD array of pointers, but not the strings it pointed to
  * Point the shell's data to the new, bigger array
  */
-static int	ms_add_new_var(t_minishell *data, const char *new_entry_str)
+static int	ms_add_new_var(t_minishell *data, char *new_entry_str)
 {
 	int		current_count;
 	char	**new_envp;

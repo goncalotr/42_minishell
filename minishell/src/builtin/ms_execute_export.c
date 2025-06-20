@@ -6,14 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 01:33:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 16:17:09 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:22:58 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-static int	ms_add_or_update_env_var(t_minishell *data, const char *arg);
-static int	ms_print_exported_vars(t_minishell *data);
 
 /**
  * @brief Helper to check if a string is a valid shell identifier.
@@ -78,7 +75,7 @@ static int	ms_process_export_args(t_minishell *data, char **args)
 	i = 1;
 	while (args[i])
 	{
-		var_name = validate_and_extract_arg(args[i], &name_len);
+		var_name = ms_validate_and_extract_arg(args[i], &name_len);
 		if (!var_name)
 			exit_status = 1;
 		else if (!ms_is_valid_identifier(var_name))

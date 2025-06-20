@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 11:56:56 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:49:26 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_ast
 	char			**args;
 	int				node_nbr;
 	char			*file_name;
+	int				original_stdin;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;

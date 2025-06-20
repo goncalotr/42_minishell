@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:27:10 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 17:29:46 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:40:31 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@ void	ms_clean_heredocs(t_ast *node)
 {
 	if (!node)
 		return ;
-	if (node->type == TOKEN_HEREDOC)
+	if (node->type == TOKEN_HEREDOC && node->file_name)
 	{
-		if (unlink(node->file_name) == -1)
-			perror ("unlink");
+		if (access(node->file_name, F_OK) == 0)
+		{
+			if (unlink(node->file_name) == -1)
+				perror("unlink");
+		}
 		free(node->file_name);
 		node->file_name = NULL;
 	}

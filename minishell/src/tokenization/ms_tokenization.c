@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 13:01:20 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:29:27 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_token	*ms_start_tokenization(char *input, t_token *list)
 	input = ms_remove_whitespaces(input);
 	while (input[i])
 	{
+		ms_skip_whitespaces(&i, input);
 		if ((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
 		else

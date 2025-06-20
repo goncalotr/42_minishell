@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/19 14:04:08 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:43:54 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	data->last_exit_status = ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
+	rl_clear_history();
 }
 
 /* void print_indent(int level)

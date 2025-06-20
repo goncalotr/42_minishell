@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:51:13 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/19 12:06:43 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 11:56:41 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,16 @@ bool	ms_syntax_check2(char *input)
 		ft_putstr_fd("Syntax error: misplaced pipes\n", 2);
 		return (true);
 	}
-	else if ((ms_rediractions_placement(input)) == true)
+	else if ((ms_rediractions_placement(input, 0)) == true)
 	{
 		free(input);
 		ft_putstr_fd("Syntax error: misplaced rediractions\n", 2);
+		return (true);
+	}
+	else if (ms_redir_pipe(input, 0) == true)
+	{
+		free(input);
+		ft_putstr_fd("Syntax error: misplaced pipes\n", 2);
 		return (true);
 	}
 	free(input);
@@ -87,7 +93,11 @@ bool	ms_pipes_placement(char *input)
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
-		ms_skip_inside_quotes(&i, input);
+		if (ms_is_quote(input[i]))
+		{
+			ms_skip_inside_quotes(&i, input);
+			continue ;
+		}
 		if (input[i] == '|')
 			pipe++;
 		else
@@ -99,18 +109,19 @@ bool	ms_pipes_placement(char *input)
 	return (false);
 }
 
-bool	ms_rediractions_placement(char *input)
+bool	ms_rediractions_placement(char *input, int i)
 {
-	int	i;
-
-	i = 0;
 	if (input[ft_strlen(input) - 1] == '<'
 		|| input[ft_strlen(input) - 1] == '>')
 		return (true);
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
-		ms_skip_inside_quotes(&i, input);
+		if (ms_is_quote(input[i]))
+		{
+			ms_skip_inside_quotes(&i, input);
+			continue ;
+		}
 		if (input[i] == '<' || input[i] == '>')
 		{
 			if (input[i] == '>' && input[i + 1] == '>')

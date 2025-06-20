@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/19 14:04:15 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 11:56:56 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ bool	ms_unclosed_quotes(char *input);
 bool	ms_syntax_check(char *input);
 bool 	ms_syntax_check2(char *input_line);
 bool	ms_pipes_placement(char *input);
-bool	ms_rediractions_placement(char *input);
+bool	ms_rediractions_placement(char *input, int i);
 
 
 //ms_syntax_utils.c
@@ -182,6 +182,7 @@ char	*ms_remove_whitespaces(char *input_line);
 void	ms_skip_inside_quotes(int *i, char *input);
 void	ms_skip_whitespaces(int *i, char *input);
 bool 	ms_not_required (char *input);
+bool	ms_redir_pipe(char *input, int i);
 
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/19 13:21:20 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/19 14:25:25 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,9 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 				execve(node->args[0], node->args, data->envp);
 			data->last_exit_status = 127;
 			perror(node->args[0]);
+			ms_clean_heredocs(data->tree);
+			ms_clean_ast(data->tree);
+			ms_cleanup_shell(data);
 			exit(127);
 		}
 		i = 0;

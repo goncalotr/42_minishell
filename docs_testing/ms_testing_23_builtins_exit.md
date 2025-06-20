@@ -52,6 +52,24 @@ echo "exit 300" | ./minishell; echo $?
 echo "exit -1" | ./minishell; echo $?
 ```
 
+### Test 4
+
+```bash
+echo "exit -255" | ./minishell; echo $?
+```
+
+### Test 5
+
+```bash
+echo "exit -256" | ./minishell; echo $?
+```
+
+### Test 6
+
+```bash
+echo "exit -300" | ./minishell; echo $?
+```
+
 ## Error Handling
 
 ### Test 1

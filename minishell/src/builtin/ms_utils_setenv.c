@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_execute_cd_setenv.c                             :+:      :+:    :+:   */
+/*   ms_utils_setenv.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 19:05:23 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 19:11:08 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:47:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,18 @@ static int	ms_find_env_var_index(t_minishell *data, const char *name)
  * Free the OLD array of pointers, but not the strings it pointed to
  * Point the shell's data to the new, bigger array
  */
-static int	ms_add_new_variable(t_minishell *data, const char *new_entry_str)
+static int	ms_add_new_var(t_minishell *data, char *new_entry_str)
 {
 	int		current_count;
 	char	**new_envp;
 	int		i;
 
 	current_count = 0;
-	while (data->envp && data->envp[current_count])
-		current_count++;
+	if (data->envp)
+	{
+		while (data->envp && data->envp[current_count])
+			current_count++;
+	}
 	new_envp = malloc(sizeof(char *) * (current_count + 2));
 	if (!new_envp)
 		return (perror("minishell: setenv (malloc)"), 1);
@@ -97,13 +100,7 @@ static int	ms_add_new_variable(t_minishell *data, const char *new_entry_str)
 		new_envp[i] = data->envp[i];
 		i++;
 	}
-	new_envp[current_count] = ft_strdup(new_entry_str);
-	if (!new_envp[current_count])
-	{
-		perror("minishell: setenv (strdup)");
-		free(new_envp);
-		return (1);
-	}
+	new_envp[current_count] = new_entry_str;
 	new_envp[current_count + 1] = NULL;
 	if (data->envp)
 		free(data->envp);
@@ -135,10 +132,10 @@ int	ms_setenv(t_minishell *data, const char *name, const char *value)
 		return (1);
 	if (!value)
 		value = "";
-	var_index = ms_find_env_var_index(data, name);
 	new_entry_str = ms_format_env_var(name, value);
 	if (!new_entry_str)
 		return (1);
+	var_index = ms_find_env_var_index(data, name);
 	if (var_index != -1)
 	{
 		free(data->envp[var_index]);
@@ -146,13 +143,11 @@ int	ms_setenv(t_minishell *data, const char *name, const char *value)
 	}
 	else
 	{
-		if (ms_add_new_variable(data, new_entry_str) != 0)
+		if (ms_add_new_var(data, new_entry_str) != 0)
 		{
 			free(new_entry_str);
 			return (1);
 		}
-
-		free(new_entry_str);
 	}
 	return (0);
 }

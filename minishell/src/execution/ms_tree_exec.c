@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 12:13:30 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:18:17 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	ms_exec_heredoc(t_ast *node)
 	if (!node || !node->file_name)
 		return ;
 	limiter = node->right->args[0];
-	fd = open(node->file_name, O_CREAT | O_WRONLY | O_TRUNC , 0644);
+	fd = open(node->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 	{
 		perror("error heredoc");
 		return ;
 	}
-	while(1)
+	while (1)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
@@ -37,18 +37,20 @@ void	ms_exec_heredoc(t_ast *node)
 			&& line[ft_strlen(limiter)] == '\n')
 		{
 			free(line);
+			line = NULL;
 			break ;
 		}
 		write(fd, line, ft_strlen(line));
 		free(line);
+		line = NULL;
 	}
 	close(fd);
 }
 
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 {
-	t_ast 	*cmd;
-	t_ast 	*outfile;
+	t_ast	*cmd;
+	t_ast	*outfile;
 	int		fd;
 	int		original_std;
 	int		status;
@@ -59,7 +61,7 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	if (node->type == TOKEN_REDIR_OUT)
 		fd = open(outfile->args[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else
- 		fd = open(outfile->args[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		fd = open(outfile->args[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd < 0)
 	{
 		perror("open outfile");
@@ -72,14 +74,14 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	close(original_std);
 	return (status);
 }
+
 int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 {
 	t_ast	*cmd;
 	t_ast	*infile;
 	int		fd;
-	int		original_std;
 	int		status;
-	
+
 	cmd = node->left;
 	infile = node->right;
 	if (node->type == TOKEN_HEREDOC)
@@ -91,12 +93,12 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 		perror("open infile");
 		return (1);
 	}
-	original_std = dup(STDIN_FILENO);
+	cmd->original_stdin = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	status = ms_exec_tree(cmd, data);
-	dup2(original_std, STDIN_FILENO);
-	close(original_std);
+	dup2(cmd->original_stdin, STDIN_FILENO);
+	close(cmd->original_stdin);
 	return (status);
 }
 
@@ -105,45 +107,42 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	int	pipefd[2];
 	int	pid_1;
 	int	pid_2;
-	int status;
-	
+	int	status;
+
 	pipe(pipefd);
-	if ((pid_1 = fork()) == 0)
+	pid_1 = fork();
+	if (pid_1 == 0)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
 		ms_exec_tree(node->left, data);
+		ms_clean_heredocs(data->tree);
+		ms_clean_ast(data->tree);
+		ms_cleanup_shell(data);
 		exit(0);
 	}
-	if ((pid_2 = fork()) == 0)
+	pid_2 = fork();
+	if (pid_2 == 0)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		close(pipefd[1]);
 		ms_exec_tree(node->right, data);
+		ms_clean_heredocs(data->tree);
+		ms_clean_ast(data->tree);
+		ms_cleanup_shell(data);
 		exit(0);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(pid_1, NULL, 0);
 	waitpid(pid_2, &status, 0);
-	return (WEXITSTATUS(status));	
+	return (WEXITSTATUS(status));
 }
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
-	/*
-	printf("--- DEBUG a_args ---\n");
-	int k = 0;
-	while (node->args[k])
-	{
-		printf("node->args[%d]: \"%s\"\n", k, node->args[k]);
-		k++;
-	}
-	printf("node->args[%d]: (NULL)\n", k);
-	printf("--- END DEBUG ---\n");
-	*/
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
 	if (strcmp(node->args[0], "cd") == 0)
@@ -157,7 +156,7 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 		return (ms_execute_exit(node->args, data));
 	}
 	if (strcmp(node->args[0], "export") == 0)
-		return ms_execute_export(node->args, data);
+		return (ms_execute_export(node->args, data));
 	else if (strcmp(node->args[0], "pwd") == 0)
 		return (ms_execute_pwd(node->args));
 	else if (strcmp(node->args[0], "unset") == 0)
@@ -169,39 +168,29 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 int	ms_exec_cmd(t_ast *node, t_minishell *data)
 {
 	int		i;
-	char 	full_path[1024];
+	char	full_path[1024];
 	pid_t	pid;
 	int		status;
-	int 	builtin_status;
+	int		builtin_status;
+	int		final_exit_status;
 
-	//int i2=0;
-	//while (node->args[i2])
-	//{
-	//	printf("args: %s\n", node->args[i2]);
-	//	i2++;
-	//}
-
-	// builtins
 	builtin_status = ms_exec_cmd_builtins(data, node);
 	if (builtin_status != -1)
 	{
 		return (builtin_status);
 	}
-	
-	// external commands
-	//return (ms_execute_external_command(data->envp, node->args));
-
-	
 	pid = fork();
 	if ((pid) == 0)
 	{
-		//printf("fork");
 		if (ft_strchr(node->args[0], '/'))
 		{
 			if (access(node->args[0], X_OK) == 0)
 				execve(node->args[0], node->args, data->envp);
 			data->last_exit_status = 127;
 			perror(node->args[0]);
+			ms_clean_heredocs(data->tree);
+			ms_clean_ast(data->tree);
+			ms_cleanup_shell(data);
 			exit(127);
 		}
 		i = 0;
@@ -219,21 +208,33 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		}
 		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
+		close(node->original_stdin);
+		ms_clean_heredocs(data->tree);
+		ms_clean_ast(data->tree);
+		ms_cleanup_shell(data);
 		exit(127);
 	}
 	waitpid(pid, &status, 0);
+	ms_clean_heredocs(data->tree);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
-	
-	//printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
-
-	return (WEXITSTATUS(status));
+	if (WIFEXITED(status))
+		final_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		final_exit_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	}
+	else
+		final_exit_status = 1; 
+	return (final_exit_status);
 }
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)
 {
 	if (!node)
-		return 0;
+		return (0);
 	if (node->type == TOKEN_CMD)
 		return (ms_exec_cmd(node, data));
 	if (node->type == TOKEN_PIPE)

@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:36:05 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/17 17:56:28 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:40:17 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*ms_extract_word(char *input, int *i, t_token *list)
 	{
 		word = ms_cpy_token(input, i);
 		if (!word)
-			return list;
+			return (list);
 		if (ms_is_infile(list))
 			list = ms_append_node(list, word, TOKEN_INFILE);
 		else
@@ -30,24 +30,24 @@ t_token	*ms_extract_word(char *input, int *i, t_token *list)
 	{
 		word = ms_cpy_token_cmd(input, i);
 		if (!word)
-			return list;
-		list = ms_append_node(list, word, TOKEN_CMD);	
+			return (list);
+		list = ms_append_node(list, word, TOKEN_CMD);
 	}
 	free(word);
 	return (list);
 }
 
-t_token	*ms_extract_eof(t_token *list, char * input, int *i)
+t_token	*ms_extract_eof(t_token *list, char *input, int *i)
 {
-	char *eof;
-	
+	char	*eof;
+
 	eof = ms_cpy_token(input, i);
 	list = ms_append_node(list, eof, TOKEN_EOF);
 	free(eof);
 	return (list);
 }
 
-t_token *ms_extract_operator(char *input, int *i, t_token *list)
+t_token	*ms_extract_operator(char *input, int *i, t_token *list)
 {
 	if (input[*i] == '|')
 		list = ms_append_node(list, "|", TOKEN_PIPE);
@@ -74,7 +74,7 @@ t_token *ms_extract_operator(char *input, int *i, t_token *list)
 
 t_token	*ms_assign_state(t_token *list)
 {
-	t_token	*temp; 
+	t_token	*temp;
 
 	temp = list;
 	while (temp)
@@ -82,7 +82,7 @@ t_token	*ms_assign_state(t_token *list)
 		if (temp->value[0] == '\'')
 			temp->state = SIMPLE_QUOTES;
 		else if (temp->value[0] == '\"')
-				temp->state = DOUBLE_QUOTES;
+			temp->state = DOUBLE_QUOTES;
 		temp = temp->next;
 	}
 	return (list);

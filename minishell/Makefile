@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/18 12:15:38 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/20 17:17:01 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,6 +80,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/execution/ms_tree_exec.c\
 				  $(SRC_DIR)/execution/ms_tree_exec_utils.c\
 				  $(SRC_DIR)/cleanup/ms_cleanup.c\
+				  $(SRC_DIR)/cleanup/ms_cleanup_2.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_cmd.c\
 				  $(SRC_DIR)/tokenization/ms_expansion_check.c\
@@ -91,16 +92,18 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\
 				  $(SRC_DIR)/expand/ms_expand_var_utils.c\
 				  $(SRC_DIR)/builtin/ms_execute_cd.c\
-				  $(SRC_DIR)/builtin/ms_execute_cd_setenv.c\
 				  $(SRC_DIR)/builtin/ms_execute_echo.c\
 				  $(SRC_DIR)/builtin/ms_execute_env.c\
 				  $(SRC_DIR)/builtin/ms_execute_exit.c\
+				  $(SRC_DIR)/builtin/ms_execute_exit_utils.c\
 				  $(SRC_DIR)/builtin/ms_execute_export.c\
+				  $(SRC_DIR)/builtin/ms_execute_export_print.c\
+				  $(SRC_DIR)/builtin/ms_execute_export_utils.c\
 				  $(SRC_DIR)/builtin/ms_execute_pwd.c\
 				  $(SRC_DIR)/builtin/ms_execute_unset.c\
+				  $(SRC_DIR)/builtin/ms_utils_getenv.c\
+				  $(SRC_DIR)/builtin/ms_utils_setenv.c\
 				  $(SRC_DIR)/init/ms_init_struct.c\
-				  $(SRC_DIR)/exec/ms_exec_external.c\
-				  $(SRC_DIR)/exec/ms_path_handler.c\
 				  $(SRC_DIR)/utils/ms_utils_exit.c\
 				  $(SRC_DIR)/utils/ms_utils_pid.c\
 				  $(SRC_DIR)/prompt/ms_prompt.c\

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 13:14:12 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:14:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@
  **************************************************************************/
 
 // --- ANSI Color Codes ---
-# define RESET   "\033[0m"
-# define BLACK   "\033[0;30m"
-# define RED     "\033[0;31m"
-# define GREEN   "\033[0;32m"
-# define YELLOW  "\033[0;33m"
-# define BLUE    "\033[0;34m"
-# define MAGENTA "\033[0;35m"
-# define CYAN    "\033[0;36m"
-# define WHITE   "\033[0;37m"
+# define RESET   "\001\033[0m\002"
+# define BLACK   "\001\033[0;30m\002"
+# define RED     "\001\033[0;31m\002"
+# define GREEN   "\001\033[0;32m\002"
+# define YELLOW  "\001\033[0;33m\002"
+# define BLUE    "\001\033[0;34m\002"
+# define MAGENTA "\001\033[0;35m\002"
+# define CYAN    "\001\033[0;36m\002"
+# define WHITE   "\001\033[0;37m\002"
 
 // using PATH_MAX from limits.h (4096)
 //# define PATH_MAX 1000
@@ -103,6 +103,7 @@ typedef struct s_ast
 	char			**args;
 	int				node_nbr;
 	char			*file_name;
+	int				original_stdin;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -172,14 +173,17 @@ void	ms_signal_handlers_set_interactive(void);
 // ms_syntax_check.c
 bool	ms_unclosed_quotes(char *input);
 bool	ms_syntax_check(char *input);
+bool 	ms_syntax_check2(char *input_line);
 bool	ms_pipes_placement(char *input);
-bool	ms_rediractions_placement(char *input);
-bool	ms_not_required(char *input);
+bool	ms_rediractions_placement(char *input, int i);
+
 
 //ms_syntax_utils.c
 char	*ms_remove_whitespaces(char *input_line);
 void	ms_skip_inside_quotes(int *i, char *input);
 void	ms_skip_whitespaces(int *i, char *input);
+bool 	ms_not_required (char *input);
+bool	ms_redir_pipe(char *input, int i);
 
 // ms_list_utils.c
 t_token	*ms_last_node(t_token *list);
@@ -207,9 +211,7 @@ bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
 
 //ms_cleanup.c
-void	ms_free_token(t_token *token);
-void	ms_clean_token_list(t_token *token);
-void ms_clean_ast(t_ast *node);
+void 	ms_clean_ast(t_ast *node);
 void	ms_cleanup_shell(t_minishell *data);
 void	ms_free_envp_copy(char **envp);
 void	ms_free_data_paths(char **paths);
@@ -225,7 +227,7 @@ t_token *ms_handle_quotes(t_token *list);
 int	ms_len_args(char *value);
 int	ms_len_arg(char *value, int *i);
 char	 *ms_put_args(char *value,int *i);
-t_token	*ms_quotes_cmd(t_token *token);
+t_token	*ms_quotes_cmd(t_token *token, int x);
 
 //ms_expansion_check.c
 int	*ms_expansion_index(char *value, int *index);
@@ -249,6 +251,8 @@ t_ast 	*ms_parse_tokens(t_token	**token_list);
 // ms_parsing_utils.c
 t_ast	*ms_new_ast_node(t_token_type type);
 t_ast	*ms_create_and_link_redir(t_token **token_list);
+char	**ms_cpy_array(char **src);
+void	ms_free_array(char **array);
 
 // ms_tree_exec.c
 int	ms_exec_tree(t_ast *node, t_minishell *data);
@@ -304,9 +308,20 @@ int		ms_execute_cd(t_minishell *data, char **args);
 int		ms_setenv(t_minishell *data, const char *name, const char *value);
 int		ms_execute_echo(char **args);
 int		ms_execute_env(char **args, char **envp);
+
+// exit
+bool	ft_atol_validate(const char *str, long long *n_out);
 int		ms_execute_exit(char **args, t_minishell *data);
+
+
 void	ms_exit_shell(t_minishell *data, int exit_code);
+
+// export
+int		ms_print_exported_vars(t_minishell *data);
+char	*ms_extract_var_name(const char *arg, size_t *len_name);
+int		ms_add_or_update_env_var(t_minishell *data, const char *arg);
 int		ms_execute_export(char **args, t_minishell *data);
+
 int		ms_execute_pwd(char **args);
 int		ms_execute_unset(char **args, t_minishell *data);
 
@@ -317,5 +332,6 @@ int		ms_execute_external_command(char **envp, char **args);
 // --- utils ---
 int		ms_exit_with_code(t_minishell *data, int status);
 int		ms_getpid(void);
+char	*ms_getenv(t_minishell *data, const char *name);
 
 #endif

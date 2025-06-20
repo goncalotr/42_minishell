@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 11:43:59 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:29:27 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ms_len_token(char *input, int i)
 {
-	int len;
+	int	len;
 	int	quote;
 	int	x;
 
@@ -22,12 +22,12 @@ int	ms_len_token(char *input, int i)
 	x = i;
 	while (input[x])
 	{
-		if(ms_is_quote(input[x]) && !quote)
+		if (ms_is_quote(input[x]) && !quote)
 			quote = input[x];
 		else if (ms_is_quote(input[x]) && quote == input[x])
 			quote = 0;
 		if (ms_ismetachar(input[x]) && quote == 0)
-				break ;
+			break ;
 		x++;
 	}
 	len = x - i;
@@ -36,10 +36,10 @@ int	ms_len_token(char *input, int i)
 
 char	*ms_cpy_token(char *input, int *i)
 {
-	char 	*token;
+	char	*token;
 	int		x;
 	int		quote;
-	
+
 	quote = 0;
 	x = 0;
 	ms_skip_whitespaces(i, input);
@@ -53,7 +53,7 @@ char	*ms_cpy_token(char *input, int *i)
 		else if (ms_is_quote(input[*i]) && quote == input[*i])
 			quote = 0;
 		if ((ms_isspace(input[*i]) || ms_ismetachar(input[*i])) && quote == 0)
-				break ;
+			break ;
 		token[x] = input[*i];
 		(*i)++;
 		x++;
@@ -64,10 +64,10 @@ char	*ms_cpy_token(char *input, int *i)
 
 char	*ms_cpy_token_cmd(char *input, int *i)
 {
-	char 	*token;
+	char	*token;
 	int		x;
 	int		quote;
-	
+
 	quote = 0;
 	x = 0;
 	ms_skip_whitespaces(i, input);
@@ -81,7 +81,7 @@ char	*ms_cpy_token_cmd(char *input, int *i)
 		else if (ms_is_quote(input[*i]) && quote == input[*i])
 			quote = 0;
 		if (ms_ismetachar(input[*i]) && quote == 0)
-				break ;
+			break ;
 		token[x] = input[*i];
 		(*i)++;
 		x++;
@@ -90,17 +90,18 @@ char	*ms_cpy_token_cmd(char *input, int *i)
 	return (token);
 }
 
-t_token *ms_start_tokenization(char *input, t_token *list)
+t_token	*ms_start_tokenization(char *input, t_token *list)
 {
-	int			i;
-	
+	int	i;
+
 	i = 0;
 	input = ms_remove_whitespaces(input);
 	while (input[i])
 	{
-		if((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
+		ms_skip_whitespaces(&i, input);
+		if ((input[i] == '|') || (input[i] == '<' || input[i] == '>'))
 			list = ms_extract_operator(input, &i, list);
-		else 
+		else
 			list = ms_extract_word(input, &i, list);
 	}
 	free(input);

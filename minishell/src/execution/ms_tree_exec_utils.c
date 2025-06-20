@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tree_exec_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:27:10 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/09 18:04:49 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:15:42 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ms_prepare_heredocs(t_ast *node)
 {
 	char	*node_nbr;
-	
+
 	if (!node)
 		return ;
 	if (node->type == TOKEN_HEREDOC)
@@ -28,7 +28,7 @@ void	ms_prepare_heredocs(t_ast *node)
 		node->file_name = ft_strjoin("/tmp/heredoc_", node_nbr);
 		free(node_nbr);
 		if (!node->file_name)
-			return ; 
+			return ;
 		ms_exec_heredoc(node);
 	}
 	ms_prepare_heredocs(node->left);
@@ -39,10 +39,13 @@ void	ms_clean_heredocs(t_ast *node)
 {
 	if (!node)
 		return ;
-	if (node->type == TOKEN_HEREDOC)
+	if (node->type == TOKEN_HEREDOC && node->file_name)
 	{
-		if (unlink(node->file_name) == -1)
-			perror ("unlink");
+		if (access(node->file_name, F_OK) == 0)
+		{
+			if (unlink(node->file_name) == -1)
+				perror("unlink");
+		}
 		free(node->file_name);
 		node->file_name = NULL;
 	}

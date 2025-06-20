@@ -26,7 +26,7 @@ export | grep "TEST_VAR="
 ### Test 3
 
 ```bash
-LOCAL_VAR="is now exported"
+LOCAL_VAR="is now exported" #! how should this work????
 env | grep "LOCAL_VAR"
 export LOCAL_VAR
 env | grep "LOCAL_VAR="
@@ -62,7 +62,7 @@ export | grep "EMPTY_VAR="
 ### Test 2
 
 ```bash
-export PATH+=":/new/path"
+export PATH+=":/new/path" # !TODO ???????
 echo $PATH | grep ":/new/path"
 ```
 
@@ -106,14 +106,18 @@ export GOOD_VAR=1 "BAD-VAR"=2 WONT_BE_SET=3
 # Verification
 # 1. Check that GOOD_VAR was set
 env | grep "GOOD_VAR="
-# 2. Check that WONT_BE_SET was NOT set
-env | grep "WONT_BE_SET" # Expected: No output
+# 2. Check 
+env | grep "WONT_BE_SET" #should be set
 # 3. Check the exit code
 echo $?
 ```
+
+CHECK WONT_BE_SET -> SHOULD BE SET
 
 ## Cleanup
 
 ```bash
 unset TEST_VAR LOCAL_VAR EMPTY_VAR NO_VALUE_VAR VAR1 VAR2 GOOD_VAR
 ```
+
+>NEEDS REVIEW

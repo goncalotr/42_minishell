@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 17:11:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/18 11:52:13 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:32:59 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	ms_len_args(char *value)
 			quote = 0;
 		if (ms_isspace(value[i]) && quote == 0)
 		{
-				len++;
-				i++;
-				ms_skip_whitespaces(&i, value);
-				continue;
+			len++;
+			i++;
+			ms_skip_whitespaces(&i, value);
+			continue ;
 		}
 		i++;
 	}
@@ -42,7 +42,7 @@ int	ms_len_args(char *value)
 
 int	ms_len_arg(char *value, int *i)
 {
-	int len;
+	int	len;
 	int	quote;
 	int	x;
 
@@ -51,19 +51,19 @@ int	ms_len_arg(char *value, int *i)
 	x = (*i);
 	while (value[x])
 	{
-		if(ms_is_quote(value[x]) && !quote)
+		if (ms_is_quote(value[x]) && !quote)
 			quote = value[x];
 		else if (ms_is_quote(value[x]) && quote == value[x])
 			quote = 0;
 		if ((ms_isspace(value[x]) || ms_ismetachar(value[x])) && quote == 0)
-				break ;
+			break ;
 		x++;
 	}
 	len = x - (*i);
 	return (len);
 }
 
-char	 *ms_put_args(char *value,int *i)
+char	*ms_put_args(char *value, int *i)
 {
 	int		quote;
 	char	*arg;
@@ -73,7 +73,7 @@ char	 *ms_put_args(char *value,int *i)
 	quote = 0;
 	arg = malloc(ms_len_arg(value, i) + 1);
 	if (!arg)
-		return NULL;
+		return (NULL);
 	while (value[*i])
 	{
 		if (ms_is_quote(value[*i]) && !quote)
@@ -90,17 +90,15 @@ char	 *ms_put_args(char *value,int *i)
 	return (arg);
 }
 
-t_token	*ms_quotes_cmd(t_token *token)
+t_token	*ms_quotes_cmd(t_token *token, int x)
 {
 	char	**args;
 	int		i;
-	int		x;
-	
-	x = 0;
+
 	i = 0;
-	args = malloc(sizeof(char*) * (ms_len_args(token->value) + 1));
+	args = malloc(sizeof (char *) * (ms_len_args(token->value) + 1));
 	if (!args)
-		return NULL;
+		return (NULL);
 	while (token->value[i])
 	{
 		args[x] = ms_put_args(token->value, &i);
@@ -116,6 +114,7 @@ t_token	*ms_quotes_cmd(t_token *token)
 	}
 	token->args = args;
 	free(token->value);
+	token->value = NULL;
 	return (token);
 }
 

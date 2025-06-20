@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 13:40:48 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:00:49 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,24 @@ static bool	ft_isspace(char c)
 			c == '\v' || c == '\f' || c == '\r');
 }
 
-/*
-** @brief Helper for atol_validate to check for overflow before calculation.
-*/
+/**
+ * @brief Helper for atol_validate to check for overflow before calculation.
+ *
+ * positive workflow
+ * negative workflow
+ */
 static bool	ft_check_overflow(long long result, int digit, int sign)
 {
-	if (sign == 1 && (result > (LLONG_MAX - digit) / 10))
-		return (true);
-	if (sign == -1 && (result > (-(LLONG_MIN + digit)) / 10))
-		return (true);
+	if (sign == 1)
+	{
+		if (result > LLONG_MAX / 10 || (result == LLONG_MAX / 10 && digit > LLONG_MAX % 10))
+			return (true);
+	}
+	else if (sign == -1)
+	{
+		if (result > -(LLONG_MIN / 10) || (result == -(LLONG_MIN / 10) && digit > -(LLONG_MIN % 10)))
+			return (true);
+	}
 	return (false);
 }
 

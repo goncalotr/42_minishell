@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 10:49:48 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:12:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static int	ms_cd_error(const char *arg, const char *msg)
 /**
  * get's var from the project custom list
  */
+/*
 static char	*ms_getenv(t_minishell *data, const char *name)
 {
 	int		i;
@@ -48,6 +49,7 @@ static char	*ms_getenv(t_minishell *data, const char *name)
 	}
 	return (NULL);
 }
+*/
 
 static int	update_pwd_vars(t_minishell *data)
 {

@@ -6,19 +6,28 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 10:47:28 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:40:48 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-//extern unsigned char	g_signal;
-
-//todo implement in libft
 static bool	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n' || \
 			c == '\v' || c == '\f' || c == '\r');
+}
+
+/*
+** @brief Helper for atol_validate to check for overflow before calculation.
+*/
+static bool	ft_check_overflow(long long result, int digit, int sign)
+{
+	if (sign == 1 && (result > (LLONG_MAX - digit) / 10))
+		return (true);
+	if (sign == -1 && (result > (-(LLONG_MIN + digit)) / 10))
+		return (true);
+	return (false);
 }
 
 /**
@@ -39,7 +48,6 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 	long long	result;
 	int			sign;
 	int			i;
-	int			digit;
 
 	result = 0;
 	sign = 1;
@@ -56,20 +64,15 @@ bool	ft_atol_validate(const char *str, long long *n_out)
 		return (false);
 	while (ft_isdigit(str[i]))
 	{
-		digit = str[i] - '0';
-		if (sign == 1 && (result > (LLONG_MAX - digit) / 10))
+		if (ft_check_overflow(result, str[i] - '0', sign))
 			return (false);
-		if (sign == -1 && (result > (-(LLONG_MIN + digit)) / 10))
-			return (false);
-		result = result * 10 + digit;
+		result = result * 10 + (str[i] - '0');
 		i++;
 	}
 	while (ft_isspace(str[i]))
 		i++;
-	if (str[i] != '\0')
-		return (false);
 	*n_out = sign * result;
-	return (true);
+	return (str[i] == '\0');
 }
 
 void	ms_exit_shell(t_minishell *data, int exit_code)
@@ -78,8 +81,26 @@ void	ms_exit_shell(t_minishell *data, int exit_code)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
-		ms_clean_all(data);
+	ms_clean_all(data);
 	exit(exit_code);
+}
+
+/*
+** @brief Handles the case for `exit` with one argument (the exit code).
+*/
+static void	handle_exit_with_one_arg(t_minishell *data, char *arg)
+{
+	long long	exit_code_ll;
+
+	if (ft_atol_validate(arg, &exit_code_ll))
+		ms_exit_shell(data, (unsigned char)exit_code_ll);
+	else
+	{
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		ms_exit_shell(data, 255);
+	}
 }
 
 /**
@@ -92,7 +113,7 @@ void	ms_exit_shell(t_minishell *data, int exit_code)
  * @param last_exit_status The exit status of the previously executed command.
  * @return int Returns 1 if there are too many arguments (and doesn't exit),
  *             otherwise, it calls exit() and does not return.
- * 
+ * 	
  * 1 Count arguments
  * 2 Print exit
  * 3 If only one argument
@@ -102,29 +123,14 @@ void	ms_exit_shell(t_minishell *data, int exit_code)
 int	ms_execute_exit(char **args, t_minishell *data)
 {
 	int			argc;
-	long long	exit_code_ll;
 
 	argc = 0;
 	while (args[argc] != NULL)
 		argc++;
 	if (argc == 1)
-	{	
 		ms_exit_shell(data, data->last_exit_status);
-	}
 	else if (argc == 2)
-	{
-		if (ft_atol_validate(args[1], &exit_code_ll))
-		{
-			ms_exit_shell(data, (unsigned char)exit_code_ll);
-		}
-		else
-		{
-			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-			ft_putstr_fd(args[1], STDERR_FILENO);
-			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-			ms_exit_shell(data, 255);
-		}
-	}
+		handle_exit_with_one_arg(data, args[1]);
 	else
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);

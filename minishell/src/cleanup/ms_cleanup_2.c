@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:16:48 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 10:16:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:19:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,4 @@ void	ms_clean_token_list(t_token *token)
 		free(token);
 		token = temp;
 	}
-}
-
-void	ms_clean_ast(t_ast *node)
-{
-	int	i;
-
-	i = 0;
-	if (!node)
-		return ;
-	ms_clean_ast(node->left);
-	ms_clean_ast(node->right);
-	if (node->args)
-	{
-		while (node->args[i])
-		{
-			free(node->args[i]);
-			i++;
-		}
-		free(node->args);
-		node->args = NULL;
-	}
-	if (node->file_name)
-		free(node->file_name);
-	free(node);
 }

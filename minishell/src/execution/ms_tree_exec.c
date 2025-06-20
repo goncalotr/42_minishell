@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 17:16:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:18:17 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 int	ms_exec_cmd(t_ast *node, t_minishell *data)
 {
 	int		i;
-	char	full_path[1024];
 	char	full_path[1024];
 	pid_t	pid;
 	int		status;

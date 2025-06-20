@@ -6,11 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/15 15:52:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:13:30 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ms_exec_heredoc(t_ast *node)
 {
@@ -113,14 +113,16 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
-		exit(ms_exec_tree(node->left, data));
+		ms_exec_tree(node->left, data);
+		exit(0);
 	}
 	if ((pid_2 = fork()) == 0)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		close(pipefd[1]);
-		exit(ms_exec_tree(node->right, data));
+		ms_exec_tree(node->right, data);
+		exit(0);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
@@ -131,16 +133,29 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
+	/*
+	printf("--- DEBUG a_args ---\n");
+	int k = 0;
+	while (node->args[k])
+	{
+		printf("node->args[%d]: \"%s\"\n", k, node->args[k]);
+		k++;
+	}
+	printf("node->args[%d]: (NULL)\n", k);
+	printf("--- END DEBUG ---\n");
+	*/
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
 	if (strcmp(node->args[0], "cd") == 0)
-		return (ms_execute_cd(node->args));
+		return (ms_execute_cd(data, node->args));
 	if (strcmp(node->args[0], "echo") == 0)
 		return (ms_execute_echo(node->args));
 	if (strcmp(node->args[0], "env") == 0)
 		return (ms_execute_env(node->args, data->envp));
 	if (strcmp(node->args[0], "exit") == 0)
-		return (ms_execute_exit(node->args));
+	{
+		return (ms_execute_exit(node->args, data));
+	}
 	if (strcmp(node->args[0], "export") == 0)
 		return ms_execute_export(node->args, data);
 	else if (strcmp(node->args[0], "pwd") == 0)
@@ -159,14 +174,24 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	int		status;
 	int 	builtin_status;
 
+	//int i2=0;
+	//while (node->args[i2])
+	//{
+	//	printf("args: %s\n", node->args[i2]);
+	//	i2++;
+	//}
+
 	// builtins
 	builtin_status = ms_exec_cmd_builtins(data, node);
 	if (builtin_status != -1)
 	{
 		return (builtin_status);
 	}
-
+	
 	// external commands
+	//return (ms_execute_external_command(data->envp, node->args));
+
+	
 	pid = fork();
 	if ((pid) == 0)
 	{
@@ -174,24 +199,22 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		if (ft_strchr(node->args[0], '/'))
 		{
 			if (access(node->args[0], X_OK) == 0)
-			{
 				execve(node->args[0], node->args, data->envp);
-				data->last_exit_status = 127;
-				perror(node->args[0]);
-				exit(127);
-			}
 			data->last_exit_status = 127;
 			perror(node->args[0]);
 			exit(127);
 		}
 		i = 0;
-		while (data->paths[i])
+		while (data->paths && data->paths[i])
 		{
 			ft_strlcpy(full_path, data->paths[i], sizeof(full_path));
 			ft_strlcat(full_path, "/", sizeof(full_path));
 			ft_strlcat(full_path, node->args[0], sizeof(full_path));
 			if (access(full_path, X_OK) == 0)
+			{
 				execve(full_path, node->args, data->envp);
+				break ;
+			}
 			i++;
 		}
 		data->last_exit_status = 127;
@@ -201,6 +224,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
+	
 	//printf("data->last_exit_status:%d\ng_signal:%d\nerror:127\n", data->last_exit_status, g_signal);
 
 	return (WEXITSTATUS(status));

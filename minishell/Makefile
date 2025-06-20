@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/16 14:35:18 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/18 12:15:38 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,16 +71,15 @@ LDFLAGS			= $(SAN_FLAGS)
 #MANDATORY_SRC	= $(MANDATORY_DIR)main.c
 MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/signals/ms_debug_global_signal.c\
-				  $(SRC_DIR)/parsing/ms_parser_placeholder.c\
 				  $(SRC_DIR)/syntax_check/ms_syntax_utils.c\
 				  $(SRC_DIR)/syntax_check/ms_syntax_check.c\
 				  $(SRC_DIR)/syntax_check/ms_debug_input.c\
 				  $(SRC_DIR)/parsing/ms_parsing.c\
 				  $(SRC_DIR)/parsing/ms_main_parsing.c\
 				  $(SRC_DIR)/parsing/ms_parsing_utils.c\
-				  $(SRC_DIR)/parsing/ms_special_case.c\
 				  $(SRC_DIR)/execution/ms_tree_exec.c\
 				  $(SRC_DIR)/execution/ms_tree_exec_utils.c\
+				  $(SRC_DIR)/cleanup/ms_cleanup.c\
 				  $(SRC_DIR)/tokenization/ms_quotes.c\
 				  $(SRC_DIR)/tokenization/ms_quotes_cmd.c\
 				  $(SRC_DIR)/tokenization/ms_expansion_check.c\
@@ -92,6 +91,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\
 				  $(SRC_DIR)/expand/ms_expand_var_utils.c\
 				  $(SRC_DIR)/builtin/ms_execute_cd.c\
+				  $(SRC_DIR)/builtin/ms_execute_cd_setenv.c\
 				  $(SRC_DIR)/builtin/ms_execute_echo.c\
 				  $(SRC_DIR)/builtin/ms_execute_env.c\
 				  $(SRC_DIR)/builtin/ms_execute_exit.c\

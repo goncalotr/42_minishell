@@ -175,3 +175,28 @@ echo $? | cat -e
 /bin/false
 echo $? | cat -e
 ```
+
+## Other
+
+2025-06-16
+random commands plus:
+```bash
+goteixei@minishell> echo -nn -nnx -n echo
+--- DEBUG a_args ---
+node->args[0]: "echo"
+node->args[1]: "-nn"
+node->args[2]: "-nnx"
+node->args[3]: "-n"
+node->args[4]: "echo"
+node->args[5]: (NULL)
+--- END DEBUG ---
+-nnx -n echogoteixei@minishell> echo -nn ola
+--- DEBUG a_args ---
+node->args[0]: "echo"
+node->args[1]: "-nn"
+node->args[2]: "ola"
+node->args[3]: (NULL)
+--- END DEBUG ---
+olamalloc_consolidate(): invalid chunk size
+[1]    67574 IOT instruction (core dumped)  ./minishell
+```

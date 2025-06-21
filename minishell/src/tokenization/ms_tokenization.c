@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tokenization.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 15:29:27 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:00:09 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,20 @@ t_token	*ms_tokenization(t_minishell *data, char *input)
 	tokens = ms_start_tokenization(input, tokens);
 	tokens = ms_expansion_check(tokens);
 	tokens = ms_expand_variables(data, tokens);
-	tokens = ms_handle_quotes(tokens);
+
+	//tokens = ms_handle_quotes(tokens);
+	// After expansion, we now split CMD tokens into `args`
+	t_token *temp = tokens;
+	while (temp)
+	{
+		if (temp->type == TOKEN_CMD && temp->value)
+		{
+			temp->args = ft_split(temp->value, ' '); // space delimiter
+			free(temp->value);
+			temp->value = NULL;
+		}
+		temp = temp->next;
+	}
+
 	return (tokens);
 }

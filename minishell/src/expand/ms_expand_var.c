@@ -6,11 +6,94 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 10:36:07 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:14:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static char *ms_expand_and_remove_quotes(t_minishell *data, const char *value);
+static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len);
+static char	*ms_process_dollar_construct(t_minishell *data, const char *str_starting_with_dollar, int *construct_len_ptr);
+static char *ms_char_append(char *str, char c);
+
+static char *ms_char_append(char *str, char c)
+{
+	size_t len = ft_strlen(str);
+	char *new_str = malloc(len + 2);
+	if (!new_str)
+	{
+		free(str);
+		return (NULL);
+	}
+	ft_memcpy(new_str, str, len);
+	new_str[len] = c;
+	new_str[len + 1] = '\0';
+	free(str);
+	return (new_str);
+}
+
+/**
+ * @brief Expands variables and removes quotes in a single pass.
+ * This is the core of the fix. It iterates through the token's value,
+ * maintaining a quote state to correctly handle expansion and literal chars.
+ *
+ * @param data The main shell data structure.
+ * @param value The original string value of the token.
+ * @return A new, fully processed string with variables expanded and
+ *         quotes removed.
+ */
+static char *ms_expand_and_remove_quotes(t_minishell *data, const char *value)
+{
+	char			*result;
+	t_token_state	state;
+	int				i;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	state = GENERAL;
+	i = 0;
+	while (value[i])
+	{
+		if (value[i] == '\'' && state == GENERAL)
+			state = SIMPLE_QUOTES;
+		else if (value[i] == '\'' && state == SIMPLE_QUOTES)
+			state = GENERAL;
+		else if (value[i] == '"' && state == GENERAL)
+			state = DOUBLE_QUOTES;
+		else if (value[i] == '"' && state == DOUBLE_QUOTES)
+			state = GENERAL;
+		else if (value[i] == '$' && state != SIMPLE_QUOTES)
+		{
+			char    *expanded_value;
+			int     construct_len;
+			
+			// This function you already have! It figures out what to expand.
+			expanded_value = ms_process_dollar_construct(data, &value[i], &construct_len);
+			if (!expanded_value) {
+				free(result);
+				return (NULL); // Malloc error
+			}
+			if (ms_append_and_free(&result, expanded_value)) {
+				free(expanded_value);
+				free(result);
+				return (NULL); // Malloc error
+			}
+			free(expanded_value);
+			i += construct_len; // Skip past the processed variable (e.g., "$USER")
+			continue;
+		}
+		else
+		{
+			result = ms_char_append(result, value[i]);
+			if (!result)
+				return (NULL);
+		}
+		i++;
+	}
+	return (result);
+}
 
 /*
 static char	*ms_substr(char const *s, unsigned int start, size_t len)
@@ -250,6 +333,7 @@ const char *str_starting_with_dollar, int *construct_len_ptr)
 /**
  * 
  */
+/*
 static char	*ms_substr_2(char const *s, unsigned int start, size_t len)
 {
 	char	*substr;
@@ -275,6 +359,7 @@ static char	*ms_substr_2(char const *s, unsigned int start, size_t len)
 	substr[k] = '\0';
 	return (substr);
 }
+*/
 
 /**
  * char	*result_str;				// The final expanded string being built
@@ -285,6 +370,7 @@ static char	*ms_substr_2(char const *s, unsigned int start, size_t len)
  * int	dollar_pos;					// Position of the next '$' found
  * int	processed_construct_len;	// Length of the $VAR construct processed
  */
+/*
 static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
 {
 	char	*result_str;
@@ -366,6 +452,7 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
 	}
 	return (result_str);
 }
+*/
 
 /**
  * @brief Iterates through args array and expands variables in each argument
@@ -374,6 +461,7 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
+/*
 t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 {
 	t_token	*current_token;
@@ -420,6 +508,47 @@ STDERR_FILENO);
 			current_token->expand_index = NULL;
 		}
 		current_token->expand = false;
+		current_token = current_token->next;
+	}
+	return (list_head);
+}
+*/
+
+/**
+ * @brief Iterates through the token list and applies expansion and quote removal.
+ *        This version uses the new, combined function for correctness.
+ *
+ * @param data The main shell data structure.
+ * @param list_head The head of the token list.
+ * @return The (potentially modified) head of the token list.
+ */
+t_token *ms_expand_variables(t_minishell *data, t_token *list_head)
+{
+	t_token	*current_token;
+	char	*original_value;
+	char	*processed_value;
+
+	current_token = list_head;
+	while (current_token)
+	{
+		if (current_token->type == TOKEN_CMD || current_token->type == TOKEN_INFILE || current_token->type == TOKEN_OUTFILE)
+		{
+			if (current_token->previous && current_token->previous->type == TOKEN_HEREDOC) {
+				current_token = current_token->next;
+				continue;
+			}
+			original_value = current_token->value;
+			processed_value = ms_expand_and_remove_quotes(data, original_value);
+			if (!processed_value)
+			{
+				ft_putstr_fd("minishell: critical expansion error\n", 2);
+			} 
+			else 
+			{
+				free(original_value);
+				current_token->value = processed_value;
+			}
+		}
 		current_token = current_token->next;
 	}
 	return (list_head);

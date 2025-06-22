@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 17:16:51 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:12:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	data->last_exit_status = ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
-	rl_clear_history();
+	//rl_clear_history();
+	// this removes the history functionality completely
 }
 
 /* void print_indent(int level)

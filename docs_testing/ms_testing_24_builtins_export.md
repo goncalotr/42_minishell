@@ -121,3 +121,16 @@ unset TEST_VAR LOCAL_VAR EMPTY_VAR NO_VALUE_VAR VAR1 VAR2 GOOD_VAR
 ```
 
 >NEEDS REVIEW
+
+
+
+## More tests
+
+```bash
+export test="a  bc        def"
+```
+
+```bash
+export ola="a b" c
+```
+

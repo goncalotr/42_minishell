@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/22 18:16:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:42:09 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ t_token	*ms_tokenization(t_minishell *data, char *input)
 		temp = temp->next;
 	}
 	*/
-	ms_debug_print_tokens(tokens, "3. ms_handle_quotes");
+	//ms_debug_print_tokens(tokens, "3. ms_handle_quotes");
 
 	return (tokens);
 }

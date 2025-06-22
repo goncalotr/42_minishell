@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 17:43:32 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:38:38 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,10 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 
 int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 {
-	t_ast	*cmd;
 	t_ast	*infile;
 	int		fd;
 	int		status;
 
-	cmd = node->left;
 	infile = node->right;
 	if (node->type == TOKEN_HEREDOC)
 		fd = open(node->file_name, O_RDONLY);
@@ -95,7 +93,7 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	status = ms_exec_tree(cmd, data);
+	status = ms_exec_tree(node->left, data);
 	dup2(data->stdin_fd, STDIN_FILENO);
 	return (status);
 }

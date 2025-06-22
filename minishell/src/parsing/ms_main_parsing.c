@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/22 18:04:33 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:12:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	ms_main_parsing(char *input, t_minishell *data)
 	ms_clean_ast(data->tree);
 	//rl_clear_history();
 	// this removes the history functionality completely
-	// the clean_all function is responsible for this
 }
 
 /* void print_indent(int level)

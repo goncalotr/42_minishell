@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 17:15:24 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:13:03 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ void	ms_clean_all(t_minishell *data)
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
 	ms_cleanup_shell(data);
-	clear_history();
+	//clear_history();
+	// readline cleans it self
 }

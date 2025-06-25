@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 15:53:37 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:20:08 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	close(fd);
 	status = ms_exec_tree(cmd, data);
 	dup2(data->stdout_fd, STDOUT_FILENO);
-	close(data->stdout_fd);
 	return (status);
 }
 

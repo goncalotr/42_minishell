@@ -3,14 +3,104 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/17 13:38:37 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/22 16:56:29 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static char	*ms_expand_and_remove_quotes(t_minishell *data, \
+const char *value);
+static char	*ms_get_expansion_info(const char *str, \
+int dollar_pos, int *target_len);
+static char	*ms_process_dollar_construct(t_minishell *data, \
+const char *str_starting_with_dollar, int *construct_len_ptr);
+static char	*ms_char_append(char *str, char c);
+
+static char	*ms_char_append(char *str, char c)
+{
+	size_t	len;
+	char	*new_str;
+
+	len = ft_strlen(str);
+	new_str = malloc(len + 2);
+	if (!new_str)
+	{
+		free(str);
+		return (NULL);
+	}
+	ft_memcpy(new_str, str, len);
+	new_str[len] = c;
+	new_str[len + 1] = '\0';
+	free(str);
+	return (new_str);
+}
+
+/**
+ * @brief Expands variables and removes quotes in a single pass.
+ * This is the core of the fix. It iterates through the token's value,
+ * maintaining a quote state to correctly handle expansion and literal chars.
+ *
+ * @param data The main shell data structure.
+ * @param value The original string value of the token.
+ * @return A new, fully processed string with variables expanded and
+ *         quotes removed.
+ */
+static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value)
+{
+	char			*result;
+	t_token_state	state;
+	int				i;
+	char			*expanded_value;
+	int				construct_len;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	state = GENERAL;
+	i = 0;
+	while (value[i])
+	{
+		if (value[i] == '\'' && state == GENERAL)
+			state = SIMPLE_QUOTES;
+		else if (value[i] == '\'' && state == SIMPLE_QUOTES)
+			state = GENERAL;
+		else if (value[i] == '"' && state == GENERAL)
+			state = DOUBLE_QUOTES;
+		else if (value[i] == '"' && state == DOUBLE_QUOTES)
+			state = GENERAL;
+		else if (value[i] == '$' && state != SIMPLE_QUOTES)
+		{
+			expanded_value = ms_process_dollar_construct(data, \
+				&value[i], &construct_len);
+			if (!expanded_value)
+			{
+				free(result);
+				return (NULL);
+			}
+			if (ms_append_and_free(&result, expanded_value))
+			{
+				free(expanded_value);
+				free(result);
+				return (NULL);
+			}
+			free(expanded_value);
+			i += construct_len;
+			continue ;
+		}
+		else
+		{
+			result = ms_char_append(result, value[i]);
+			if (!result)
+				return (NULL);
+		}
+		i++;
+	}
+	return (result);
+}
 
 /*
 static char	*ms_substr(char const *s, unsigned int start, size_t len)
@@ -74,7 +164,8 @@ static char	*ms_substr(char const *s, unsigned int start, size_t len)
  * 
  */
 
-static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_len)
+static char	*ms_get_expansion_info(const char *str, \
+int dollar_pos, int *target_len)
 {
 	int		i;
 	char	*info;
@@ -103,7 +194,6 @@ static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_
 	return (info);
 }
 
-
 /**
  * @brief Processes one potential expansion segment within the
  * main expansion loop.
@@ -117,8 +207,8 @@ static char	*ms_get_expansion_info(const char *str, int dollar_pos, int *target_
  * @return 0 on success, 1 on error.
  */
 /*
-static int	ms_process_one_expansion(t_minishell *data, char *str, char **res_ptr, \
-									int *cur_pos_ptr, int dol_pos)
+static int	ms_process_one_expansion(t_minishell *data, \
+char *str, char **res_ptr, int *cur_pos_ptr, int dol_pos)
 {
 	char	*info;
 	char	*value;
@@ -126,7 +216,8 @@ static int	ms_process_one_expansion(t_minishell *data, char *str, char **res_ptr
 	int		target_len;
 
 	target_len = 0;
-	literal = ms_substr(str, (unsigned int) *cur_pos_ptr, dol_pos - *cur_pos_ptr);
+	literal = ms_substr(str, (unsigned int) *cur_pos_ptr, \
+	dol_pos - *cur_pos_ptr);
 	if (!literal || ms_append_and_free(res_ptr, literal))
 	{ 
 		free(literal);
@@ -215,39 +306,41 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *list)
 }
 */
 
-
 /**
  * given string starts with $
  * returns the expanded value of that $ construct.
  * updates 'construct_len_ptr' with the length of the recognized construct 
  */
-static char *ms_process_dollar_construct(t_minishell *data, \
+static char	*ms_process_dollar_construct(t_minishell *data, \
 const char *str_starting_with_dollar, int *construct_len_ptr)
 {
-	char *info;
-	char *value;
+	char	*info;
+	char	*value;
 
 	*construct_len_ptr = 0;
-	info = ms_get_expansion_info(str_starting_with_dollar, 0, construct_len_ptr);
-	if (!info) {
+	info = ms_get_expansion_info(str_starting_with_dollar, 0, \
+		construct_len_ptr);
+	if (!info)
+	{
 		if (construct_len_ptr && *construct_len_ptr == 0)
 			*construct_len_ptr = 1;
-		return ft_strdup("$"); // Return literal $ if info failed or indicated literal $
+		return (ft_strdup("$"));
 	}
-	// 
 	value = ms_get_expansion_value(data, info);
 	free(info);
-	if (!value) {
+	if (!value)
+	{
 		if (construct_len_ptr && *construct_len_ptr == 0)
 			*construct_len_ptr = 1;
 		return (NULL);
 	}
-	return (value); // Return the expanded string
+	return (value);
 }
 
 /**
  * 
  */
+/*
 static char	*ms_substr_2(char const *s, unsigned int start, size_t len)
 {
 	char	*substr;
@@ -273,30 +366,41 @@ static char	*ms_substr_2(char const *s, unsigned int start, size_t len)
 	substr[k] = '\0';
 	return (substr);
 }
+*/
 
+/**
+ * char	*result_str;				// The final expanded string being built
+ * char	*literal_prefix;			// Literal part before a '$'
+ * char	*expanded_value;			// Value from ms_process_dollar_construct
+ * int	current_pos_in_token;		// Our scan
+ * 									   position in token_to_expand->value
+ * int	dollar_pos;					// Position of the next '$' found
+ * int	processed_construct_len;	// Length of the $VAR construct processed
+ */
+/*
 static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
 {
-	char	*result_str;            // The final expanded string being built
-	char	*literal_prefix;        // Literal part before a '$'
-	char	*expanded_value;        // Value from ms_process_dollar_construct
-	int		current_pos_in_token;   // Our scan position in token_to_expand->value
-	int		dollar_pos;             // Position of the next '$' found
-	int		processed_construct_len; // Length of the $VAR construct processed
+	char	*result_str;
+	char	*literal_prefix;
+	char	*expanded_value;
+	int		current_pos_in_token;
+	int		dollar_pos;
+	int		processed_construct_len;
 
 	if (!token_to_expand || !token_to_expand->value)
 		return (ft_strdup(""));
-	
 	result_str = ft_strdup("");
 	if (!result_str)
 		return (NULL);
 	current_pos_in_token = 0;
 	while ((size_t)current_pos_in_token < ft_strlen(token_to_expand->value))
 	{
-		dollar_pos = ms_find_next_dollar(token_to_expand->value, current_pos_in_token);
-		if (dollar_pos == -1) // No more '$' found
+		dollar_pos = ms_find_next_dollar(token_to_expand->value, \
+		current_pos_in_token);
+		if (dollar_pos == -1)
 		{
-			// append the rest of string as literal
-			literal_prefix = ms_substr_2(token_to_expand->value, current_pos_in_token, 
+			literal_prefix = ms_substr_2(token_to_expand->value, \
+			current_pos_in_token, \
 			ft_strlen(token_to_expand->value) - current_pos_in_token);
 			if (!literal_prefix)
 			{
@@ -312,15 +416,14 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
 				return (NULL);
 			}
 			free(literal_prefix);
-			break;
+			break ;
 		}
 		else
 		{
-			// 1. Append the literal part from current_pos_in_token up to dollar_pos
 			if (dollar_pos > current_pos_in_token)
 			{
-				literal_prefix = ms_substr_2(token_to_expand->value, current_pos_in_token,
-									 dollar_pos - current_pos_in_token);
+				literal_prefix = ms_substr_2(token_to_expand->value, \
+					current_pos_in_token, dollar_pos - current_pos_in_token);
 				if (!literal_prefix)
 				{
 					if (result_str)
@@ -335,13 +438,8 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
 				}
 				free(literal_prefix);
 			}
-
-
-			// 2. Process the construct starting at dollar_pos
-			//    Pass the substring that starts with '$'
-			expanded_value = ms_process_dollar_construct(data, 
-														 token_to_expand->value + dollar_pos, 
-														 &processed_construct_len);
+			expanded_value = ms_process_dollar_construct(data, \
+				token_to_expand->value + dollar_pos, &processed_construct_len);
 			if (!expanded_value)
 			{
 				if (result_str)
@@ -356,13 +454,12 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
 				return (NULL);
 			}
 			free(expanded_value);
-
-			// 3. Update current_pos_in_token to skip past the processed construct
 			current_pos_in_token = dollar_pos + processed_construct_len;
 		}
 	}
 	return (result_str);
 }
+*/
 
 /**
  * @brief Iterates through args array and expands variables in each argument
@@ -371,7 +468,8 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *token_to_expand)
  * @param args The argument array (from ft_split). Will be modified.
  * @param last_exit_status The value for $?.
  */
-t_token *ms_expand_variables(t_minishell *data, t_token *list_head)
+/*
+t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 {
 	t_token	*current_token;
 	char	*original_value;
@@ -382,12 +480,8 @@ t_token *ms_expand_variables(t_minishell *data, t_token *list_head)
 	current_token = list_head;
 	if (!current_token->value)
 		return (NULL);
-
-	//i = 0;
 	while (current_token)
 	{
-		// here doc
-		// no expand, clean expand_index
 		if (current_token->type == TOKEN_EOF)
 		{
 			if (current_token->expand_index)
@@ -397,15 +491,12 @@ t_token *ms_expand_variables(t_minishell *data, t_token *list_head)
 			}
 			current_token->expand = false;
 			current_token = current_token->next;
-			continue;
+			continue ;
 		}
-
 		if (current_token->expand == true && current_token->value)
 		{
 			original_value = current_token->value;
 			expanded_value_str = ms_expand_str_help(data, current_token);
-
-			// result check
 			if (!expanded_value_str)
 			{
 				ft_putstr_fd("minishell: expansion error for token value: ", \
@@ -414,20 +505,62 @@ STDERR_FILENO);
 			}
 			else
 			{
-			
 				free(original_value);
 				current_token->value = expanded_value_str;
 			}
 		}
-
-		// clean expand_index
 		if (current_token->expand_index)
 		{
 			free(current_token->expand_index);
 			current_token->expand_index = NULL;
 		}
 		current_token->expand = false;
+		current_token = current_token->next;
+	}
+	return (list_head);
+}
+*/
 
+/**
+ * @brief Iterates through the token list and applies
+ *        expansion and quote removal.
+ *        This version uses the new, combined function
+ *        for correctness.
+ *
+ * @param data The main shell data structure.
+ * @param list_head The head of the token list.
+ * @return The (potentially modified) head of the token list.
+ */
+t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
+{
+	t_token	*current_token;
+	char	*original_value;
+	char	*processed_value;
+
+	current_token = list_head;
+	while (current_token)
+	{
+		if (current_token->type == TOKEN_CMD || current_token->type \
+			== TOKEN_INFILE || current_token->type == TOKEN_OUTFILE)
+		{
+			if (current_token->previous && \
+				current_token->previous->type == TOKEN_HEREDOC)
+			{
+				current_token = current_token->next;
+				continue ;
+			}
+			original_value = current_token->value;
+			processed_value = ms_expand_and_remove_quotes(data, original_value);
+			if (!processed_value)
+			{
+				ft_putstr_fd("minishell: critical expansion error\n", 2);
+			}
+			else
+			{
+				free(original_value);
+				current_token->value = processed_value;
+			}
+		}
 		current_token = current_token->next;
 	}
 	return (list_head);

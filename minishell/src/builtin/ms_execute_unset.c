@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:31:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 20:12:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:43:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,20 @@ int	ms_execute_unset(char **args, t_minishell *data)
 	int		var_index;
 	char	*var_name;
 
+	//ft_putstr_fd("\n--- DEBUG: ENTERING ms_execute_unset ---\n", 2); // To STDERR
+
 	exit_status = 0;
 	i = 1;
 	while (args[i])
 	{
+		//ft_putstr_fd("DEBUG: Unsetting arg: ", 2);
+		//ft_putstr_fd(args[i], 2);
+		//ft_putstr_fd("\n", 2);
+
 		var_name = args[i];
 		if (!ms_valid_identifier(var_name))
 		{
+			//ft_putstr_fd("DEBUG: IDENTIFIER IS INVALID. PRINTING ERROR.\n", 2);
 			ms_print_invalid_identifier_err(var_name);
 			exit_status = 1;
 		}
@@ -130,11 +137,11 @@ int	ms_execute_unset(char **args, t_minishell *data)
 		{
 			var_index = ms_find_env_var_index(var_name, data->envp);
 			if (var_index != -1)
-			{
 				ms_remove_env_var_at_index(var_index, data);
-			}
 		}
 		i++;
 	}
+
+	//ft_putstr_fd("--- DEBUG: LEAVING ms_execute_unset ---\n\n", 2);
 	return (exit_status);
 }

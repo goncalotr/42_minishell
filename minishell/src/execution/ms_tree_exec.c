@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 16:20:08 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:31:11 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	int	status;
 
 	pipe(pipefd);
-	if ((pid_1 = fork()) == 0)
+	pid_1 = fork();
+	if (pid_1 == 0)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
@@ -114,7 +115,8 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		ms_cleanup_shell(data);
 		exit(0);
 	}
-	if ((pid_2 = fork()) == 0)
+	pid_2 = fork();
+	if (pid_2 == 0)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
@@ -134,17 +136,6 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
-	/*
-	printf("--- DEBUG a_args ---\n");
-	int k = 0;
-	while (node->args[k])
-	{
-		printf("node->args[%d]: \"%s\"\n", k, node->args[k]);
-		k++;
-	}
-	printf("node->args[%d]: (NULL)\n", k);
-	printf("--- END DEBUG ---\n");
-	*/
 	if (node->args == NULL || node->args[0] == NULL)
 		return (0);
 	if (strcmp(node->args[0], "cd") == 0)
@@ -174,25 +165,16 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	pid_t	pid;
 	int		status;
 	int		builtin_status;
+	int		final_exit_status;
 
-	//int i2=0;
-	//while (node->args[i2])
-	//{
-	//	printf("args: %s\n", node->args[i2]);
-	//	i2++;
-	//}
-	// builtins
 	builtin_status = ms_exec_cmd_builtins(data, node);
 	if (builtin_status != -1)
 	{
 		return (builtin_status);
 	}
-	// external commands
-	//return (ms_execute_external_command(data->envp, node->args));
 	pid = fork();
 	if ((pid) == 0)
 	{
-		//printf("fork");
 		if (ft_strchr(node->args[0], '/'))
 		{
 			if (access(node->args[0], X_OK) == 0)
@@ -228,7 +210,17 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	ms_clean_heredocs(data->tree);
 	ms_signal_handlers_set_interactive();
 	ms_exit_with_code(data, status);
-	return (WEXITSTATUS(status));
+	if (WIFEXITED(status))
+		final_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		final_exit_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	}
+	else
+		final_exit_status = 1; 
+	return (final_exit_status);
 }
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)

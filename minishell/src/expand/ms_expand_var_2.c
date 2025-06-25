@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 14:21:48 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:11:25 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info)
 		return (ft_strdup("$"));
 	else
 	{
-		env_val = getenv(info);
+		env_val = ms_getenv(data, info);
 		if (env_val)
 			return (ft_strdup(env_val));
 		else

@@ -74,6 +74,25 @@ cd -
 pwd
 ```
 
+### Test 4
+
+```bash
+cd ""
+```
+
+### Test 5
+
+```bash
+unset HOME
+cd
+```
+
+### Test 6
+
+```bash
+cd $PWD
+```
+
 ## Path Navigation Testing
 
 ### Test 1

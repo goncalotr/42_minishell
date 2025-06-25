@@ -6,10 +6,11 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 13:04:57 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:31:03 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../inc/minishell.h"
 #include "../inc/minishell.h"
 
 void	ms_clean_ast(t_ast *node)
@@ -84,5 +85,6 @@ void	ms_clean_all(t_minishell *data)
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
 	ms_cleanup_shell(data);
-	clear_history();
+	//clear_history();
+	// readline cleans it self
 }

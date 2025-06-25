@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tree_exec_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:27:10 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 16:40:31 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:15:42 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ms_prepare_heredocs(t_ast *node)
 {

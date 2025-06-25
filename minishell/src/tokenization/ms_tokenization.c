@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 17:16:09 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:45:12 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ t_token	*ms_tokenization(t_minishell *data, char *input)
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);
 	tokens = ms_join_cmd(tokens);
-	ms_print_tokens(tokens);
+	// ms_print_tokens(tokens);
 	tokens = ms_expansion_check(tokens);
 	tokens = ms_expand_variables(data, tokens);
 	tokens = ms_handle_quotes(tokens);

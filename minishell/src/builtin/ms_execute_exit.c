@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 15:30:11 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:51:57 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	ms_exit_shell(t_minishell *data, int exit_code)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
-	ms_clean_all(data);
+	ms_cleanup_shell(data);
+	clear_history();
 	exit(exit_code);
 }
 

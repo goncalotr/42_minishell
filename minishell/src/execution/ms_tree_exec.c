@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 17:18:17 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:52:17 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,10 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 
 int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 {
-	t_ast	*cmd;
 	t_ast	*infile;
 	int		fd;
 	int		status;
 
-	cmd = node->left;
 	infile = node->right;
 	if (node->type == TOKEN_HEREDOC)
 		fd = open(node->file_name, O_RDONLY);
@@ -93,12 +91,10 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 		perror("open infile");
 		return (1);
 	}
-	cmd->original_stdin = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	status = ms_exec_tree(cmd, data);
-	dup2(cmd->original_stdin, STDIN_FILENO);
-	close(cmd->original_stdin);
+	status = ms_exec_tree(node->left, data);
+	dup2(data->stdin_fd, STDIN_FILENO);
 	return (status);
 }
 
@@ -188,6 +184,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 				execve(node->args[0], node->args, data->envp);
 			data->last_exit_status = 127;
 			perror(node->args[0]);
+			close(data->stdin_fd);
 			ms_clean_heredocs(data->tree);
 			ms_clean_ast(data->tree);
 			ms_cleanup_shell(data);
@@ -208,7 +205,6 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		}
 		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
-		close(node->original_stdin);
 		ms_clean_heredocs(data->tree);
 		ms_clean_ast(data->tree);
 		ms_cleanup_shell(data);

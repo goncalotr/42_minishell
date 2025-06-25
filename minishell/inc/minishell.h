@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/22 16:49:31 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:51:38 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_ast
 	char			**args;
 	int				node_nbr;
 	char			*file_name;
-	int				original_stdin;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;

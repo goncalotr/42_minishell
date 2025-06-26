@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 12:53:28 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:23:41 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,6 @@ t_token	*ms_start_tokenization(char *input, t_token *list)
 t_token	*ms_tokenization(t_minishell *data, char *input)
 {
 	t_token		*tokens;
-	int	i = 0;
 
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);

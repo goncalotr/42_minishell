@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 19:11:01 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:52:23 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,18 @@ static void	ms_core_loop(t_minishell *data)
 			Exiting.\n", 2);
 			break ;
 		}
-
 		input_line = readline(prompt_str);
 		free(prompt_str);
-
+		if (g_signal == SIGINT)
+		{
+			data->last_exit_status = 130;
+			g_signal = 0;
+		}
 		// 2. Handle readline's return value
 		if (input_line == NULL)
 		{
 			ms_exit_shell(data, data->last_exit_status);
-			/*
-			if (g_signal == SIGINT)
-				continue;
-
-			if (isatty(STDIN_FILENO))
-			{
-				ft_putstr_fd("exit\n", STDOUT_FILENO);
-				fflush(stdout); // Try to force the buffer to flush
-				usleep(10000); 
-			}
-			break;
-			*/
 		}
-
 		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{
@@ -86,22 +76,17 @@ static void	ms_core_loop(t_minishell *data)
 			free(input_line);
 			continue ;
 		}
-	
 		add_history(input_line);
-
 		// --- Syntax check ---
 		// ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
 		//args = ms_parse_input_placeholder(input_line);
 		if (ms_syntax_check(input_line))
 		{
-			data->last_exit_status = 2; //or 258?
+			data->last_exit_status = 2; //or 258? 2 for syntax errors
 			free(input_line);
 			continue ;
 		}
-		
-		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
-
 		free(input_line);
 	}
 	rl_clear_history();

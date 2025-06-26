@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 13:18:03 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:37:34 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,7 @@ void	ms_cleanup_shell(t_minishell *data);
 void	ms_free_envp_copy(char **envp);
 void	ms_free_data_paths(char **paths);
 void	ms_clean_all(t_minishell *data);
+void	ms_clean_token_list(t_token *token);
 
 //ms_quotes.c
 int		ms_new_value_len(char *value);

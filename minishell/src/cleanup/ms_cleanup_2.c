@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:16:48 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 17:08:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:36:44 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static void	ms_free_one_token(t_token *token)
 	free(token);
 	}
 
+// Main function to free the whole list
 void	ms_clean_token_list(t_token *token)
 {
 	t_token	*temp;
@@ -54,7 +55,8 @@ void	ms_clean_token_list(t_token *token)
 	while (token)
 	{
 		temp = token->next;
-		free(token);
+		//free(token);
+		ms_free_one_token(token);
 		token = temp;
 	}
 }

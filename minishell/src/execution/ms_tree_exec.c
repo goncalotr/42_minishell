@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 12:52:17 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:21:06 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	{
 		return (builtin_status);
 	}
+	ms_signal_handlers_set_non_interactive();
 	pid = fork();
 	if ((pid) == 0)
 	{
@@ -211,8 +212,8 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		exit(127);
 	}
 	waitpid(pid, &status, 0);
-	ms_clean_heredocs(data->tree);
 	ms_signal_handlers_set_interactive();
+	ms_clean_heredocs(data->tree);
 	ms_exit_with_code(data, status);
 	if (WIFEXITED(status))
 		final_exit_status = WEXITSTATUS(status);

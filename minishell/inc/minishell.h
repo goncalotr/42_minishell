@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/25 12:51:38 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:19:00 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 void	ms_signal_handlers_set_interactive(void);
+void	ms_signal_handlers_set_non_interactive(void);
 
 // ------------------PARSER-------------------------
 // ms_syntax_check.c

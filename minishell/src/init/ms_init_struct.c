@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 12:13:49 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:36:43 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,30 +129,30 @@ int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 		return (1);
 	data->paths = get_path(data->envp);
 	data->last_exit_status = 0;
-	// data->stdin_fd = dup(STDIN_FILENO);
-	// if (data->stdin_fd == -1)
-	// {
-	// 	perror("minishell: dup(STDIN_FILENO)");
-	// 	free_envp_copy(data->envp);
-	// 	return (1);
-	// }
-	// data->stdout_fd = dup(STDOUT_FILENO);
-	// if (data->stdout_fd == -1)
-	// {
-	// 	perror("minishell: dup(STDOUT_FILENO)");
-	// 	free_envp_copy(data->envp);
-	// 	close(data->stdin_fd);
-	// 	return (1);
-	// }
-	// data->stderr_fd = dup(STDERR_FILENO);
-	// if (data->stderr_fd == -1)
-	// {
-	// 	perror("minishell: dup(STDERR_FILENO)");
-	// 	free_envp_copy(data->envp);
-	// 	close(data->stdin_fd);
-	// 	close(data->stdout_fd);
-	// 	return (1);
-	// }
+	data->stdin_fd = dup(STDIN_FILENO);
+	if (data->stdin_fd == -1)
+	{
+		perror("minishell: dup(STDIN_FILENO)");
+		free_envp_copy(data->envp);
+		return (1);
+	}
+	data->stdout_fd = dup(STDOUT_FILENO);
+	if (data->stdout_fd == -1)
+	{
+		perror("minishell: dup(STDOUT_FILENO)");
+		free_envp_copy(data->envp);
+		close(data->stdin_fd);
+		return (1);
+	}
+	data->stderr_fd = dup(STDERR_FILENO);
+	if (data->stderr_fd == -1)
+	{
+		perror("minishell: dup(STDERR_FILENO)");
+		free_envp_copy(data->envp);
+		close(data->stdin_fd);
+		close(data->stdout_fd);
+		return (1);
+	}
 	if (argv[0])
 		data->shell_name = ft_strdup(argv[0]);
 	else

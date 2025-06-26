@@ -6,20 +6,22 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/22 16:56:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:53:52 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static char	*ms_expand_and_remove_quotes(t_minishell *data, \
-const char *value);
+//static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value);
+/*
 static char	*ms_get_expansion_info(const char *str, \
 int dollar_pos, int *target_len);
 static char	*ms_process_dollar_construct(t_minishell *data, \
 const char *str_starting_with_dollar, int *construct_len_ptr);
 static char	*ms_char_append(char *str, char c);
+*/
 
+/*
 static char	*ms_char_append(char *str, char c)
 {
 	size_t	len;
@@ -38,6 +40,7 @@ static char	*ms_char_append(char *str, char c)
 	free(str);
 	return (new_str);
 }
+*/
 
 /**
  * @brief Expands variables and removes quotes in a single pass.
@@ -49,6 +52,7 @@ static char	*ms_char_append(char *str, char c)
  * @return A new, fully processed string with variables expanded and
  *         quotes removed.
  */
+/*
 static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value)
 {
 	char			*result;
@@ -101,6 +105,60 @@ static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value)
 	}
 	return (result);
 }
+*/
+
+/*
+static char	*ms_expand_variables_in_string(t_minishell *data, const char *value)
+{
+	char			*result;
+	t_token_state	state;
+	int				i;
+	char			*expanded_value;
+	int				construct_len;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	state = GENERAL; // We still use state to know if we are inside single quotes
+	i = 0;
+	while (value[i])
+	{
+		// Toggle state but DON'T skip the character
+		if (value[i] == '\'' && state == GENERAL)
+			state = SIMPLE_QUOTES;
+		else if (value[i] == '\'' && state == SIMPLE_QUOTES)
+			state = GENERAL;
+		
+		// Handle expansion only if not in single quotes
+		if (value[i] == '$' && state != SIMPLE_QUOTES)
+		{
+			// This part is the same as before
+			expanded_value = ms_process_dollar_construct(data, &value[i], &construct_len);
+			if (!expanded_value)
+			{
+				free(result);
+				return (NULL);
+			}
+			if (ms_append_and_free(&result, expanded_value))
+			{
+				free(expanded_value);
+				free(result);
+				return (NULL);
+			}
+			free(expanded_value);
+			i += construct_len; // Move past the processed construct (e.g., "$VAR")
+			continue ;
+		}
+		
+		// Append the current character to the result
+		result = ms_char_append(result, value[i]);
+		if (!result)
+			return (NULL);
+		i++;
+	}
+	return (result);
+}
+*/
 
 /*
 static char	*ms_substr(char const *s, unsigned int start, size_t len)
@@ -522,6 +580,60 @@ STDERR_FILENO);
 */
 
 /**
+ * @brief Builds a new string by expanding variables at specified indices.
+ * @return A new, expanded string, or NULL on error.
+ */
+static char *ms_expand_str_with_indices(t_minishell *data, t_token *token)
+{
+	char	*result_str;
+	char	*literal_part;
+	char	*expanded_value;
+	int		current_pos;
+	int		i;
+	int		dollar_pos;
+	int		construct_len;
+
+	result_str = ft_strdup("");
+	if (!result_str) return (NULL);
+
+	current_pos = 0;
+	i = 0;
+	while (token->expand_index[i] != -1)
+	{
+		dollar_pos = token->expand_index[i];
+
+		// 1. Append the literal part before the '$'
+		if (dollar_pos > current_pos)
+		{
+			literal_part = ft_substr(token->value, current_pos, dollar_pos - current_pos);
+			ms_append_and_free(&result_str, literal_part);
+			free(literal_part);
+		}
+
+		// 2. Get the expanded value
+		expanded_value = ms_process_dollar_construct(data, &token->value[dollar_pos], &construct_len);
+		if (!expanded_value)
+			return (free(result_str), NULL);
+		ms_append_and_free(&result_str, expanded_value);
+		free(expanded_value);
+
+		// 3. Update the current position to be after the processed construct
+		current_pos = dollar_pos + construct_len;
+		i++;
+	}
+
+	// Append any remaining literal part after the last expansion
+	if ((size_t)current_pos < ft_strlen(token->value))
+	{
+		literal_part = ft_substr(token->value, current_pos, ft_strlen(token->value) - current_pos);
+		ms_append_and_free(&result_str, literal_part);
+		free(literal_part);
+	}
+
+	return (result_str);
+}
+
+/**
  * @brief Iterates through the token list and applies
  *        expansion and quote removal.
  *        This version uses the new, combined function
@@ -533,33 +645,29 @@ STDERR_FILENO);
  */
 t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 {
-	t_token	*current_token;
-	char	*original_value;
-	char	*processed_value;
+	t_token		*current_token;
+	char		*original_value;
+	char		*expanded_value_str;
 
 	current_token = list_head;
 	while (current_token)
 	{
-		if (current_token->type == TOKEN_CMD || current_token->type \
-			== TOKEN_INFILE || current_token->type == TOKEN_OUTFILE)
+		if (current_token->expand == true && current_token->value)
 		{
-			if (current_token->previous && \
-				current_token->previous->type == TOKEN_HEREDOC)
-			{
-				current_token = current_token->next;
-				continue ;
-			}
 			original_value = current_token->value;
-			processed_value = ms_expand_and_remove_quotes(data, original_value);
-			if (!processed_value)
-			{
-				ft_putstr_fd("minishell: critical expansion error\n", 2);
-			}
+			expanded_value_str = ms_expand_str_with_indices(data, current_token);
+			if (!expanded_value_str)
+				ft_putstr_fd("minishell: expansion error\n", 2);
 			else
 			{
+				current_token->value = expanded_value_str;
 				free(original_value);
-				current_token->value = processed_value;
 			}
+		}
+		if (current_token == current_token->next)
+		{
+			free(current_token->expand_index);
+			current_token->expand_index = NULL;
 		}
 		current_token = current_token->next;
 	}

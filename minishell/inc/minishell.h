@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/22 16:49:31 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:18:03 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_ast
 	char			**args;
 	int				node_nbr;
 	char			*file_name;
-	int				original_stdin;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -168,6 +167,8 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 void	ms_signal_handlers_set_interactive(void);
+void	ms_signal_handlers_set_non_interactive(void);
+void	ms_exit_shell_sig(t_minishell *data, int exit_code);
 
 // ------------------PARSER-------------------------
 // ms_syntax_check.c

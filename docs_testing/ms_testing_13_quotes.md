@@ -17,3 +17,8 @@ echo "a'b'c"
 
 echo 'a"b"c'
 ```
+
+```bash
+echo "'$USER'"
+'$USER'
+```

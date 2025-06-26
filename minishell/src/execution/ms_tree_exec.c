@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 12:21:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:22:35 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	int	pid_2;
 	int	status;
 
+	ms_signal_handlers_set_non_interactive();
 	pipe(pipefd);
 	pid_1 = fork();
 	if (pid_1 == 0)
@@ -134,6 +135,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	close(pipefd[1]);
 	waitpid(pid_1, NULL, 0);
 	waitpid(pid_2, &status, 0);
+	ms_signal_handlers_set_interactive();
 	return (WEXITSTATUS(status));
 }
 

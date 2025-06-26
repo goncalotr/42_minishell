@@ -6,19 +6,24 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 12:57:49 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/26 13:30:42 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "./../../inc/minishell.h"
 
+/**
+ * function for exit built-in
+ * 
+ * exit - ms_cleanup_shell
+ * ctrl d - ms_cleanup_shell(data)
+ */
 void	ms_exit_shell(t_minishell *data, int exit_code)
 {
 	if (isatty(STDIN_FILENO))
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
-	(void)data;
 	ms_clean_all(data);
 	clear_history();
 	exit(exit_code);

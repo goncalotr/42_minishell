@@ -6,11 +6,11 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:37:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 10:25:07 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:19:32 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "./../../inc/minishell.h"
 
 //unsigned char	g_signal;
 //extern volatile sig_atomic_t g_signal;
@@ -26,10 +26,14 @@
  * 
  * rl_cleanup_after_signal tells readline to clean up
  * its internal state for signal handling.
+ * 
+ * we need signum because perating system requires that
+ * all simple signal handler functions have the exact same
+ * "shape" or "prototype".
  */
 static void	ms_handle_sigint_interactive(int signum)
 {
-	(void) signum; //! check
+	(void) signum;
 	g_signal = SIGINT;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);

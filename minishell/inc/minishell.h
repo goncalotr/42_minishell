@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/25 16:30:39 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:29:58 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ int		init_shell_data(t_minishell *data, char **argv, char **envp);
 // --- signals ---
 void	ms_signal_handlers_init(void);
 void	ms_signal_handlers_set_interactive(void);
+void	ms_signal_handlers_set_non_interactive(void);
+void	ms_exit_shell_sig(t_minishell *data, int exit_code);
 
 // ------------------PARSER-------------------------
 // ms_syntax_check.c

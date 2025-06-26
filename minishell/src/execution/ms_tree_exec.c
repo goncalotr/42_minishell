@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 12:37:32 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/26 13:31:22 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	int	pid_2;
 	int	status;
 
+	ms_signal_handlers_set_non_interactive();
 	pipe(pipefd);
 	pid_1 = fork();
 	if (pid_1 == 0)
@@ -127,6 +128,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	close(pipefd[1]);
 	waitpid(pid_1, NULL, 0);
 	waitpid(pid_2, &status, 0);
+	ms_signal_handlers_set_interactive();
 	return (WEXITSTATUS(status));
 }
 
@@ -168,6 +170,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	{
 		return (builtin_status);
 	}
+	ms_signal_handlers_set_non_interactive();
 	pid = fork();
 	if ((pid) == 0)
 	{
@@ -199,8 +202,8 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		exit(127);
 	}
 	waitpid(pid, &status, 0);
-	ms_clean_heredocs(data->tree);
 	ms_signal_handlers_set_interactive();
+	ms_clean_heredocs(data->tree);
 	ms_exit_with_code(data, status);
 	if (WIFEXITED(status))
 		final_exit_status = WEXITSTATUS(status);

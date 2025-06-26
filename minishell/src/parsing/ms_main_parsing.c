@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 17:36:05 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:47:19 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,21 @@
 // clears list after parsing
 void	ms_main_parsing(char *input, t_minishell *data)
 {
-	//t_token	*tokens;
+	t_token	*tokens;
 	t_ast	*ast_tree;
-	t_token	*token_list_head;
+	//t_token	*token_list_head;
 
-	//tokens = ms_tokenization(data, input);
-	//data->token_list = tokens;
-	//ast_tree = ms_parse_tokens(&tokens);
-	//data->tree = ast_tree;
+	tokens = ms_tokenization(data, input);
+	data->token_list = tokens;
+	ast_tree = ms_parse_tokens(&tokens);
+	data->tree = ast_tree;
+
+	/*
 	token_list_head = ms_tokenization(data, input);
 	data->tree = ms_parse_tokens(&token_list_head);
 	ms_clean_token_list(token_list_head);
-	ast_tree = data->tree;
+	ast_tree = ast_tree;
+	*/
 
 	ms_prepare_heredocs(ast_tree); 
 	data->last_exit_status = ms_exec_tree(ast_tree, data);

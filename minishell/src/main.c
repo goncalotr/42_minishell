@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 16:41:33 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:49:20 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static void	ms_core_loop(t_minishell *data)
 		{
 			data->last_exit_status = 130;
 			g_signal = 0;
+			//usleep(1000);
 		}
 		// 2. Handle readline's return value
 		if (input_line == NULL)

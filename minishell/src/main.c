@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 11:52:23 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:17:34 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ static void	ms_core_loop(t_minishell *data)
 		}
 		// 2. Handle readline's return value
 		if (input_line == NULL)
-		{
-			ms_exit_shell(data, data->last_exit_status);
-		}
+			ms_exit_shell_sig(data, data->last_exit_status);
 		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{

@@ -131,6 +131,13 @@ export test="a  bc        def"
 ```
 
 ```bash
-export ola="a b" c
+NEW_VAR=" -l "
+
+echo $NEW_VAR
 ```
 
+```bash
+export NEW_VAR=" -l |"
+
+export | grep NEW_VAR
+```

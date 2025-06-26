@@ -137,5 +137,7 @@ echo $NEW_VAR
 ```
 
 ```bash
-NEW_VAR=" -l |"
+export NEW_VAR=" -l |"
+
+export | grep NEW_VAR
 ```

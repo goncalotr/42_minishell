@@ -20,5 +20,6 @@ echo 'a"b"c'
 
 ```bash
 echo "'$USER'"
-'$USER'
+'$USER' //wrong
+should expand
 ```

@@ -6,14 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/22 16:56:29 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:01:54 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static char	*ms_expand_and_remove_quotes(t_minishell *data, \
-const char *value);
+//static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value);
 static char	*ms_get_expansion_info(const char *str, \
 int dollar_pos, int *target_len);
 static char	*ms_process_dollar_construct(t_minishell *data, \
@@ -49,6 +48,7 @@ static char	*ms_char_append(char *str, char c)
  * @return A new, fully processed string with variables expanded and
  *         quotes removed.
  */
+/*
 static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value)
 {
 	char			*result;
@@ -97,6 +97,58 @@ static char	*ms_expand_and_remove_quotes(t_minishell *data, const char *value)
 			if (!result)
 				return (NULL);
 		}
+		i++;
+	}
+	return (result);
+}
+*/
+
+static char	*ms_expand_variables_in_string(t_minishell *data, const char *value)
+{
+	char			*result;
+	t_token_state	state;
+	int				i;
+	char			*expanded_value;
+	int				construct_len;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	state = GENERAL; // We still use state to know if we are inside single quotes
+	i = 0;
+	while (value[i])
+	{
+		// Toggle state but DON'T skip the character
+		if (value[i] == '\'' && state == GENERAL)
+			state = SIMPLE_QUOTES;
+		else if (value[i] == '\'' && state == SIMPLE_QUOTES)
+			state = GENERAL;
+		
+		// Handle expansion only if not in single quotes
+		if (value[i] == '$' && state != SIMPLE_QUOTES)
+		{
+			// This part is the same as before
+			expanded_value = ms_process_dollar_construct(data, &value[i], &construct_len);
+			if (!expanded_value)
+			{
+				free(result);
+				return (NULL);
+			}
+			if (ms_append_and_free(&result, expanded_value))
+			{
+				free(expanded_value);
+				free(result);
+				return (NULL);
+			}
+			free(expanded_value);
+			i += construct_len; // Move past the processed construct (e.g., "$VAR")
+			continue ;
+		}
+		
+		// Append the current character to the result
+		result = ms_char_append(result, value[i]);
+		if (!result)
+			return (NULL);
 		i++;
 	}
 	return (result);
@@ -550,11 +602,9 @@ t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 				continue ;
 			}
 			original_value = current_token->value;
-			processed_value = ms_expand_and_remove_quotes(data, original_value);
+			processed_value = ms_expand_variables_in_string(data, original_value);
 			if (!processed_value)
-			{
 				ft_putstr_fd("minishell: critical expansion error\n", 2);
-			}
 			else
 			{
 				free(original_value);

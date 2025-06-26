@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 13:17:34 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:41:33 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
+	signal(SIGPIPE, SIG_IGN);
 	g_signal = 0;
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);

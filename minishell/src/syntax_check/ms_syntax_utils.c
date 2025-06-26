@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_syntax_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:43:34 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 18:02:48 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:25:14 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,6 @@ bool	ms_not_required(char *input)
 
 bool	ms_redir_pipe(char *input, int i)
 {
-	bool	redir;
-
-	redir = false;
 	while (input[i])
 	{
 		ms_skip_whitespaces(&i, input);
@@ -109,7 +106,6 @@ bool	ms_redir_pipe(char *input, int i)
 			ms_skip_inside_quotes(&i, input);
 		else if (input[i] == '<' || input[i] == '>')
 		{
-			redir = true;
 			if ((input[i] == '<' && input[i + 1] == '<')
 				|| (input[i] == '>' && input[i + 1] == '>'))
 				i++;
@@ -117,7 +113,6 @@ bool	ms_redir_pipe(char *input, int i)
 			ms_skip_whitespaces(&i, input);
 			if (input[i] == '|')
 				return (true);
-			redir = false;
 		}
 		else
 			i++;

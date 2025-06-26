@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tree_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 16:31:11 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:37:32 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		close(pipefd[1]);
 		close(pipefd[0]);
 		ms_exec_tree(node->left, data);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(0);
 	}
 	pid_2 = fork();
@@ -122,9 +120,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		close(pipefd[0]);
 		close(pipefd[1]);
 		ms_exec_tree(node->right, data);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(0);
 	}
 	close(pipefd[0]);
@@ -181,9 +177,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 				execve(node->args[0], node->args, data->envp);
 			data->last_exit_status = 127;
 			perror(node->args[0]);
-			ms_clean_heredocs(data->tree);
-			ms_clean_ast(data->tree);
-			ms_cleanup_shell(data);
+			ms_clean_all(data);
 			exit(127);
 		}
 		i = 0;
@@ -201,9 +195,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		}
 		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(127);
 	}
 	waitpid(pid, &status, 0);

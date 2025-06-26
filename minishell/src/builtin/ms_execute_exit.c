@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_execute_exit.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/25 16:30:53 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:57:49 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ void	ms_exit_shell(t_minishell *data, int exit_code)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
-	ms_clean_heredocs(data->tree);
-	ms_clean_ast(data->tree);
-	ms_cleanup_shell(data);
+	(void)data;
+	ms_clean_all(data);
 	clear_history();
 	exit(exit_code);
 }

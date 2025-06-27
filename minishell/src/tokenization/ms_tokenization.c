@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tokenization.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 11:23:41 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:32:17 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,33 +192,13 @@ t_token	*ms_start_tokenization(char *input, t_token *list)
 t_token	*ms_tokenization(t_minishell *data, char *input)
 {
 	t_token		*tokens;
-
+	
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);
-	//ms_debug_print_tokens(tokens, "1. ms_start_tokenization");
-
+	tokens = ms_join_cmd(tokens);
+	// ms_print_tokens(tokens);
 	tokens = ms_expansion_check(tokens);
-	//ms_debug_print_tokens(tokens, "1. ms_expansion_check");
-
 	tokens = ms_expand_variables(data, tokens);
-	//ms_debug_print_tokens(tokens, "1. ms_expand_variables");
-
 	tokens = ms_handle_quotes(tokens);
-	// After expansion, we now split CMD tokens into `args`
-	/*
-	t_token *temp = tokens;
-	while (temp)
-	{
-		if (temp->type == TOKEN_CMD && temp->value)
-		{
-			temp->args = ft_split(temp->value, ' '); // space delimiter
-			free(temp->value);
-			temp->value = NULL;
-		}
-		temp = temp->next;
-	}
-	*/
-	//ms_debug_print_tokens(tokens, "3. ms_handle_quotes");
-
 	return (tokens);
 }

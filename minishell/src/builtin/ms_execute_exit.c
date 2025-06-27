@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_execute_exit.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 13:16:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:30:42 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

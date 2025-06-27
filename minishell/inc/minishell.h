@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 15:39:58 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:46:08 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,10 @@ bool	ms_ismetachar(char c);
 bool	ms_isspace(char c);
 bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
+
+//ms_tokenization_utils3.c
+void ms_join_nodes(t_token *dest, t_token *src);
+t_token	*ms_join_cmd(t_token *tokens);
 
 //ms_cleanup.c
 void	ms_clean_ast(t_ast *node);

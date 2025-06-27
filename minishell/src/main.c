@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 17:49:20 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:46:57 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ static void	ms_core_loop(t_minishell *data)
 			free(input_line);
 			continue ;
 		}
+		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
 		free(input_line);
 	}

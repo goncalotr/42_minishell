@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 15:41:08 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:46:20 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,8 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	t_ast	*cmd;
 	t_ast	*outfile;
 	int		fd;
-	int		original_std;
 	int		status;
 
-	original_std = dup(STDOUT_FILENO);
 	cmd = node->left;
 	outfile = node->right;
 	if (node->type == TOKEN_REDIR_OUT)
@@ -116,8 +114,7 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	status = ms_exec_tree(cmd, data);
-	dup2(original_std, STDOUT_FILENO);
-	close(original_std);
+	dup2(data->stdout_fd, STDOUT_FILENO);
 	return (status);
 }
 
@@ -162,9 +159,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		close(pipefd[1]);
 		close(pipefd[0]);
 		ms_exec_tree(node->left, data);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(0);
 	}
 	pid_2 = fork();
@@ -176,9 +171,7 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 		close(pipefd[0]);
 		close(pipefd[1]);
 		ms_exec_tree(node->right, data);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(0);
 	}
 	close(pipefd[0]);
@@ -239,10 +232,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 				execve(node->args[0], node->args, data->envp);
 			data->last_exit_status = 127;
 			perror(node->args[0]);
-			close(data->stdin_fd);
-			ms_clean_heredocs(data->tree);
-			ms_clean_ast(data->tree);
-			ms_cleanup_shell(data);
+			ms_clean_all(data);
 			exit(127);
 		}
 		i = 0;
@@ -263,9 +253,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 		}
 		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(127);
 	}
 	waitpid(pid, &status, 0);

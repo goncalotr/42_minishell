@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 01:54:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/11 02:00:22 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:05 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * exit()
 */
-int	ms_getpid(void)
+int	ms_getpid(t_minishell *data, t_token *token, char *info)
 {
 	pid_t	child_pid;
 	pid_t	presumed_parent_pid;
@@ -28,6 +28,9 @@ int	ms_getpid(void)
 	}
 	if (child_pid == 0)
 	{
+		free(info);
+		ms_clean_tokens(token);
+		ms_clean_all(data);
 		exit(0);
 	}
 	presumed_parent_pid = child_pid - 1;

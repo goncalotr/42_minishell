@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 13:11:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:44:52 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ char	*ms_process_curly_expansion(const char *str, int i, \
  * 4 literal $
  * 5 $VAR adn ${VAR}
  */
-char	*ms_get_expansion_value(t_minishell *data, const char *info)
+char	*ms_get_expansion_value(t_minishell *data, char *info, \
+t_token *token)
 {
 	char	*env_val;
 	pid_t	pid;
@@ -98,8 +99,7 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info)
 		return (ft_itoa(data->last_exit_status));
 	else if (ft_strcmp(info, "$$") == 0)
 	{
-		pid = getpid();
-		pid = ms_getpid();
+		pid = ms_getpid(data, token, info);
 		return (ft_itoa((int)pid));
 	}
 	else if (ft_strcmp(info, "$") == 0)

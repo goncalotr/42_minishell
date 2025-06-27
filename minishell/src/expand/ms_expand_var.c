@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 15:53:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:00:12 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,7 +370,8 @@ static char	*ms_expand_str_help(t_minishell *data, t_token *list)
  * updates 'construct_len_ptr' with the length of the recognized construct 
  */
 static char	*ms_process_dollar_construct(t_minishell *data, \
-const char *str_starting_with_dollar, int *construct_len_ptr)
+const char *str_starting_with_dollar, int *construct_len_ptr, \
+t_token *token)
 {
 	char	*info;
 	char	*value;
@@ -384,7 +385,7 @@ const char *str_starting_with_dollar, int *construct_len_ptr)
 			*construct_len_ptr = 1;
 		return (ft_strdup("$"));
 	}
-	value = ms_get_expansion_value(data, info);
+	value = ms_get_expansion_value(data, info, token);
 	free(info);
 	if (!value)
 	{
@@ -611,7 +612,9 @@ static char *ms_expand_str_with_indices(t_minishell *data, t_token *token)
 		}
 
 		// 2. Get the expanded value
-		expanded_value = ms_process_dollar_construct(data, &token->value[dollar_pos], &construct_len);
+		//if (token->value[dollar_pos + 1] == '$')
+		//	ms_getpid;
+		expanded_value = ms_process_dollar_construct(data, &token->value[dollar_pos], &construct_len, token);
 		if (!expanded_value)
 			return (free(result_str), NULL);
 		ms_append_and_free(&result_str, expanded_value);
@@ -660,15 +663,16 @@ t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 				ft_putstr_fd("minishell: expansion error\n", 2);
 			else
 			{
-				current_token->value = expanded_value_str;
+				current_token->value = ft_strdup(expanded_value_str);
+				free(expanded_value_str);
 				free(original_value);
 			}
 		}
-		if (current_token == current_token->next)
-		{
-			free(current_token->expand_index);
-			current_token->expand_index = NULL;
-		}
+		// if (current_token == current_token->next)
+		// {
+		// 	free(current_token->expand_index);
+		// 	current_token->expand_index = NULL;
+		// }
 		current_token = current_token->next;
 	}
 	return (list_head);

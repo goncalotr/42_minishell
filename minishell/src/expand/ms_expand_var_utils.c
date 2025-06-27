@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:06 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 11:22:53 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/27 18:47:40 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	ms_append_and_free(char **base_str_ptr, const char *to_append)
 		base_str_ptr = NULL;
 		return (1);
 	}
-	*base_str_ptr = new;
+	*base_str_ptr = ft_strdup(new);
+	free(new);
 	return (0);
 }

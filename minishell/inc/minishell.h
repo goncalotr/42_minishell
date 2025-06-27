@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 16:56:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
 
 //ms_tokenization_utils3.c
-void ms_join_nodes(t_token *dest, t_token *src);
+void	ms_join_nodes(t_token *dest, t_token *src);
 t_token	*ms_join_cmd(t_token *tokens);
 
 //ms_cleanup.c
@@ -225,6 +225,7 @@ void	ms_free_envp_copy(char **envp);
 void	ms_free_data_paths(char **paths);
 void	ms_clean_all(t_minishell *data);
 void	ms_clean_token_list(t_token *token);
+void	ms_clean_tokens(t_token *tokens);
 
 //ms_quotes.c
 int		ms_new_value_len(char *value);
@@ -297,7 +298,7 @@ char	*ms_process_simple_var_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
 char	*ms_process_curly_expansion(const char *str, int i, \
 				int *t_len, int d_pos);
-char	*ms_get_expansion_value(t_minishell *data, const char *info);
+char	*ms_get_expansion_value(t_minishell *data, char *info, t_token *token);
 
 // 1
 /*
@@ -338,7 +339,7 @@ int		ms_execute_external_command(char **envp, char **args);
 
 // --- utils ---
 int		ms_exit_with_code(t_minishell *data, int status);
-int		ms_getpid(void);
+int		ms_getpid(t_minishell *data, t_token *token, char *info);
 char	*ms_getenv(t_minishell *data, const char *name);
 
 #endif

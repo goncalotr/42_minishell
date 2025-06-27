@@ -3,15 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cleanup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 12:36:10 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/27 18:37:08 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 #include "../inc/minishell.h"
+
+void	ms_clean_tokens(t_token *tokens)
+{
+	t_token *tmp;
+
+	while (tokens)
+	{
+		tmp = tokens->next;
+		if (tokens->value)
+			free(tokens->value);
+		if (tokens->expand_index)
+			free(tokens->expand_index);
+		free(tokens);
+		tokens = tmp;
+	}
+}
+
 
 void	ms_clean_ast(t_ast *node)
 {

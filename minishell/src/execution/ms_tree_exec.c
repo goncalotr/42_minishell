@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 17:09:09 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:27:27 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 	return (status);
 }
 
+/*
 int	ms_exec_pipe(t_ast *node, t_minishell *data)
 {
 	int	pipefd[2];
@@ -181,6 +182,51 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	ms_signal_handlers_set_interactive();
 	return (WEXITSTATUS(status));
 }
+*/
+
+int	ms_exec_pipe(t_ast *node, t_minishell *data)
+{
+	int	pipefd[2];
+	int	pid_1;
+	int	pid_2;
+	int	status_1;
+	int	status_2;
+	int final_exit_status;
+
+	pipe(pipefd);
+	pid_1 = fork();
+	if (pid_1 == 0)
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+		close(pipefd[0]);
+		// Execute left side and exit with its status
+		exit(ms_exec_tree(node->left, data));
+	}
+	pid_2 = fork();
+	if (pid_2 == 0)
+	{
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+		close(pipefd[1]);
+		// Execute right side and exit with its status
+		exit(ms_exec_tree(node->right, data));
+	}
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid_1, &status_1, 0);
+	waitpid(pid_2, &status_2, 0);
+
+	// The exit status of a pipe is the status of the LAST command
+	if (WIFEXITED(status_2))
+		final_exit_status = WEXITSTATUS(status_2);
+	else if (WIFSIGNALED(status_2))
+		final_exit_status = 128 + WTERMSIG(status_2);
+	else
+		final_exit_status = 1;
+
+	return (final_exit_status);
+}
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 {
@@ -206,67 +252,51 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 		return (-1);
 }
 
-int	ms_exec_cmd(t_ast *node, t_minishell *data)
+int ms_exec_external_command(t_ast *node, t_minishell *data)
 {
-	int		i;
-	char	full_path[1024];
 	pid_t	pid;
 	int		status;
-	int		builtin_status;
 	int		final_exit_status;
+	int		i;
+	char	full_path[PATH_MAX]; // Use PATH_MAX from limits.h
 
-	status = 0;
-	builtin_status = ms_exec_cmd_builtins(data, node);
-	if (builtin_status != -1)
-	{
-		return (builtin_status);
-	}
 	ms_signal_handlers_set_non_interactive();
 	pid = fork();
-	if ((pid) == 0)
+	if (pid == -1)
 	{
+		perror("fork");
+		return (1);
+	}
+	if (pid == 0)
+	{
+		// --- CHILD PROCESS ---
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
+		
 		if (ft_strchr(node->args[0], '/'))
 		{
-			struct stat	path_stat;
-
-			// 1. First, check if the path exists at all.
-			if (access(node->args[0], F_OK) == -1)
-			{
-				// F_OK check failed, meaning file/dir does not exist.
-				// This is a "No such file or directory" error.
+			// This is the logic you already fixed
+			struct stat file_stat;
+			if (access(node->args[0], F_OK) == -1) {
 				perror(node->args[0]);
-				exit(127); // "command not found" is appropriate here.
+				exit(127);
 			}
-
-			// 2. The path exists. Now, get its info using stat()
-			stat(node->args[0], &path_stat);
-
-			// 3. Check if it's a directory.
-			if (S_ISDIR(path_stat.st_mode))
-			{
+			stat(node->args[0], &file_stat);
+			if (S_ISDIR(file_stat.st_mode)) {
 				ft_putstr_fd("minishell: ", 2);
 				ft_putstr_fd(node->args[0], 2);
 				ft_putstr_fd(": Is a directory\n", 2);
-				exit(126); // Exit 126 for "is a directory"
+				exit(126);
 			}
-			
-			// 4. It's a file. Check for execute permissions.
-			if (access(node->args[0], X_OK) == -1)
-			{
-				// X_OK check failed. This is a "Permission denied" error.
-				perror(node->args[0]); // perror will correctly print "Permission denied"
-				exit(126); // Exit 126 for permission issues
+			if (access(node->args[0], X_OK) == -1) {
+				perror(node->args[0]);
+				exit(126);
 			}
-
-			// If we get here, the file exists, is not a directory, and is executable.
 			execve(node->args[0], node->args, data->envp);
-			
-			// If execve returns, it's an error.
 			perror(node->args[0]);
-			exit(126); // Or 1, but 126 is safe for "can't execute"
+			exit(126);
 		}
+		
 		i = 0;
 		while (data->paths && data->paths[i])
 		{
@@ -274,24 +304,18 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 			ft_strlcat(full_path, "/", sizeof(full_path));
 			ft_strlcat(full_path, node->args[0], sizeof(full_path));
 			if (access(full_path, X_OK) == 0)
-			{
-				close(data->stdin_fd);
-				close(data->stdout_fd);
-				close(data->stderr_fd);
 				execve(full_path, node->args, data->envp);
-				break ;
-			}
 			i++;
 		}
-		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
-		ms_clean_all(data);
+		ms_clean_all(data); // Important for memory leaks
 		exit(127);
 	}
+
+	// --- PARENT PROCESS ---
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
-	ms_clean_heredocs(data->tree);
-	ms_exit_with_code(data, status);
+
 	if (WIFEXITED(status))
 		final_exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -301,8 +325,28 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	}
 	else
-		final_exit_status = 1; 
+		final_exit_status = 1;
+	
 	return (final_exit_status);
+}
+
+int	ms_exec_cmd(t_ast *node, t_minishell *data)
+{
+	int	builtin_status;
+
+	if (node->args == NULL || node->args[0] == NULL)
+		return (0); // No command to execute
+
+	// Check if it's a builtin first
+	builtin_status = ms_exec_cmd_builtins(data, node);
+	if (builtin_status != -1)
+	{
+		// If it was a builtin, return its status
+		return (builtin_status);
+	}
+
+	// If not a builtin, it's an external command
+	return (ms_exec_external_command(node, data));
 }
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)

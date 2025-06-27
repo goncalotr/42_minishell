@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 10:54:32 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:41:08 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 	if (strcmp(node->args[0], "export") == 0)
 		return (ms_execute_export(node->args, data));
 	else if (strcmp(node->args[0], "pwd") == 0)
-		return (ms_execute_pwd(node->args));
+		return (ms_execute_pwd(node->args, data));
 	else if (strcmp(node->args[0], "unset") == 0)
 		return (ms_execute_unset((node->args), data));
 	else

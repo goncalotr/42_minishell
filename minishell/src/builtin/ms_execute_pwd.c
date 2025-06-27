@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:24:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/18 19:44:07 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:41:38 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
  * Part 4: Free buffer
  * Part 5: Return value
  */
-int	ms_execute_pwd(char **args)
+int	ms_execute_pwd(char **args, t_minishell *data)
 {
 	char	*cwd_buffer;
 
@@ -34,13 +34,26 @@ int	ms_execute_pwd(char **args)
 		return (1);
 	}
 	cwd_buffer = getcwd(NULL, 0);
-	if (cwd_buffer == NULL)
+	if (cwd_buffer != NULL)
 	{
-		perror("minishell: pwd");
-		return (1);
+		// Success! Print the real path and we are done.
+		ft_putstr_fd(cwd_buffer, 1);
+		ft_putstr_fd("\n", 1);
+		free(cwd_buffer);
+		return (0);
 	}
-	ft_putstr_fd(cwd_buffer, 1);
-	ft_putstr_fd("\n", 1);
-	free(cwd_buffer);
-	return (0);
+	if (errno == ENOENT)
+	{
+		// Fallback to our internal PWD variable.
+		char *pwd_from_env = ms_getenv(data, "PWD");
+		if (pwd_from_env)
+		{
+			ft_putstr_fd(pwd_from_env, 1);
+			ft_putstr_fd("\n", 1);
+			// We don't print a system error because this is our graceful fallback.
+			return (0); // Success, we printed something.
+		}
+	}
+	perror("minishell: pwd");
+	return (1);
 }

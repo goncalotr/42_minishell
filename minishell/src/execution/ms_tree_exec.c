@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 15:46:20 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:59:53 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,7 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	int		builtin_status;
 	int		final_exit_status;
 
+	status = 0;
 	builtin_status = ms_exec_cmd_builtins(data, node);
 	if (builtin_status != -1)
 	{

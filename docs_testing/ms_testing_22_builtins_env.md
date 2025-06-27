@@ -70,3 +70,7 @@ unset TEST_VAR
 unset COMPLEX_VAR
 unset EMPTY_VAR
 ```
+
+```env
+env -i ./minishell
+```

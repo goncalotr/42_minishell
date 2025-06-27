@@ -141,3 +141,18 @@ export NEW_VAR=" -l |"
 
 export | grep NEW_VAR
 ```
+
+```bash
+goteixei@minishell> export a='$a'
+goteixei@minishell> echo $a
+$a
+goteixei@minishell> export a="$a"
+goteixei@minishell> echo $a
+$a
+goteixei@minishell> export b="$b"
+goteixei@minishell> echo $b
+
+goteixei@minishell> echo ola $b adeus
+ola adeus
+```
+everything ok

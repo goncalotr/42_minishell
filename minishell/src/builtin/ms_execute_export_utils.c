@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:53:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 16:54:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:02:09 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@ char	*ms_extract_var_name(const char *arg, size_t *len_name)
 		return (NULL);
 	equal_sign = ft_strchr(arg, '=');
 	if (equal_sign)
-		*len_name = equal_sign - arg;
+	{
+		if (equal_sign > arg && *(equal_sign - 1) == '+')
+			*len_name = (equal_sign - 1) - arg;
+		else
+			*len_name = equal_sign - arg;
+	}
 	else
 		*len_name = ft_strlen(arg);
 	name = (char *)malloc(sizeof(char) * (*len_name + 1));

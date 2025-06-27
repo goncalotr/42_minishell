@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 16:56:43 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:09:09 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,10 +226,11 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	if ((pid) == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-  		signal(SIGQUIT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (ft_strchr(node->args[0], '/'))
 		{
-			struct stat	file_stat;
+			struct stat	path_stat;
+
 			// 1. First, check if the path exists at all.
 			if (access(node->args[0], F_OK) == -1)
 			{

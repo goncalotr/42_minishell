@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:24:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 17:00:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:09:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	ms_execute_pwd(char **args, t_minishell *data)
 {
 	char	*cwd_buffer;
 
+	(void)args;
 	cwd_buffer = getcwd(NULL, 0);
 	if (cwd_buffer != NULL)
 	{

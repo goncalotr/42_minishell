@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 12:22:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:15:51 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,9 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 			ft_strlcat(full_path, node->args[0], sizeof(full_path));
 			if (access(full_path, X_OK) == 0)
 			{
+				close(data->stdin_fd);
+				close(data->stdout_fd);
+				close(data->stderr_fd);
 				execve(full_path, node->args, data->envp);
 				break ;
 			}

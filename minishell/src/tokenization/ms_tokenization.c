@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_tokenization.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 13:32:17 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/27 17:35:14 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,13 +192,21 @@ t_token	*ms_start_tokenization(char *input, t_token *list)
 t_token	*ms_tokenization(t_minishell *data, char *input)
 {
 	t_token		*tokens;
-	
+	t_token		*temp;
+
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);
 	tokens = ms_join_cmd(tokens);
 	// ms_print_tokens(tokens);
 	tokens = ms_expansion_check(tokens);
 	tokens = ms_expand_variables(data, tokens);
+	temp = tokens;
+	while (temp)
+	{
+		if (temp->expand_index)
+			free(temp->expand_index);
+		temp = temp->next;
+	}
 	tokens = ms_handle_quotes(tokens);
 	return (tokens);
 }

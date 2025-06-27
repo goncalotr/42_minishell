@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 15:46:08 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:56:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
+
+#include <sys/stat.h>
 
 // non-standard librarys
 # include "../lib/libft/libft.h"

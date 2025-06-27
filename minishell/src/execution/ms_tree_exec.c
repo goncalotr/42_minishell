@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 15:59:53 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:56:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,12 +229,42 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
   		signal(SIGQUIT, SIG_DFL);
 		if (ft_strchr(node->args[0], '/'))
 		{
-			if (access(node->args[0], X_OK) == 0)
-				execve(node->args[0], node->args, data->envp);
-			data->last_exit_status = 127;
+			struct stat	file_stat;
+			// 1. First, check if the path exists at all.
+			if (access(node->args[0], F_OK) == -1)
+			{
+				// F_OK check failed, meaning file/dir does not exist.
+				// This is a "No such file or directory" error.
+				perror(node->args[0]);
+				exit(127); // "command not found" is appropriate here.
+			}
+
+			// 2. The path exists. Now, get its info using stat()
+			stat(node->args[0], &path_stat);
+
+			// 3. Check if it's a directory.
+			if (S_ISDIR(path_stat.st_mode))
+			{
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(node->args[0], 2);
+				ft_putstr_fd(": Is a directory\n", 2);
+				exit(126); // Exit 126 for "is a directory"
+			}
+			
+			// 4. It's a file. Check for execute permissions.
+			if (access(node->args[0], X_OK) == -1)
+			{
+				// X_OK check failed. This is a "Permission denied" error.
+				perror(node->args[0]); // perror will correctly print "Permission denied"
+				exit(126); // Exit 126 for permission issues
+			}
+
+			// If we get here, the file exists, is not a directory, and is executable.
+			execve(node->args[0], node->args, data->envp);
+			
+			// If execve returns, it's an error.
 			perror(node->args[0]);
-			ms_clean_all(data);
-			exit(127);
+			exit(126); // Or 1, but 126 is safe for "can't execute"
 		}
 		i = 0;
 		while (data->paths && data->paths[i])

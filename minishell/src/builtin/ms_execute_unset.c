@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:31:46 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/22 17:43:44 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:30:31 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,17 @@ static void	ms_remove_env_var_at_index(int index, t_minishell *data)
 	data->envp[i] = NULL;
 }
 
+static int	ms_update_path(t_minishell *data)
+{
+	if (data->paths)
+	{
+		ms_free_data_paths(data->paths);
+		data->paths = NULL;
+	}
+	data->paths = get_path(data->envp);
+	return (0);
+}
+
 /**
  * @brief Executes the unset builtin command.
  *        Removes specified environment variables.
@@ -115,10 +126,12 @@ int	ms_execute_unset(char **args, t_minishell *data)
 	int		exit_status;
 	int		var_index;
 	char	*var_name;
+	bool	path_was_unset;
 
 	//ft_putstr_fd("\n--- DEBUG: ENTERING ms_execute_unset ---\n", 2); // To STDERR
 
 	exit_status = 0;
+	path_was_unset = false;
 	i = 1;
 	while (args[i])
 	{
@@ -137,11 +150,16 @@ int	ms_execute_unset(char **args, t_minishell *data)
 		{
 			var_index = ms_find_env_var_index(var_name, data->envp);
 			if (var_index != -1)
+			{
+				if (ft_strcmp(var_name, "PATH") == 0)
+					path_was_unset = true;
 				ms_remove_env_var_at_index(var_index, data);
+			}
 		}
 		i++;
 	}
-
+	if (path_was_unset)
+		ms_update_path(data);
 	//ft_putstr_fd("--- DEBUG: LEAVING ms_execute_unset ---\n\n", 2);
 	return (exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 10:15:13 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:34:43 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void	ms_debug_print_gsig(void);
 
 // --- init ---
 int		init_shell_data(t_minishell *data, char **argv, char **envp);
+char	**get_path(char **envp);
 
 // --- signals ---
 void	ms_signal_handlers_init(void);

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 17:36:43 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:35:21 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h" // Adjust path as needed
 
+/*
 char **get_path(char **envp)
 {
 	int		i;
@@ -34,6 +35,32 @@ char **get_path(char **envp)
 	}
 	ft_putstr_fd("Path variable not found", 2);
 	exit(EXIT_FAILURE);
+}
+*/
+
+char **get_path(char **envp)
+{
+	int		i;
+	char	*path_value;
+
+	i = 0;
+	path_value = NULL;
+	while (envp && envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			path_value = envp[i] + 5; // Point to the value after "PATH="
+			break;
+		}
+		i++;
+	}
+
+	if (path_value == NULL)
+		return (NULL); // PATH variable not found at all
+
+	// Split the found value. ft_split should handle an empty string correctly
+	// (returning an array with just a NULL terminator).
+	return (ft_split(path_value, ':'));
 }
 
 /**

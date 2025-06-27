@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/26 13:18:35 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/27 15:47:06 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ LDFLAGS			= $(SAN_FLAGS)
 MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/signals/ms_signal_handler_non_int.c\
 				  $(SRC_DIR)/signals/ms_debug_global_signal.c\
+				  $(SRC_DIR)/signals/ms_signals_heredoc.c\
 				  $(SRC_DIR)/signals/ms_signals_exit.c\
 				  $(SRC_DIR)/syntax_check/ms_syntax_utils.c\
 				  $(SRC_DIR)/syntax_check/ms_syntax_check.c\
@@ -89,6 +90,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils.c\
 				  $(SRC_DIR)/tokenization/ms_tokenization_utils2.c\
+				  $(SRC_DIR)/tokenization/ms_tokenization_utils3.c\
 				  $(SRC_DIR)/tokenization/ms_list_utils.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\
@@ -182,8 +184,10 @@ valgrind:		all
 reval: re valgrind
 
 valgrind_sup:		all
-				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
+				@valgrind -q --leak-check=full --show-leak-kinds=all --track-fds=yes \
 					--track-origins=yes --trace-children=yes --suppressions=readline.supp ./minishell
+
+#valgrind -q --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --track-fds=yes ./minishell
 
 reval_sup: re valgrind_sup
 

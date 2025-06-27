@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:10:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 13:16:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:04:58 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	ms_handle_exit_with_one_arg(t_minishell *data, char *arg)
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		ms_exit_shell(data, 255);
+		ms_exit_shell(data, 2);
 	}
 }
 
@@ -73,8 +73,12 @@ int	ms_execute_exit(char **args, t_minishell *data)
 		argc++;
 	if (argc == 1)
 		ms_exit_shell(data, data->last_exit_status);
+	else if (argc == 2 && ft_strcmp(args[1], "--") == 0)
+		ms_exit_shell(data, data->last_exit_status);
 	else if (argc == 2)
 		ms_handle_exit_with_one_arg(data, args[1]);
+	else if (ft_strcmp(args[1], "--") == 0 && argc > 2)
+		ms_handle_exit_with_one_arg(data, args[2]);
 	else
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);

@@ -6,12 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/26 12:22:35 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:27:27 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "./../../inc/minishell.h"
 
+/*
 void	ms_exec_heredoc(t_ast *node)
 {
 	int		fd;
@@ -46,16 +47,59 @@ void	ms_exec_heredoc(t_ast *node)
 	}
 	close(fd);
 }
+*/
+
+void	ms_exec_heredoc(t_ast *node)
+{
+	int		fd;
+	char	*line;
+	char	*limiter;
+	int		original_stdin;
+
+	if (!node || !node->file_name)
+		return ;
+	original_stdin = dup(STDIN_FILENO);
+	ms_signal_handlers_set_heredoc();
+	limiter = node->right->args[0];
+	fd = open(node->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("error heredoc");
+		return ;
+	}
+	g_signal = 0;
+	while (1)
+	{
+		write(1, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		if (!line || g_signal == SIGINT)
+			break ;
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+			&& line[ft_strlen(limiter)] == '\n')
+		{
+			free(line);
+			line = NULL;
+			break ;
+		}
+		write(fd, line, ft_strlen(line));
+		free(line);
+		line = NULL;
+	}
+	close(fd);
+	dup2(original_stdin, STDIN_FILENO);
+	close(original_stdin);
+	ms_signal_handlers_set_interactive();
+	if (g_signal == SIGINT)
+		unlink(node->file_name);
+}
 
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 {
 	t_ast	*cmd;
 	t_ast	*outfile;
 	int		fd;
-	int		original_std;
 	int		status;
 
-	original_std = dup(STDOUT_FILENO);
 	cmd = node->left;
 	outfile = node->right;
 	if (node->type == TOKEN_REDIR_OUT)
@@ -70,8 +114,7 @@ int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	status = ms_exec_tree(cmd, data);
-	dup2(original_std, STDOUT_FILENO);
-	close(original_std);
+	dup2(data->stdout_fd, STDOUT_FILENO);
 	return (status);
 }
 
@@ -98,6 +141,7 @@ int	ms_exec_redir_in(t_ast *node, t_minishell *data)
 	return (status);
 }
 
+/*
 int	ms_exec_pipe(t_ast *node, t_minishell *data)
 {
 	int	pipefd[2];
@@ -110,25 +154,25 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	pid_1 = fork();
 	if (pid_1 == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
 		ms_exec_tree(node->left, data);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(0);
 	}
 	pid_2 = fork();
 	if (pid_2 == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		close(pipefd[1]);
 		ms_exec_tree(node->right, data);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data);
 		exit(0);
 	}
 	close(pipefd[0]);
@@ -137,6 +181,51 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	waitpid(pid_2, &status, 0);
 	ms_signal_handlers_set_interactive();
 	return (WEXITSTATUS(status));
+}
+*/
+
+int	ms_exec_pipe(t_ast *node, t_minishell *data)
+{
+	int	pipefd[2];
+	int	pid_1;
+	int	pid_2;
+	int	status_1;
+	int	status_2;
+	int final_exit_status;
+
+	pipe(pipefd);
+	pid_1 = fork();
+	if (pid_1 == 0)
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+		close(pipefd[0]);
+		// Execute left side and exit with its status
+		exit(ms_exec_tree(node->left, data));
+	}
+	pid_2 = fork();
+	if (pid_2 == 0)
+	{
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+		close(pipefd[1]);
+		// Execute right side and exit with its status
+		exit(ms_exec_tree(node->right, data));
+	}
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid_1, &status_1, 0);
+	waitpid(pid_2, &status_2, 0);
+
+	// The exit status of a pipe is the status of the LAST command
+	if (WIFEXITED(status_2))
+		final_exit_status = WEXITSTATUS(status_2);
+	else if (WIFSIGNALED(status_2))
+		final_exit_status = 128 + WTERMSIG(status_2);
+	else
+		final_exit_status = 1;
+
+	return (final_exit_status);
 }
 
 static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
@@ -156,43 +245,58 @@ static int	ms_exec_cmd_builtins(t_minishell *data, t_ast *node)
 	if (strcmp(node->args[0], "export") == 0)
 		return (ms_execute_export(node->args, data));
 	else if (strcmp(node->args[0], "pwd") == 0)
-		return (ms_execute_pwd(node->args));
+		return (ms_execute_pwd(node->args, data));
 	else if (strcmp(node->args[0], "unset") == 0)
 		return (ms_execute_unset((node->args), data));
 	else
 		return (-1);
 }
 
-int	ms_exec_cmd(t_ast *node, t_minishell *data)
+int ms_exec_external_command(t_ast *node, t_minishell *data)
 {
-	int		i;
-	char	full_path[1024];
 	pid_t	pid;
 	int		status;
-	int		builtin_status;
 	int		final_exit_status;
+	int		i;
+	char	full_path[PATH_MAX]; // Use PATH_MAX from limits.h
 
-	builtin_status = ms_exec_cmd_builtins(data, node);
-	if (builtin_status != -1)
-	{
-		return (builtin_status);
-	}
 	ms_signal_handlers_set_non_interactive();
 	pid = fork();
-	if ((pid) == 0)
+	if (pid == -1)
 	{
+		perror("fork");
+		return (1);
+	}
+	if (pid == 0)
+	{
+		// --- CHILD PROCESS ---
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		
 		if (ft_strchr(node->args[0], '/'))
 		{
-			if (access(node->args[0], X_OK) == 0)
-				execve(node->args[0], node->args, data->envp);
-			data->last_exit_status = 127;
+			// This is the logic you already fixed
+			struct stat file_stat;
+			if (access(node->args[0], F_OK) == -1) {
+				perror(node->args[0]);
+				exit(127);
+			}
+			stat(node->args[0], &file_stat);
+			if (S_ISDIR(file_stat.st_mode)) {
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(node->args[0], 2);
+				ft_putstr_fd(": Is a directory\n", 2);
+				exit(126);
+			}
+			if (access(node->args[0], X_OK) == -1) {
+				perror(node->args[0]);
+				exit(126);
+			}
+			execve(node->args[0], node->args, data->envp);
 			perror(node->args[0]);
-			close(data->stdin_fd);
-			ms_clean_heredocs(data->tree);
-			ms_clean_ast(data->tree);
-			ms_cleanup_shell(data);
-			exit(127);
+			exit(126);
 		}
+		
 		i = 0;
 		while (data->paths && data->paths[i])
 		{
@@ -200,23 +304,18 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 			ft_strlcat(full_path, "/", sizeof(full_path));
 			ft_strlcat(full_path, node->args[0], sizeof(full_path));
 			if (access(full_path, X_OK) == 0)
-			{
 				execve(full_path, node->args, data->envp);
-				break ;
-			}
 			i++;
 		}
-		data->last_exit_status = 127;
 		ms_command_not_found(node->args);
-		ms_clean_heredocs(data->tree);
-		ms_clean_ast(data->tree);
-		ms_cleanup_shell(data);
+		ms_clean_all(data); // Important for memory leaks
 		exit(127);
 	}
+
+	// --- PARENT PROCESS ---
 	waitpid(pid, &status, 0);
 	ms_signal_handlers_set_interactive();
-	ms_clean_heredocs(data->tree);
-	ms_exit_with_code(data, status);
+
 	if (WIFEXITED(status))
 		final_exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -226,8 +325,28 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	}
 	else
-		final_exit_status = 1; 
+		final_exit_status = 1;
+	
 	return (final_exit_status);
+}
+
+int	ms_exec_cmd(t_ast *node, t_minishell *data)
+{
+	int	builtin_status;
+
+	if (node->args == NULL || node->args[0] == NULL)
+		return (0); // No command to execute
+
+	// Check if it's a builtin first
+	builtin_status = ms_exec_cmd_builtins(data, node);
+	if (builtin_status != -1)
+	{
+		// If it was a builtin, return its status
+		return (builtin_status);
+	}
+
+	// If not a builtin, it's an external command
+	return (ms_exec_external_command(node, data));
 }
 
 int	ms_exec_tree(t_ast *node, t_minishell *data)

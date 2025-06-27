@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 13:18:03 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:56:46 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
+
+#include <sys/stat.h>
 
 // non-standard librarys
 # include "../lib/libft/libft.h"
@@ -163,11 +165,13 @@ void	ms_debug_print_gsig(void);
 
 // --- init ---
 int		init_shell_data(t_minishell *data, char **argv, char **envp);
+char	**get_path(char **envp);
 
 // --- signals ---
 void	ms_signal_handlers_init(void);
 void	ms_signal_handlers_set_interactive(void);
 void	ms_signal_handlers_set_non_interactive(void);
+void	ms_signal_handlers_set_heredoc(void);
 void	ms_exit_shell_sig(t_minishell *data, int exit_code);
 
 // ------------------PARSER-------------------------
@@ -210,12 +214,17 @@ bool	ms_isspace(char c);
 bool	ms_is_infile(t_token *list);
 bool	ms_is_file(t_token	*list);
 
+//ms_tokenization_utils3.c
+void ms_join_nodes(t_token *dest, t_token *src);
+t_token	*ms_join_cmd(t_token *tokens);
+
 //ms_cleanup.c
 void	ms_clean_ast(t_ast *node);
 void	ms_cleanup_shell(t_minishell *data);
 void	ms_free_envp_copy(char **envp);
 void	ms_free_data_paths(char **paths);
 void	ms_clean_all(t_minishell *data);
+void	ms_clean_token_list(t_token *token);
 
 //ms_quotes.c
 int		ms_new_value_len(char *value);
@@ -320,7 +329,7 @@ char	*ms_extract_var_name(const char *arg, size_t *len_name);
 int		ms_add_or_update_env_var(t_minishell *data, const char *arg);
 int		ms_execute_export(char **args, t_minishell *data);
 
-int		ms_execute_pwd(char **args);
+int		ms_execute_pwd(char **args, t_minishell *data);
 int		ms_execute_unset(char **args, t_minishell *data);
 
 // --- exec ---

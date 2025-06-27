@@ -6,30 +6,32 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:03:26 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 12:53:14 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:46:49 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+// clears list after parsing
 void	ms_main_parsing(char *input, t_minishell *data)
 {
 	t_token	*tokens;
 	t_ast	*ast_tree;
+	//t_token	*token_list_head;
 
 	tokens = ms_tokenization(data, input);
 	data->token_list = tokens;
+	// ms_print_tokens(data->token_list);
 	ast_tree = ms_parse_tokens(&tokens);
 	data->tree = ast_tree;
+	// print_ast(ast_tree, 0);
 	ms_prepare_heredocs(ast_tree); 
 	data->last_exit_status = ms_exec_tree(ast_tree, data);
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
-	//rl_clear_history();
-	// this removes the history functionality completely
 }
 
-/* void print_indent(int level)
+void print_indent(int level)
 {
 	for (int i = 0; i < level; i++)
 		printf("  ");
@@ -86,4 +88,3 @@ void print_ast(t_ast *node, int level)
 	}
 }
 
- */

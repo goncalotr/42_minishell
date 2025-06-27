@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cleanup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 15:55:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 12:52:09 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:36:10 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,4 @@ void	ms_clean_all(t_minishell *data)
 	ms_clean_heredocs(data->tree);
 	ms_clean_ast(data->tree);
 	ms_cleanup_shell(data);
-	//clear_history();
-	// readline cleans it self
 }

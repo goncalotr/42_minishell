@@ -6,7 +6,7 @@
 /*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/19 12:20:03 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:57:52 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_token	*ms_append_node(t_token *list, char *input, t_token_type type)
 	return (list);
 }
 
-/* void	ms_print_tokens(t_token *list)
+void	ms_print_tokens(t_token *list)
 {
 	char	*type[] = {
 		"INFILE", "OUTFILE", "CMD", "PIPE",
@@ -81,4 +81,3 @@ t_token	*ms_append_node(t_token *list, char *input, t_token_type type)
 		list = list->next;
 	}
 }
- */

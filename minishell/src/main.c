@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 13:17:34 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:10:34 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static void	ms_core_loop(t_minishell *data)
 		{
 			data->last_exit_status = 130;
 			g_signal = 0;
+			//usleep(1000);
 		}
 		// 2. Handle readline's return value
 		if (input_line == NULL)
@@ -84,6 +85,7 @@ static void	ms_core_loop(t_minishell *data)
 			free(input_line);
 			continue ;
 		}
+		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
 		free(input_line);
 	}
@@ -101,12 +103,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
+	signal(SIGPIPE, SIG_IGN);
 	g_signal = 0;
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);
 	//ms_signal_handlers_init();
 	//ms_signal_handlers_set_interactive();
-	printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
+	// printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
 	//tcgetattr(STDIN_FILENO, &original_termios); 
 	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \

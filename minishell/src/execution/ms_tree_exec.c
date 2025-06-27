@@ -6,12 +6,13 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:43:03 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 10:15:51 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:54:32 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "./../../inc/minishell.h"
 
+/*
 void	ms_exec_heredoc(t_ast *node)
 {
 	int		fd;
@@ -45,6 +46,51 @@ void	ms_exec_heredoc(t_ast *node)
 		line = NULL;
 	}
 	close(fd);
+}
+*/
+
+void	ms_exec_heredoc(t_ast *node)
+{
+	int		fd;
+	char	*line;
+	char	*limiter;
+	int		original_stdin;
+
+	if (!node || !node->file_name)
+		return ;
+	original_stdin = dup(STDIN_FILENO);
+	ms_signal_handlers_set_heredoc();
+	limiter = node->right->args[0];
+	fd = open(node->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("error heredoc");
+		return ;
+	}
+	g_signal = 0;
+	while (1)
+	{
+		write(1, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		if (!line || g_signal == SIGINT)
+			break ;
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+			&& line[ft_strlen(limiter)] == '\n')
+		{
+			free(line);
+			line = NULL;
+			break ;
+		}
+		write(fd, line, ft_strlen(line));
+		free(line);
+		line = NULL;
+	}
+	close(fd);
+	dup2(original_stdin, STDIN_FILENO);
+	close(original_stdin);
+	ms_signal_handlers_set_interactive();
+	if (g_signal == SIGINT)
+		unlink(node->file_name);
 }
 
 int	ms_exec_redir_out(t_ast	*node, t_minishell *data)
@@ -110,6 +156,8 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	pid_1 = fork();
 	if (pid_1 == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
@@ -122,6 +170,8 @@ int	ms_exec_pipe(t_ast *node, t_minishell *data)
 	pid_2 = fork();
 	if (pid_2 == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		close(pipefd[1]);
@@ -181,6 +231,8 @@ int	ms_exec_cmd(t_ast *node, t_minishell *data)
 	pid = fork();
 	if ((pid) == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+  		signal(SIGQUIT, SIG_DFL);
 		if (ft_strchr(node->args[0], '/'))
 		{
 			if (access(node->args[0], X_OK) == 0)

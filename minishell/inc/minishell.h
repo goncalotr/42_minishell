@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 12:12:58 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:47:03 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,6 +310,12 @@ int			ms_execute_exit(char **args, t_minishell *data);
 void		ms_exit_shell(t_minishell *data, int exit_code);
 
 // export
+
+// export utils 2
+char		*ms_extract_var_name(const char *arg, size_t *len_name);
+int			ms_find_var_index(const char *name, size_t len, char **env_list);
+int			ms_update_var(t_minishell *data, int index, const char *new_str);
+
 int			ms_print_exported_vars(t_minishell *data);
 char		*ms_extract_var_name(const char *arg, size_t *len_name);
 int			ms_add_or_update_env_var(t_minishell *data, const char *arg);

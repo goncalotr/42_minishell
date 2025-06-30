@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 10:58:10 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:42:21 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,28 @@ int	ms_check_n_flag(char *str)
 	return (1);
 }
 
+static void	ms_print_echo_args(t_minishell *data, char **args, int i)
+{
+	char	*home_path;
+
+	while (args[i] != NULL)
+	{
+		if (ft_strcmp(args[i], "~") == 0)
+		{
+			home_path = ms_getenv(data, "HOME");
+			if (home_path)
+				ft_putstr_fd(home_path, STDOUT_FILENO);
+			else
+				ft_putstr_fd("~", STDOUT_FILENO);
+		}
+		else
+			ft_putstr_fd(args[i], STDOUT_FILENO);
+		if (args[i + 1] != NULL)
+			ft_putchar_fd(' ', STDOUT_FILENO);
+		i++;
+	}
+}
+
 /**
  * @brief Executes the echo builtin command using a simple argv array.
  *
@@ -51,7 +73,6 @@ int	ms_execute_echo(t_minishell *data, char **args)
 {
 	int	i;
 	int	print_newline;
-	char	*home_path;
 
 	i = 1;
 	print_newline = 1;
@@ -62,22 +83,7 @@ int	ms_execute_echo(t_minishell *data, char **args)
 		print_newline = 0;
 		i++;
 	}
-	while (args[i] != NULL)
-	{
-		if (ft_strcmp(args[i], "~") == 0)
-		{
-			home_path = ms_getenv(data, "HOME");
-			if (home_path)
-				ft_putstr_fd(home_path, STDOUT_FILENO);
-			else
-				ft_putstr_fd("~", STDOUT_FILENO);
-		}
-		else
-			ft_putstr_fd(args[i], STDOUT_FILENO);
-		if (args[i + 1] != NULL)
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		i++;
-	}
+	ms_print_echo_args(data, args, i);
 	if (print_newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	return (0);

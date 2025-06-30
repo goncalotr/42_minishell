@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/30 12:55:13 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/30 13:23:13 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,6 +94,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/tokenization/ms_list_utils.c\
 				  $(SRC_DIR)/expand/ms_expand_var.c\
 				  $(SRC_DIR)/expand/ms_expand_var_2.c\
+				  $(SRC_DIR)/expand/ms_expand_var_3.c\
 				  $(SRC_DIR)/expand/ms_expand_var_utils.c\
 				  $(SRC_DIR)/builtin/ms_execute_cd.c\
 				  $(SRC_DIR)/builtin/ms_execute_echo.c\

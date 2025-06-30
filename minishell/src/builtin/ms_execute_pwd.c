@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:24:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 12:58:08 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:24:40 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	ms_execute_pwd(char **args, t_minishell *data)
 	char	*cwd_buffer;
 	char	*pwd_from_env;
 
-	(void)args;
+	if (args[1] != NULL)
+		return (ft_putstr_fd("pwd: too many arguments\n", STDERR_FILENO), 1);
 	cwd_buffer = getcwd(NULL, 0);
 	if (cwd_buffer != NULL)
 	{

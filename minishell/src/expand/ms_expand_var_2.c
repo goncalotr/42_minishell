@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 18:44:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 10:21:31 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ t_token *token)
 		return (ft_itoa(data->last_exit_status));
 	else if (ft_strcmp(info, "$$") == 0)
 	{
-		pid = ms_getpid(data, token, info);
+		pid = data->pid;
 		return (ft_itoa((int)pid));
 	}
 	else if (ft_strcmp(info, "$") == 0)

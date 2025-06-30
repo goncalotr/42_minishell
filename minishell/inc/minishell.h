@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 10:21:06 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ typedef struct s_minishell
 	int		stdout_fd;
 	int		stderr_fd;
 	char	*shell_name;
+	pid_t	pid;
 	char	**envp_orig;
 }	t_minishell;
 

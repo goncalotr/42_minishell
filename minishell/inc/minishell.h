@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 12:47:03 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:56:32 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,6 +322,11 @@ int			ms_add_or_update_env_var(t_minishell *data, const char *arg);
 int			ms_execute_export(char **args, t_minishell *data);
 
 int			ms_execute_pwd(char **args, t_minishell *data);
+
+int			ms_valid_identifier(const char *str);
+void		ms_print_invalid_identifier_err(const char *arg);
+int			ms_find_env_var_index_unset(const char *name, char **env_list);
+void		ms_remove_env_var_at_index(int index, t_minishell *data);
 int			ms_execute_unset(char **args, t_minishell *data);
 
 // --- exec ---

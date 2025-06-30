@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/30 12:46:08 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/30 12:55:13 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,6 +106,7 @@ MANDATORY_SRC	= $(SRC_DIR)/signals/ms_signal_handlers.c\
 				  $(SRC_DIR)/builtin/ms_execute_export_utils_2.c\
 				  $(SRC_DIR)/builtin/ms_execute_pwd.c\
 				  $(SRC_DIR)/builtin/ms_execute_unset.c\
+				  $(SRC_DIR)/builtin/ms_execute_unset_utils.c\
 				  $(SRC_DIR)/builtin/ms_utils_getenv.c\
 				  $(SRC_DIR)/builtin/ms_utils_setenv.c\
 				  $(SRC_DIR)/init/ms_init_struct.c\

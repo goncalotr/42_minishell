@@ -6,11 +6,26 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:24:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 18:24:40 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:37:37 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static int	ms_execute_pwd_aux(char **args)
+{
+	if (args[1] != NULL)
+	{
+		if (args[1][0] == '-')
+		{
+			ft_putstr_fd("minishell: pwd: ", STDERR_FILENO);
+			ft_putstr_fd(args[1], STDERR_FILENO);
+			ft_putstr_fd(": invalid option\n", STDERR_FILENO);
+			return (2);
+		}
+	}
+	return (0);
+}
 
 /**
  * @brief Executes the 'pwd' built-in command.
@@ -29,8 +44,8 @@ int	ms_execute_pwd(char **args, t_minishell *data)
 	char	*cwd_buffer;
 	char	*pwd_from_env;
 
-	if (args[1] != NULL)
-		return (ft_putstr_fd("pwd: too many arguments\n", STDERR_FILENO), 1);
+	if (ms_execute_pwd_aux(args) != 0)
+		return (2);
 	cwd_buffer = getcwd(NULL, 0);
 	if (cwd_buffer != NULL)
 	{

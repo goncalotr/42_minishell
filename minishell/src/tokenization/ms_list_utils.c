@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_list_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:28:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 12:57:52 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:41:55 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 t_token	*ms_last_node(t_token *list)
 {
@@ -46,38 +46,4 @@ t_token	*ms_append_node(t_token *list, char *input, t_token_type type)
 		new_node->previous = last_node;
 	}
 	return (list);
-}
-
-void	ms_print_tokens(t_token *list)
-{
-	char	*type[] = {
-		"INFILE", "OUTFILE", "CMD", "PIPE",
-		"IN", "OUT", "APPEND", "HEREDOC", "EOF"
-	};
-
-	char	*state[] = {
-		"GENERAL", "DOUBLE_QUOTES", "SIMPLE_QUOTES"
-	};
-	int i;
-
-	i = 0;
-	while (list)
-	{
-		ft_printf(GREEN"---------------------------------\n");
-		ft_printf(GREEN"value: %s\n", list->value);
-		ft_printf(GREEN"Type:  %s\n", type[list->type]);
-		ft_printf(GREEN"State: %s\n", state[list->state]);
-		printf("expansion: %s\n", list->expand ? "true" : "false");
-		if (list->expand)
-		{
-			i = 0;
-			while (list->expand_index[i] != -1)
-			{
-				ft_printf("index: %d\n", list->expand_index[i]);
-				i++;
-			}
-		}
-		ft_printf("\n");
-		list = list->next;
-	}
 }

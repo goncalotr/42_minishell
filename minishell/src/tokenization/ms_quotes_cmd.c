@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_quotes_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 17:11:17 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/25 17:38:21 by jpedro-f         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:42:23 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	ms_len_arg(char *value, int *i)
 			quote = value[x];
 		else if (ms_is_quote(value[x]) && quote == value[x])
 			quote = 0;
-		if (ms_isspace(value[x])  && quote == 0)
+		if (ms_isspace(value[x]) && quote == 0)
 			break ;
 		x++;
 	}

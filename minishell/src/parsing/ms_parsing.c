@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/30 15:28:01 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 16:03:09 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ t_ast	*ms_parse_redirection(t_token	**token_list)
 {
 	t_ast	*redirect_node;
 	t_token	*start;
+	t_token	*file_token;
+	t_token	*redir_token;
 
 	if (!(*token_list))
 		return (NULL);
@@ -61,15 +63,12 @@ t_ast	*ms_parse_redirection(t_token	**token_list)
 	{
 		if ((*token_list)->next->type >= TOKEN_REDIR_IN
 			&& (*token_list)->next->type <= TOKEN_HEREDOC)
-		{
-			(*token_list)->next = (*token_list)->next->next->next;
-			redirect_node = ms_new_ast_node((*token_list)->next->type);
-			redirect_node->left = ms_parse_redirection(&start);
-			redirect_node->right = ms_create_file_node(
-					(*token_list)->next->next);
-			ms_free_token2((*token_list)->next);
-			return (redirect_node);
-		}
+			return (redir_token = (*token_list)->next, file_token = \
+redir_token->next, (*token_list)->next = file_token->next, redirect_node = \
+ms_new_ast_node(redir_token->type), redirect_node->left = \
+ms_parse_redirection(&start), redirect_node->right = \
+ms_create_file_node(file_token), \
+free(redir_token->value), free(redir_token), redirect_node);
 		*token_list = (*token_list)->next;
 	}
 	return (ms_parse_command(&start));

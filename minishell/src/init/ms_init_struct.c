@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 15:30:46 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 16:25:13 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ int	init_shell_data_aux1(t_minishell *data, char **envp_main)
 	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
-	data->pid = ms_getpid();
+	// data->pid = ms_getpid();
+	data->pid = 42;
 	data->envp = duplicate_envp(envp_main);
 	if (!data->envp && envp_main)
 		return (1);

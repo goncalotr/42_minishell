@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:54:14 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 13:56:10 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:49:31 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	ms_parent_process_wait(pid_t pid)
 	int	status;
 	int	final_exit_status;
 
+	status = 0;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		final_exit_status = WEXITSTATUS(status);

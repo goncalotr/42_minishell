@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 13:21:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:40:44 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,10 @@ t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 				current_token->value = expanded_value_str;
 				free(original_value);
 			}
+			free(current_token->expand_index);
 		}
 		if (current_token == current_token->next)
 			free(current_token->expand_index);
-		current_token->expand_index = NULL;
 		current_token = current_token->next;
 	}
 	return (list_head);

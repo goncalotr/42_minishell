@@ -6,92 +6,11 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:57:22 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/27 20:37:52 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 14:54:32 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-
-
-// Helper to get a string name for a token type enum.
-static const char *get_type_str(t_token_type type)
-{
-    if (type == TOKEN_INFILE) return "INFILE";
-    if (type == TOKEN_OUTFILE) return "OUTFILE";
-    if (type == TOKEN_CMD) return "CMD";
-    if (type == TOKEN_PIPE) return "PIPE";
-    if (type == TOKEN_REDIR_IN) return "REDIR_IN";
-    if (type == TOKEN_REDIR_OUT) return "REDIR_OUT";
-    if (type == TOKEN_APPEND) return "APPEND";
-    if (type == TOKEN_HEREDOC) return "HEREDOC";
-    if (type == TOKEN_EOF) return "EOF";
-    return "UNKNOWN";
-}
-
-/**
- * @brief Prints the entire token list for debugging purposes.
- *        Displays the value, type, and args array for each node.
- *
- * @param list The head of the token list to print.
- * @param stage_name A string describing when this print is happening
- *                   (e.g., "After Tokenization", "After Expansion").
- */
-void ms_debug_print_tokens(t_token *list, const char *stage_name)
-{
-    int i = 0;
-    t_token *current = list;
-
-    // Use different colors to make the debug output stand out.
-    ft_printf(CYAN "\n=============== TOKEN LIST DEBUG (%s) ===============\n" RESET, stage_name);
-    if (!current)
-    {
-        ft_printf(YELLOW "Token list is empty.\n" RESET);
-        ft_printf(CYAN "========================================================\n\n" RESET);
-        return;
-    }
-
-    while (current)
-    {
-        ft_printf(BLUE "--- Node %d ---\n" RESET, i);
-        ft_printf(WHITE "  Type  : %s\n" RESET, get_type_str(current->type));
-
-        if (current->value)
-        {
-            ft_printf(WHITE "  Value : \"%s\"\n" RESET, current->value);
-        }
-        else
-        {
-            ft_printf(YELLOW "  Value : (null)\n" RESET);
-        }
-
-        if (current->args)
-        {
-            ft_printf(WHITE "  Args[]:\n" RESET);
-            int j = 0;
-            while (current->args[j])
-            {
-                ft_printf(GREEN "    -> arg[%d]: \"%s\"\n" RESET, j, current->args[j]);
-                j++;
-            }
-            if (j == 0)
-            {
-                 ft_printf(YELLOW "    (args array is allocated but empty)\n" RESET);
-            }
-        }
-        else
-        {
-            ft_printf(YELLOW "  Args[]: (null)\n" RESET);
-        }
-        
-        current = current->next;
-        i++;
-    }
-    ft_printf(CYAN "========================================================\n\n" RESET);
-}
-
-
-
 
 int	ms_len_token(char *input, int i)
 {
@@ -197,7 +116,6 @@ t_token	*ms_tokenization(t_minishell *data, char *input)
 	tokens = NULL;
 	tokens = ms_start_tokenization(input, tokens);
 	tokens = ms_join_cmd(tokens);
-	// ms_print_tokens(tokens);
 	tokens = ms_expansion_check(tokens);
 	tokens = ms_expand_variables(data, tokens);
 	temp = tokens;

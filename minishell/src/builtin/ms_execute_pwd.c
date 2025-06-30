@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:24:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 17:09:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:58:08 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@
 int	ms_execute_pwd(char **args, t_minishell *data)
 {
 	char	*cwd_buffer;
+	char	*pwd_from_env;
 
 	(void)args;
 	cwd_buffer = getcwd(NULL, 0);
 	if (cwd_buffer != NULL)
 	{
-		// Success! Print the real path and we are done.
 		ft_putstr_fd(cwd_buffer, 1);
 		ft_putstr_fd("\n", 1);
 		free(cwd_buffer);
@@ -40,14 +40,12 @@ int	ms_execute_pwd(char **args, t_minishell *data)
 	}
 	if (errno == ENOENT)
 	{
-		// Fallback to our internal PWD variable.
-		char *pwd_from_env = ms_getenv(data, "PWD");
+		pwd_from_env = ms_getenv(data, "PWD");
 		if (pwd_from_env)
 		{
 			ft_putstr_fd(pwd_from_env, 1);
 			ft_putstr_fd("\n", 1);
-			// We don't print a system error because this is our graceful fallback.
-			return (0); // Success, we printed something.
+			return (0);
 		}
 	}
 	perror("minishell: pwd");

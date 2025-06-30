@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 20:13:02 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 11:20:58 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	*ms_get_expansion_value(t_minishell *data, const char *info)
 	pid_t	pid;
 
 	if (!info)
-		return (NULL);
+		return (ft_strdup(""));
 	if (ft_strcmp(info, "?") == 0)
 		return (ft_itoa(data->last_exit_status));
 	else if (ft_strcmp(info, "$$") == 0)

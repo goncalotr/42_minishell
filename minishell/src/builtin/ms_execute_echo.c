@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 16:31:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 10:58:10 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ int	ms_check_n_flag(char *str)
  * 
  * -n suppresses the trailing newline character.
  */
-int	ms_execute_echo(char **args)
+int	ms_execute_echo(t_minishell *data, char **args)
 {
 	int	i;
 	int	print_newline;
+	char	*home_path;
 
 	i = 1;
 	print_newline = 1;
@@ -63,11 +64,18 @@ int	ms_execute_echo(char **args)
 	}
 	while (args[i] != NULL)
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
-		if (args[i + 1] != NULL)
+		if (ft_strcmp(args[i], "~") == 0)
 		{
-			ft_putchar_fd(' ', STDOUT_FILENO);
+			home_path = ms_getenv(data, "HOME");
+			if (home_path)
+				ft_putstr_fd(home_path, STDOUT_FILENO);
+			else
+				ft_putstr_fd("~", STDOUT_FILENO);
 		}
+		else
+			ft_putstr_fd(args[i], STDOUT_FILENO);
+		if (args[i + 1] != NULL)
+			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (print_newline)

@@ -6,7 +6,7 @@
 #    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/27 15:47:06 by goteixei         ###   ########.fr        #
+#    Updated: 2025/06/30 12:06:03 by goteixei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -183,11 +183,13 @@ valgrind:		all
 
 reval: re valgrind
 
-valgrind_sup:		all
+valgridn_sup:		all
+				@valgrind -q --leak-check=full --show-leak-kinds=all \
+				--suppressions=readline.supp --track-fds=yes ./minishell
+
+valgrind_sup2:		all
 				@valgrind -q --leak-check=full --show-leak-kinds=all --track-fds=yes \
 					--track-origins=yes --trace-children=yes --suppressions=readline.supp ./minishell
-
-#valgrind -q --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --track-fds=yes ./minishell
 
 reval_sup: re valgrind_sup
 

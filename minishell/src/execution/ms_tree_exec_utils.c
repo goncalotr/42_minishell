@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:27:10 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/20 17:15:42 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:52:19 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ms_prepare_heredocs(t_ast *node)
 {
 	char	*node_nbr;
 
-	if (!node)
+	if (!node || g_signal == SIGINT)
 		return ;
 	if (node->type == TOKEN_HEREDOC)
 	{
@@ -31,7 +31,11 @@ void	ms_prepare_heredocs(t_ast *node)
 			return ;
 		ms_exec_heredoc(node);
 	}
+	if (g_signal == SIGINT)
+		return;
 	ms_prepare_heredocs(node->left);
+	if (g_signal == SIGINT)
+		return;
 	ms_prepare_heredocs(node->right);
 }
 

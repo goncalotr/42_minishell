@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 10:50:27 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 10:51:00 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:43:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 static void ms_handle_sigint_heredoc(int signum)
 {
 	(void)signum;
-	// Set the global signal flag to indicate an interruption.
 	g_signal = SIGINT;
-	// Close standard input. This will cause the read() or get_next_line()
-	// in the heredoc loop to fail, breaking the loop.
+	write(STDOUT_FILENO, "\n", 1);
 	close(STDIN_FILENO);
 }
 

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 15:53:52 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:31:16 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,11 @@ int dollar_pos, int *target_len)
 	{
 		*target_len = 2;
 		info = ft_strdup("?");
+	}
+	else if (str[i] == '0')
+	{
+		*target_len = 2;
+		info = ft_strdup("0");
 	}
 	else if (str[i] == '$')
 	{
@@ -583,6 +588,7 @@ STDERR_FILENO);
  * @brief Builds a new string by expanding variables at specified indices.
  * @return A new, expanded string, or NULL on error.
  */
+/*
 static char *ms_expand_str_with_indices(t_minishell *data, t_token *token)
 {
 	char	*result_str;
@@ -632,6 +638,62 @@ static char *ms_expand_str_with_indices(t_minishell *data, t_token *token)
 
 	return (result_str);
 }
+*/
+
+/**
+ * @brief Scans a string from left to right and expands variables in a single pass.
+ * @param data    The main shell data structure for accessing environment variables.
+ * @param value   The original string from the token to be expanded.
+ * @return        A new, fully expanded string, or NULL on memory allocation failure.
+ * 
+ * find the next $
+ * case a: no more dollar signs
+ * case b: dollar sign is found
+ * literal text is appended to result str
+ * ms_process_dollar_construct - processes the expansion
+ * expanded value is appended to result_str
+ * current_pos goes past the entire construct (dollar_pos + construct_len)
+ * in order to prevent re-expanding
+ * loop repeats from current_pos
+ */
+static char *ms_expand_string_scanner(t_minishell *data, const char *value)
+{
+	char *result_str;
+	char *literal_part;
+	char *expanded_value;
+	int current_pos;
+	int dollar_pos;
+	int construct_len;
+
+	result_str = ft_strdup("");
+	if (!result_str)
+		return (NULL);
+	current_pos = 0;
+	while (value[current_pos] != '\0')
+	{
+		dollar_pos = ms_find_next_dollar(value, current_pos);
+		if (dollar_pos == -1)
+		{
+			literal_part = ft_substr(value, current_pos, ft_strlen(value) - current_pos);
+			ms_append_and_free(&result_str, literal_part);
+			free(literal_part);
+			break;
+		}
+		if (dollar_pos > current_pos)
+		{
+			literal_part = ft_substr(value, current_pos, dollar_pos - current_pos);
+			ms_append_and_free(&result_str, literal_part);
+			free(literal_part);
+		}
+		expanded_value = ms_process_dollar_construct(data, &value[dollar_pos], &construct_len);
+		if (!expanded_value)
+			return (free(result_str), NULL);
+		ms_append_and_free(&result_str, expanded_value);
+		free(expanded_value);
+		current_pos = dollar_pos + construct_len;
+	}
+	return (result_str);
+}
 
 /**
  * @brief Iterates through the token list and applies
@@ -655,7 +717,7 @@ t_token	*ms_expand_variables(t_minishell *data, t_token *list_head)
 		if (current_token->expand == true && current_token->value)
 		{
 			original_value = current_token->value;
-			expanded_value_str = ms_expand_str_with_indices(data, current_token);
+			expanded_value_str = ms_expand_string_scanner(data, original_value);
 			if (!expanded_value_str)
 				ft_putstr_fd("minishell: expansion error\n", 2);
 			else

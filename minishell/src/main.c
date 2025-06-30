@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 12:25:56 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:37:02 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,48 @@
 
 // Definition of the global variable
 //extern unsigned char	g_signal;
-volatile sig_atomic_t g_signal;
+volatile sig_atomic_t	g_signal;
+
+static void	ms_execute_command_line(char *input_line, t_minishell *data)
+{
+	add_history(input_line);
+	if (ms_syntax_check(input_line))
+	{
+		data->last_exit_status = 2;
+		free(input_line);
+		return ;
+	}
+	ms_main_parsing(input_line, data);
+	free(input_line);
+}
+
+static void	ms_reset_signal_state(t_minishell *data)
+{
+	if (g_signal == SIGINT)
+	{
+		data->last_exit_status = 130;
+		g_signal = 0;
+	}
+}
+
+static char	*ms_read_user_input(t_minishell *data)
+{
+	char	*prompt_str;
+	char	*input_line;
+
+	ms_reset_signal_state(data);
+	ms_signal_handlers_set_interactive();
+	prompt_str = ms_get_prompt(data);
+	if (!prompt_str)
+	{
+		ft_putstr_fd("Minishell: Critical prompt error. Exiting.\n", 2);
+		ms_exit_shell(data, 1);
+	}
+	input_line = readline(prompt_str);
+	free(prompt_str);
+	ms_reset_signal_state(data);
+	return (input_line);
+}
 
 /**
  * @brief The main interactive loop of the minishell.
@@ -37,30 +78,10 @@ volatile sig_atomic_t g_signal;
 static void	ms_core_loop(t_minishell *data)
 {
 	char	*input_line;
-	char	*prompt_str;
 
 	while (1)
 	{
-		if (g_signal == SIGINT)
-		{
-			data->last_exit_status = 130;
-			g_signal = 0;
-		}
-		ms_signal_handlers_set_interactive();
-		prompt_str = ms_get_prompt(data);
-		if (!prompt_str)
-		{
-			ft_putstr_fd("Minishell: Critical error generating prompt. \
-			Exiting.\n", 2);
-			break ;
-		}
-		input_line = readline(prompt_str);
-		free(prompt_str);
-		if (g_signal == SIGINT)
-		{
-			data->last_exit_status = 130;
-			g_signal = 0;
-		}
+		input_line = ms_read_user_input(data);
 		if (input_line == NULL)
 			ms_exit_shell_sig(data, data->last_exit_status);
 		if (input_line[0] == '\0')
@@ -69,22 +90,8 @@ static void	ms_core_loop(t_minishell *data)
 			free(input_line);
 			continue ;
 		}
-		add_history(input_line);
-		if (ms_syntax_check(input_line))
-		{
-			input_line = ms_remove_whitespaces(input_line);
-			if (!input_line)
-				data->last_exit_status = 0;
-			else
-				data->last_exit_status = 2;
-			free(input_line);
-			continue ;
-		}
-		ms_main_parsing(input_line, data);
-		free(input_line);
+		ms_execute_command_line(input_line, data);
 	}
-	rl_clear_history();
-	ms_cleanup_shell(data);
 }
 
 /**
@@ -103,5 +110,5 @@ int	main(int argc, char **argv, char **envp)
 	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
-	return(shell_data.last_exit_status);
+	return (shell_data.last_exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 15:28:03 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 17:12:56 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ int			ms_exec_pipe(t_ast *node, t_minishell *data);
 
 // cmd
 int			ms_exec_cmd_builtins(t_minishell *data, t_ast *node);
-void		ms_handle_absolute_path(char **args, char **envp);
+void		ms_handle_absolute_path(char **args, t_minishell *data);
 void		ms_child_process_exec(t_ast *node, t_minishell *data);
 int			ms_parent_process_wait(pid_t pid);
 int			ms_exec_external_command(t_ast *node, t_minishell *data);

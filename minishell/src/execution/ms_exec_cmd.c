@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:54:14 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 16:49:31 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 18:00:49 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ms_child_process_exec(t_ast *node, t_minishell *data)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (ft_strchr(node->args[0], '/'))
-		ms_handle_absolute_path(node->args, data->envp);
+		ms_handle_absolute_path(node->args, data);
 	i = 0;
 	while (data->paths && data->paths[i])
 	{

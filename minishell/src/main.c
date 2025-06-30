@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 15:07:16 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 17:02:46 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ static void	ms_execute_command_line(char *input_line, t_minishell *data)
 	add_history(input_line);
 	if (ms_syntax_check(input_line))
 	{
-		data->last_exit_status = 2;
+		input_line = ms_remove_whitespaces(input_line);
+		if (!input_line)
+			data->last_exit_status = 0;
+		else
+			data->last_exit_status = 2;
 		free(input_line);
 		return ;
 	}

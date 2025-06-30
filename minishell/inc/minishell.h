@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 13:22:59 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:58:50 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,12 +260,20 @@ char		**ms_cpy_array(char **src);
 void		ms_free_array(char **array);
 
 // ms_tree_exec.c
-int			ms_exec_tree(t_ast *node, t_minishell *data);
-int			ms_exec_cmd(t_ast *node, t_minishell *data);
-int			ms_exec_pipe(t_ast *node, t_minishell *data);
-int			ms_exec_redir_in(t_ast *node, t_minishell *data);
-int			ms_exec_redir_out(t_ast	*node, t_minishell *data);
 void		ms_exec_heredoc(t_ast *node);
+int			ms_exec_redir_out(t_ast *node, t_minishell *data);
+int			ms_exec_redir_in(t_ast *node, t_minishell *data);
+int			ms_exec_pipe(t_ast *node, t_minishell *data);
+
+// cmd
+int			ms_exec_cmd_builtins(t_minishell *data, t_ast *node);
+void		ms_handle_absolute_path(char **args, char **envp);
+void		ms_child_process_exec(t_ast *node, t_minishell *data);
+int			ms_parent_process_wait(pid_t pid);
+int			ms_exec_external_command(t_ast *node, t_minishell *data);
+int			ms_exec_cmd(t_ast *node, t_minishell *data);
+
+int			ms_exec_tree(t_ast *node, t_minishell *data);
 
 // ms_tree_exec_utils.c
 void		ms_prepare_heredocs(t_ast *node);

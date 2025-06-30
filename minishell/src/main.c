@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 12:17:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:25:56 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ static void	ms_core_loop(t_minishell *data)
 		add_history(input_line);
 		if (ms_syntax_check(input_line))
 		{
-			data->last_exit_status = 0;
+			input_line = ms_remove_whitespaces(input_line);
+			if (!input_line)
+				data->last_exit_status = 0;
+			else
+				data->last_exit_status = 2;
 			free(input_line);
 			continue ;
 		}

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:23:07 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 11:28:06 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:31:16 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,11 @@ int dollar_pos, int *target_len)
 	{
 		*target_len = 2;
 		info = ft_strdup("?");
+	}
+	else if (str[i] == '0')
+	{
+		*target_len = 2;
+		info = ft_strdup("0");
 	}
 	else if (str[i] == '$')
 	{

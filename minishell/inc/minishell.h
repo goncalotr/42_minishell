@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 20:12:14 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 11:00:55 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,8 +315,8 @@ t_token	*ms_expand_variables(t_minishell *data, t_token *list_head);
 // --- built-ins ---
 int		ms_execute_cd(t_minishell *data, char **args);
 int		ms_setenv(t_minishell *data, const char *name, const char *value);
-int		ms_execute_echo(char **args);
-int		ms_execute_env(char **args, char **envp);
+int		ms_execute_echo(t_minishell *data, char **args);
+int		ms_execute_env(t_minishell *data, char **args);
 
 // exit
 bool	ft_atol_validate(const char *str, long long *n_out);

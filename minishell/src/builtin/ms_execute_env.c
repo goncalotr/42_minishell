@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 00:20:09 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:43:43 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:01:37 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * @param envp The environment variables array.
  * @return int Always returns 0 (success).
  */
-int	ms_execute_env(char **args, char **envp)
+int	ms_execute_env(t_minishell *data, char **args)
 {
 	int	i;
 
@@ -33,11 +33,11 @@ int	ms_execute_env(char **args, char **envp)
 		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
-	while (envp && envp[i] != NULL)
+	while (data->envp && data->envp[i] != NULL)
 	{
-		if (ft_strchr(envp[i], '=') != NULL)
+		if (ft_strchr(data->envp[i], '=') != NULL)
 		{
-			ft_putstr_fd(envp[i], STDOUT_FILENO);
+			ft_putstr_fd(data->envp[i], STDOUT_FILENO);
 			ft_putchar_fd('\n', STDOUT_FILENO);
 		}
 		i++;

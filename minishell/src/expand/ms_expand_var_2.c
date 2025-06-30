@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 13:20:36 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:05:22 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * @return Allocated string with variable name, or NULL on malloc error.
  */
 char	*ms_process_simple_var_expansion(const char *str, int i, \
-		int *t_len, int d_pos)
+int *t_len, int d_pos)
 {
 	int		name_len;	
 	char	*info_str;
@@ -51,7 +51,7 @@ char	*ms_process_simple_var_expansion(const char *str, int i, \
  * no closing } -> treat $ literally 
  */
 char	*ms_process_curly_expansion(const char *str, int i, \
-		int *t_len, int d_pos)
+int *t_len, int d_pos)
 {
 	int		name_len;
 	char	*info_str;

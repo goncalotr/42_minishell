@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_execute_exit_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:23:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 15:28:39 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:25:05 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static bool	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n' || \
-			c == '\v' || c == '\f' || c == '\r');
+c == '\v' || c == '\f' || c == '\r');
 }
 
 /**
@@ -29,13 +29,13 @@ static bool	ft_check_overflow(long long result, int digit, int sign)
 	if (sign == 1)
 	{
 		if (result > LLONG_MAX / 10 || (result == LLONG_MAX \
-		/ 10 && digit > LLONG_MAX % 10))
+/ 10 && digit > LLONG_MAX % 10))
 			return (true);
 	}
 	else if (sign == -1)
 	{
 		if (result > -(LLONG_MIN / 10) || (result == -(LLONG_MIN / 10) \
-		&& digit > -(LLONG_MIN % 10)))
+&& digit > -(LLONG_MIN % 10)))
 			return (true);
 	}
 	return (false);

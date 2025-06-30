@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 13:58:50 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:01:10 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,9 @@ void		ms_free_data_paths(char **paths);
 void		ms_clean_all(t_minishell *data);
 void		ms_clean_token_list(t_token *token);
 
+//ms_cleanup_2
+void		ms_free_token(t_token *token);
+
 //ms_quotes.c
 int			ms_new_value_len(char *value);
 char		*ms_put_new_value(char *value, char *new_value);
@@ -296,18 +299,18 @@ int			ms_find_next_dollar(const char *str, int start_pos);
 int			ms_append_and_free(char **base_str_ptr, const char *to_append);
 
 // 3
-char	*ms_handle_special_info_cases(const char *str, int i, \
+char		*ms_handle_special_info_cases(const char *str, int i, \
 int *target_len);
-char	*ms_get_expansion_info(const char *str, \
+char		*ms_get_expansion_info(const char *str, \
 int dollar_pos, int *target_len);
-char	*ms_process_dollar_construct(t_minishell *data, \
+char		*ms_process_dollar_construct(t_minishell *data, \
 const char *str_starting_with_dollar, int *construct_len_ptr);
 
 // 2
 char		*ms_process_simple_var_expansion(const char *str, int i, \
-				int *t_len, int d_pos);
+int *t_len, int d_pos);
 char		*ms_process_curly_expansion(const char *str, int i, \
-				int *t_len, int d_pos);
+int *t_len, int d_pos);
 char		*ms_get_expansion_value(t_minishell *data, const char *info);
 
 // 1

@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 16:10:34 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:17:19 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ volatile sig_atomic_t g_signal;
  * 7. Free input line
  * 
  * SIGINT = 130
- * isatty checks if the shell is runningin an interactive terminal
+ * isatty checks if the shell is running in an interactive terminal
  */
 static void	ms_core_loop(t_minishell *data)
 {
 	char	*input_line;
-	//char	**args;
 	char	*prompt_str;
-	//int		saved_errno;
 
 	while (1)
 	{
@@ -62,30 +60,22 @@ static void	ms_core_loop(t_minishell *data)
 		{
 			data->last_exit_status = 130;
 			g_signal = 0;
-			//usleep(1000);
 		}
-		// 2. Handle readline's return value
 		if (input_line == NULL)
 			ms_exit_shell_sig(data, data->last_exit_status);
-		// 3. Handle empty input line (user pressed Enter)
 		if (input_line[0] == '\0')
 		{
-			//tcsetattr(STDIN_FILENO, TCSAFLUSH, original_termios); 
 			data->last_exit_status = 0;
 			free(input_line);
 			continue ;
 		}
 		add_history(input_line);
-		// --- Syntax check ---
-		// ft_printf(YELLOW "DEBUG Received: <%s>\n" RESET, input_line);
-		//args = ms_parse_input_placeholder(input_line);
 		if (ms_syntax_check(input_line))
 		{
-			data->last_exit_status = 2; //or 258? 2 for syntax errors
+			data->last_exit_status = 0;
 			free(input_line);
 			continue ;
 		}
-		// --- PARSING AND EXECUTION ---
 		ms_main_parsing(input_line, data);
 		free(input_line);
 	}
@@ -99,7 +89,6 @@ static void	ms_core_loop(t_minishell *data)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell_data;
-	//struct termios	original_termios;
 
 	(void) argc;
 	(void) argv;
@@ -107,13 +96,8 @@ int	main(int argc, char **argv, char **envp)
 	g_signal = 0;
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);
-	//ms_signal_handlers_init();
-	//ms_signal_handlers_set_interactive();
-	// printf(GREEN "DEBUG Minishell Start!\n---\n" RESET "\n");
-	//tcgetattr(STDIN_FILENO, &original_termios); 
 	ms_core_loop(&shell_data);
 	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
 		g_signal);
-	//return (g_signal);
 	return(shell_data.last_exit_status);
 }

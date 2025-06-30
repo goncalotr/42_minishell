@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:16:48 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 14:47:31 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 15:29:13 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ void	ms_clean_token_list(t_token *token)
 	}
 }
 
-void	ms_free_token(t_token *token)
+void	ms_free_token2(t_token *token)
 {
 	if (!token)
-		return (token);
+		return ;
 	free(token->value);
 	free(token);
 }

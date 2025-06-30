@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 20:15:36 by jpedro-f          #+#    #+#             */
-/*   Updated: 2025/06/30 14:52:26 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 15:28:01 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_ast	*ms_parse_redirection(t_token	**token_list)
 			redirect_node->left = ms_parse_redirection(&start);
 			redirect_node->right = ms_create_file_node(
 					(*token_list)->next->next);
-			ms_free_token((*token_list)->next);
+			ms_free_token2((*token_list)->next);
 			return (redirect_node);
 		}
 		*token_list = (*token_list)->next;

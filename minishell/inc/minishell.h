@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:47:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 15:01:10 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 15:28:03 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void		ms_clean_all(t_minishell *data);
 void		ms_clean_token_list(t_token *token);
 
 //ms_cleanup_2
-void		ms_free_token(t_token *token);
+void		ms_free_token2(t_token *token);
 
 //ms_quotes.c
 int			ms_new_value_len(char *value);

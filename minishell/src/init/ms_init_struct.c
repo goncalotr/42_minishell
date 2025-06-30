@@ -6,7 +6,7 @@
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 15:22:33 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/06/30 15:30:46 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ entry"), free_envp_copy(copy), NULL);
 	return (copy);
 }
 
-int	init_shell_data_aux1(t_minishell *data, char *argv, char **envp_main)
+int	init_shell_data_aux1(t_minishell *data, char **envp_main)
 {
 	data->envp = NULL;
 	data->shell_name = NULL;
@@ -133,7 +133,7 @@ free_envp_copy(data->envp), close(data->stdin_fd), 1);
  */
 int	init_shell_data(t_minishell *data, char **argv, char **envp_main)
 {
-	if (init_shell_data_aux1(data, argv, envp_main) != 0)
+	if (init_shell_data_aux1(data, envp_main) != 0)
 		return (1);
 	if (data->stderr_fd == -1)
 	{

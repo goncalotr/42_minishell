@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 17:22:18 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 17:02:46 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/07/01 11:11:14 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,5 @@ int	main(int argc, char **argv, char **envp)
 	if (init_shell_data(&shell_data, argv, envp) != 0)
 		return (EXIT_FAILURE);
 	ms_core_loop(&shell_data);
-	printf(RED "\n---\nDEBUG Exiting Minishell. Final status: %d" RESET "\n", \
-g_signal);
 	return (shell_data.last_exit_status);
 }

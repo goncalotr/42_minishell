@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_init_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:19:19 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 16:25:13 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/07/01 11:02:29 by jpedro-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ int	init_shell_data_aux1(t_minishell *data, char **envp_main)
 	data->stdin_fd = -1;
 	data->stdout_fd = -1;
 	data->stderr_fd = -1;
-	// data->pid = ms_getpid();
-	data->pid = 42;
+	data->pid = ms_getpid();
 	data->envp = duplicate_envp(envp_main);
 	if (!data->envp && envp_main)
 		return (1);

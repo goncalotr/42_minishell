@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_cmd_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:55:39 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 17:12:19 by jpedro-fvm       ###   ########.fr       */
+/*   Updated: 2025/07/01 10:51:39 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ void	ms_handle_absolute_path(char **args, t_minishell *data)
 	struct stat	file_stat;
 
 	if (access(args[0], F_OK) == -1)
-	{
-		perror(args[0]);
-		ms_clean_all(data);
-		exit(127);
-	}
+		exit((perror(args[0]), ms_clean_all(data), 127));
 	stat(args[0], &file_stat);
 	if (S_ISDIR(file_stat.st_mode))
 	{

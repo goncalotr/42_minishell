@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/30 18:49:51 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/07/01 10:46:47 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,7 @@ static void	ms_handle_tilde_expansion(t_minishell *data, char *arg)
 			{
 				expanded_path = ft_strjoin(home_path, arg + 1);
 				if (!expanded_path)
-				{
-					ft_putstr_fd(arg, STDOUT_FILENO);
-					return ;
-				}
+					return (ft_putstr_fd(arg, STDOUT_FILENO), (void)0);
 				ft_putstr_fd(expanded_path, STDOUT_FILENO);
 				free(expanded_path);
 			}

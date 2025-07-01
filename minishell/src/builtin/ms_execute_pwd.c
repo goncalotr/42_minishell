@@ -6,11 +6,26 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:24:59 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/27 17:09:46 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:37:37 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static int	ms_execute_pwd_aux(char **args)
+{
+	if (args[1] != NULL)
+	{
+		if (args[1][0] == '-')
+		{
+			ft_putstr_fd("minishell: pwd: ", STDERR_FILENO);
+			ft_putstr_fd(args[1], STDERR_FILENO);
+			ft_putstr_fd(": invalid option\n", STDERR_FILENO);
+			return (2);
+		}
+	}
+	return (0);
+}
 
 /**
  * @brief Executes the 'pwd' built-in command.
@@ -27,12 +42,13 @@
 int	ms_execute_pwd(char **args, t_minishell *data)
 {
 	char	*cwd_buffer;
+	char	*pwd_from_env;
 
-	(void)args;
+	if (ms_execute_pwd_aux(args) != 0)
+		return (2);
 	cwd_buffer = getcwd(NULL, 0);
 	if (cwd_buffer != NULL)
 	{
-		// Success! Print the real path and we are done.
 		ft_putstr_fd(cwd_buffer, 1);
 		ft_putstr_fd("\n", 1);
 		free(cwd_buffer);
@@ -40,14 +56,12 @@ int	ms_execute_pwd(char **args, t_minishell *data)
 	}
 	if (errno == ENOENT)
 	{
-		// Fallback to our internal PWD variable.
-		char *pwd_from_env = ms_getenv(data, "PWD");
+		pwd_from_env = ms_getenv(data, "PWD");
 		if (pwd_from_env)
 		{
 			ft_putstr_fd(pwd_from_env, 1);
 			ft_putstr_fd("\n", 1);
-			// We don't print a system error because this is our graceful fallback.
-			return (0); // Success, we printed something.
+			return (0);
 		}
 	}
 	perror("minishell: pwd");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_var_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:58:28 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/20 13:11:25 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:05:22 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * @return Allocated string with variable name, or NULL on malloc error.
  */
 char	*ms_process_simple_var_expansion(const char *str, int i, \
-		int *t_len, int d_pos)
+int *t_len, int d_pos)
 {
 	int		name_len;	
 	char	*info_str;
@@ -51,7 +51,7 @@ char	*ms_process_simple_var_expansion(const char *str, int i, \
  * no closing } -> treat $ literally 
  */
 char	*ms_process_curly_expansion(const char *str, int i, \
-		int *t_len, int d_pos)
+int *t_len, int d_pos)
 {
 	int		name_len;
 	char	*info_str;
@@ -74,6 +74,28 @@ char	*ms_process_curly_expansion(const char *str, int i, \
 	return (info_str);
 }
 
+static char	*ms_handle_special_expansions(t_minishell *data, const char *info)
+{
+	pid_t	pid;
+
+	if (ft_strcmp(info, "?") == 0)
+		return (ft_itoa(data->last_exit_status));
+	if (ft_strcmp(info, "0") == 0)
+	{
+		if (ft_strncmp(data->shell_name, "./", 2) == 0)
+			return (ft_strdup(data->shell_name + 2));
+		return (ft_strdup(data->shell_name));
+	}
+	if (ft_strcmp(info, "$$") == 0)
+	{
+		pid = data->pid;
+		return (ft_itoa((int)pid));
+	}
+	if (ft_strcmp(info, "$") == 0)
+		return (ft_strdup("$"));
+	return (NULL);
+}
+
 /**
  * @brief Gets the expanded value for the given info.
  *
@@ -90,26 +112,15 @@ char	*ms_process_curly_expansion(const char *str, int i, \
 char	*ms_get_expansion_value(t_minishell *data, const char *info)
 {
 	char	*env_val;
-	pid_t	pid;
+	char	*special_val;
 
 	if (!info)
-		return (NULL);
-	if (ft_strcmp(info, "?") == 0)
-		return (ft_itoa(data->last_exit_status));
-	else if (ft_strcmp(info, "$$") == 0)
-	{
-		pid = getpid();
-		pid = ms_getpid();
-		return (ft_itoa((int)pid));
-	}
-	else if (ft_strcmp(info, "$") == 0)
-		return (ft_strdup("$"));
-	else
-	{
-		env_val = ms_getenv(data, info);
-		if (env_val)
-			return (ft_strdup(env_val));
-		else
-			return (ft_strdup(""));
-	}
+		return (ft_strdup(""));
+	special_val = ms_handle_special_expansions(data, info);
+	if (special_val)
+		return (special_val);
+	env_val = ms_getenv(data, info);
+	if (env_val)
+		return (ft_strdup(env_val));
+	return (ft_strdup(""));
 }

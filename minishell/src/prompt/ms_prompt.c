@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_prompt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:42:20 by goteixei          #+#    #+#             */
-/*   Updated: 2025/04/28 12:03:21 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:06:50 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*ms_get_current_path(void)
 	free(full_path);
 	if (!result_name)
 		return (ft_putstr_fd("minishell: directory name allocation error\n", \
-				2), NULL);
+2), NULL);
 	return (result_name);
 }
 
@@ -72,8 +72,8 @@ static int	ms_build_str_append(char **base_ptr, const char *to_append)
 	free(old_base);
 	if (!new_base)
 		return (*base_ptr = NULL, \
-			ft_putstr_fd("minishell: prompt build allocation error\n", \
-			2), 1);
+ft_putstr_fd("minishell: prompt build allocation error\n", \
+2), 1);
 	*base_ptr = new_base;
 	return (0);
 }
@@ -109,7 +109,7 @@ static char	*ms_build_fallback_prompt(const char *color)
 * @return Allocated string or NULL on failure.
 */
 static char	*ms_build_dynamic_prompt(const char *user, const char *pwd, \
-	const char *color)
+const char *color)
 {
 	char	*prompt;
 

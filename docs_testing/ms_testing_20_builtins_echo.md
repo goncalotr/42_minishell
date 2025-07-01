@@ -176,6 +176,12 @@ echo $? | cat -e
 echo $? | cat -e
 ```
 
+### Test 7
+
+```bash
+echo ~
+```
+
 ## Other
 
 2025-06-16
@@ -200,3 +206,5 @@ node->args[3]: (NULL)
 olamalloc_consolidate(): invalid chunk size
 [1]    67574 IOT instruction (core dumped)  ./minishell
 ```
+
+

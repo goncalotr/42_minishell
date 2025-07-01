@@ -6,7 +6,7 @@
 /*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:32:50 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/16 16:31:19 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:49:51 by goteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,48 @@ int	ms_check_n_flag(char *str)
 	return (1);
 }
 
+static void	ms_handle_tilde_expansion(t_minishell *data, char *arg)
+{
+	char	*home_path;
+	char	*expanded_path;
+
+	if (arg[0] == '~' && (arg[1] == '/' || arg[1] == '\0'))
+	{
+		home_path = ms_getenv(data, "HOME");
+		if (home_path)
+		{
+			if (arg[1] == '\0')
+				ft_putstr_fd(home_path, STDOUT_FILENO);
+			else
+			{
+				expanded_path = ft_strjoin(home_path, arg + 1);
+				if (!expanded_path)
+				{
+					ft_putstr_fd(arg, STDOUT_FILENO);
+					return ;
+				}
+				ft_putstr_fd(expanded_path, STDOUT_FILENO);
+				free(expanded_path);
+			}
+		}
+		else
+			ft_putstr_fd(arg, STDOUT_FILENO);
+	}
+	else
+		ft_putstr_fd(arg, STDOUT_FILENO);
+}
+
+static void	ms_print_echo_args(t_minishell *data, char **args, int i)
+{
+	while (args[i] != NULL)
+	{
+		ms_handle_tilde_expansion(data, args[i]);
+		if (args[i + 1] != NULL)
+			ft_putchar_fd(' ', STDOUT_FILENO);
+		i++;
+	}
+}
+
 /**
  * @brief Executes the echo builtin command using a simple argv array.
  *
@@ -47,7 +89,7 @@ int	ms_check_n_flag(char *str)
  * 
  * -n suppresses the trailing newline character.
  */
-int	ms_execute_echo(char **args)
+int	ms_execute_echo(t_minishell *data, char **args)
 {
 	int	i;
 	int	print_newline;
@@ -61,15 +103,7 @@ int	ms_execute_echo(char **args)
 		print_newline = 0;
 		i++;
 	}
-	while (args[i] != NULL)
-	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
-		if (args[i + 1] != NULL)
-		{
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		}
-		i++;
-	}
+	ms_print_echo_args(data, args, i);
 	if (print_newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	return (0);

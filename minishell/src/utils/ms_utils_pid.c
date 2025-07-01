@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_utils_pid.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 01:54:25 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/11 02:00:22 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:24:37 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "./../inc/minishell.h"
 
 /**
  * exit()

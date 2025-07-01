@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_signal_handler_non_int.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 12:09:30 by goteixei          #+#    #+#             */
-/*   Updated: 2025/06/26 12:19:27 by goteixei         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:03:43 by jpedro-fvm       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 static void	ms_handle_sigint_non_interactive(int signum)
 {
 	(void) signum;
-	write(STDOUT_FILENO, "\n", 1);
 	g_signal = SIGINT;
 }
 

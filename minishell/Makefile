@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+         #
+#    By: jpedro-f <jpedro-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/17 15:55:38 by goteixei          #+#    #+#              #
-#    Updated: 2025/06/30 14:01:00 by goteixei         ###   ########.fr        #
+#    Updated: 2025/07/01 11:17:27 by jpedro-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -185,21 +185,17 @@ re:				fclean all
 #				@echo "$(GREEN)Use 'make' or 'make all' to recompile everything.$(RESET)"
 
 # Rule to use valgrind
-valgrind:		all
-				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
-					--track-origins=yes --trace-children=yes ./minishell
+# valgrind:		all
+# 				@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
+# 					--track-origins=yes --trace-children=yes ./minishell
 
-reval: re valgrind
+# reval: re valgrind
 
-valgridn_sup:		all
-				@valgrind -q --leak-check=full --show-leak-kinds=all \
-				--suppressions=readline.supp --track-fds=yes ./minishell
+# valgrind_sup:		all
+# 				@valgrind -q --leak-check=full --show-leak-kinds=all \
+# 				--suppressions=readline.supp --track-fds=yes ./minishell
 
-valgrind_sup2:		all
-				@valgrind -q --leak-check=full --show-leak-kinds=all --track-fds=yes \
-					--track-origins=yes --trace-children=yes --suppressions=readline.supp ./minishell
-
-reval_sup: re valgrind_sup
+# reval_sup: re valgrind_sup
 
 .PHONY:			all clean fclean re valgrind reval valgrind_sup reval_sup
 

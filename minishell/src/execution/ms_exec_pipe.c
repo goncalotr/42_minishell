@@ -3,6 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: goteixei <goteixei@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 13:54:11 by goteixei          #+#    #+#             */
+/*   Updated: 2025/07/01 10:44:05 by goteixei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "./../../inc/minishell.h"
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_exec_pipe.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
 /*   By: jpedro-fvm <jpedro-fvm@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:54:11 by goteixei          #+#    #+#             */
@@ -14,26 +28,30 @@
 
 static void	ms_exec_pipe_left(t_ast *node, int pipefd[2], t_minishell *data)
 {
+	int	exit_code;
+
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[1]);
 	close(pipefd[0]);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	ms_exec_tree(node->left, data);
+	exit_code = ms_exec_tree(node->left, data);
 	ms_clean_all(data);
-	exit(0);
+	exit(exit_code);
 }
 
 static void	ms_exec_pipe_right(t_ast *node, int pipefd[2], t_minishell *data)
 {
+	int	exit_code;
+
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	ms_exec_tree(node->right, data);
+	exit_code = ms_exec_tree(node->right, data);
 	ms_clean_all(data);
-	exit(0);
+	exit(exit_code);
 }
 
 static int	ms_wait_for_pipe_children(int pid_1, int pid_2)
